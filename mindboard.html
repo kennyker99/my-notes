@@ -188,6 +188,38 @@
   .palette-swatch{width:18px;height:18px;border-radius:50%;border:1px solid rgba(255,255,255,.2);cursor:pointer;}
   .palette-swatch:hover{transform:scale(1.15);}
 
+  /* ---------- 标签 (Labels) ---------- */
+  .card-labels{display:flex;flex-wrap:wrap;gap:4px;padding:6px 10px 0;}
+  .label-pill{
+    display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:10px;
+    font-size:10.5px;font-weight:600;color:#141414;line-height:1.5;cursor:default;max-width:150px;
+  }
+  .label-pill span.lp-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .label-pill .lp-x{opacity:0;cursor:pointer;font-weight:700;flex-shrink:0;}
+  .label-pill:hover .lp-x{opacity:.7;}
+  .label-pill .lp-x:hover{opacity:1;}
+  .label-picker-pop{
+    position:absolute;top:24px;left:6px;z-index:60;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
+    padding:8px;width:200px;box-shadow:0 4px 16px rgba(0,0,0,.4);display:flex;flex-direction:column;gap:6px;
+  }
+  .label-picker-list{display:flex;flex-direction:column;gap:3px;max-height:180px;overflow-y:auto;}
+  .label-picker-item{
+    display:flex;align-items:center;gap:7px;padding:5px 6px;border-radius:5px;cursor:pointer;font-size:12px;color:var(--text);
+  }
+  .label-picker-item:hover{background:var(--bg3);}
+  .label-picker-item .lp-swatch{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+  .label-picker-item .lp-check{margin-left:auto;color:var(--orange);font-size:11px;opacity:0;}
+  .label-picker-item.checked .lp-check{opacity:1;}
+  .label-picker-item .lp-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .label-picker-new{
+    display:flex;gap:4px;border-top:1px solid var(--border);padding-top:6px;
+  }
+  .label-picker-new input{
+    flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:5px 7px;
+    border-radius:5px;font-size:11.5px;outline:none;
+  }
+  .label-picker-new input:focus{border-color:var(--orange);}
+
   .resize-handle{
     position:absolute;width:15px;height:15px;z-index:5;opacity:0;transition:opacity .12s;
   }
@@ -629,6 +661,7 @@ var DEFAULT_SIZE = {
   file:[220,88], column:[220,240]
 };
 var CARD_ICONS = {note:'🗒',todo:'☑',image:'🖼',link:'🔗',header:'🔤',boardlink:'📁',file:'📎',column:'🗂'};
+var LABEL_PALETTE = ['#ff6b6b','#ffa94d','#ffd43b','#69db7c','#4dabf7','#9775fa','#f783ac','#66d9c4'];
 var EMOJI_ICONS = ['📋','📝','🧠','🎬','🖼️','🧳','💡','📚','🗓','🎨','🔬','💼','🎯','🌱','🏠','⭐','🔖','🧩','📊','🎵','🍳','✈️','📷','🗂'];
 var HISTORY_LIMIT = 60;
 var MAX_UPLOAD_BYTES = 4*1024*1024;
@@ -1477,6 +1510,7 @@ function buildCardEl(card){
     '<button class="card-btn dup-btn" title="复制">⧉</button>'+
     '<button class="card-btn del-btn" title="删除">🗑</button>';
   el.appendChild(bar);
+  renderCardLabels(card, el);
 
   var body = document.createElement('div');
   body.className = 'card-body';
@@ -1573,6 +1607,126 @@ function togglePalette(cardEl, card){
     pop.appendChild(sw);
   });
   cardEl.appendChild(pop);
+  setTimeout(function(){
+    document.addEventListener('mousedown', function closer(e){
+      if(!pop.contains(e.target)){ pop.remove(); document.removeEventListener('mousedown',closer); }
+    });
+  },0);
+}
+
+/* ---------- 标签 (Labels) ---------- */
+function boardLabels(b){ if(!b.labels) b.labels=[]; return b.labels; }
+function findOrCreateLabel(b, text){
+  text = text.trim();
+  if(!text) return null;
+  var labels = boardLabels(b);
+  var existing = labels.find(function(l){ return l.text.toLowerCase()===text.toLowerCase(); });
+  if(existing) return existing;
+  var lbl = { id:uid('lb'), text:text, color:LABEL_PALETTE[labels.length % LABEL_PALETTE.length] };
+  labels.push(lbl);
+  return lbl;
+}
+function toggleCardLabel(card, labelId){
+  card.labelIds = card.labelIds || [];
+  var idx = card.labelIds.indexOf(labelId);
+  if(idx===-1) card.labelIds.push(labelId);
+  else card.labelIds.splice(idx,1);
+}
+function removeCardLabel(card, labelId){
+  if(!card.labelIds) return;
+  pushHistory();
+  card.labelIds = card.labelIds.filter(function(id){ return id!==labelId; });
+  scheduleSave();
+  renderBoard();
+}
+function renderCardLabels(card, el){
+  var existing = el.querySelector('.card-labels');
+  if(existing) existing.remove();
+  if(!card.labelIds || !card.labelIds.length) return;
+  var b = activeBoard();
+  var labels = boardLabels(b);
+  var row = document.createElement('div');
+  row.className = 'card-labels';
+  card.labelIds.forEach(function(labelId){
+    var lbl = labels.find(function(l){ return l.id===labelId; });
+    if(!lbl) return;
+    var pill = document.createElement('span');
+    pill.className = 'label-pill';
+    pill.style.background = lbl.color;
+    pill.innerHTML = '<span class="lp-text"></span><span class="lp-x" title="移除标签">✕</span>';
+    pill.querySelector('.lp-text').textContent = lbl.text;
+    pill.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+    pill.querySelector('.lp-x').addEventListener('click', function(e){
+      e.stopPropagation();
+      removeCardLabel(card, labelId);
+    });
+    row.appendChild(pill);
+  });
+  // insert right after the card-bar
+  var bar = el.querySelector('.card-bar');
+  if(bar && bar.nextSibling) el.insertBefore(row, bar.nextSibling);
+  else el.appendChild(row);
+}
+function toggleLabelPicker(cardEl, card){
+  var existing = cardEl.querySelector('.label-picker-pop');
+  if(existing){ existing.remove(); return; }
+  document.querySelectorAll('.label-picker-pop,.palette-pop').forEach(function(p){p.remove();});
+  var b = activeBoard();
+  var pop = document.createElement('div');
+  pop.className = 'label-picker-pop';
+
+  function renderList(){
+    var list = pop.querySelector('.label-picker-list');
+    list.innerHTML = '';
+    boardLabels(b).forEach(function(lbl){
+      var checked = card.labelIds && card.labelIds.indexOf(lbl.id)!==-1;
+      var item = document.createElement('div');
+      item.className = 'label-picker-item'+(checked?' checked':'');
+      item.innerHTML =
+        '<span class="lp-swatch" style="background:'+lbl.color+'"></span>'+
+        '<span class="lp-name"></span><span class="lp-check">✓</span>';
+      item.querySelector('.lp-name').textContent = lbl.text;
+      item.addEventListener('click', function(){
+        pushHistory();
+        toggleCardLabel(card, lbl.id);
+        scheduleSave();
+        renderList();
+        var liveEl = document.querySelector('.card[data-id="'+card.id+'"]');
+        if(liveEl) renderCardLabels(card, liveEl);
+      });
+      list.appendChild(item);
+    });
+  }
+
+  var listWrap = document.createElement('div');
+  listWrap.className = 'label-picker-list';
+  pop.appendChild(listWrap);
+
+  var newRow = document.createElement('div');
+  newRow.className = 'label-picker-new';
+  newRow.innerHTML = '<input type="text" placeholder="新建标签，回车确认">';
+  var input = newRow.querySelector('input');
+  input.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+  input.addEventListener('keydown', function(e){
+    e.stopPropagation();
+    if(e.key==='Enter' && input.value.trim()){
+      pushHistory();
+      var lbl = findOrCreateLabel(b, input.value.trim());
+      if(lbl){
+        card.labelIds = card.labelIds || [];
+        if(card.labelIds.indexOf(lbl.id)===-1) card.labelIds.push(lbl.id);
+      }
+      input.value='';
+      scheduleSave();
+      renderList();
+      var liveEl = document.querySelector('.card[data-id="'+card.id+'"]');
+      if(liveEl) renderCardLabels(card, liveEl);
+    }
+  });
+  pop.appendChild(newRow);
+
+  cardEl.appendChild(pop);
+  renderList();
   setTimeout(function(){
     document.addEventListener('mousedown', function closer(e){
       if(!pop.contains(e.target)){ pop.remove(); document.removeEventListener('mousedown',closer); }
@@ -2308,6 +2462,10 @@ function openCardContextMenu(card, x, y){
       var el = document.querySelector('.card[data-id="'+card.id+'"]');
       if(el) togglePalette(el, card);
     }},
+    {label:'标签', action:function(){
+      var el = document.querySelector('.card[data-id="'+card.id+'"]');
+      if(el) toggleLabelPicker(el, card);
+    }},
     {label: anyLocked ? '解锁位置' : '锁定位置', action:function(){ toggleLockCards(ids); }},
     {separator:true},
     {label:'置于顶层', action:function(){ ids.forEach(bringCardToFront); scheduleSave(); }},
@@ -2481,7 +2639,7 @@ function emptyTrash(){
 }
 
 /* ---- 全局搜索 ---- */
-function extractCardText(card){
+function extractCardText(card, board){
   var parts = [];
   if(card.text) parts.push(stripHtml(card.text));
   if(card.title) parts.push(card.title);
@@ -2490,6 +2648,13 @@ function extractCardText(card){
   if(card.url) parts.push(card.url);
   if(card.fileName) parts.push(card.fileName);
   if(card.items) card.items.forEach(function(it){ if(it.text) parts.push(it.text); });
+  if(board && card.labelIds && card.labelIds.length){
+    var labels = boardLabels(board);
+    card.labelIds.forEach(function(lid){
+      var lbl = labels.find(function(l){return l.id===lid;});
+      if(lbl) parts.push(lbl.text);
+    });
+  }
   return parts.join(' ');
 }
 function searchAllCards(query){
@@ -2500,7 +2665,7 @@ function searchAllCards(query){
     var b = store.boards[bid];
     if(!b) return;
     b.cards.forEach(function(c){
-      var text = extractCardText(c);
+      var text = extractCardText(c, b);
       if(text.toLowerCase().indexOf(q)!==-1){
         results.push({boardId:bid, boardName:b.name, boardIcon:b.icon, card:c, snippet:text.trim().slice(0,60)});
       }
@@ -2997,6 +3162,7 @@ function importData(data){
       if(copy.items) copy.items = copy.items.map(function(it){return Object.assign({},it,{id:uid('t')});});
       return {card:copy, deletedAt:entry.deletedAt||Date.now()};
     });
+    nb.labels = JSON.parse(JSON.stringify(b.labels||[]));
     nb.maxZ = Math.max(1, nb.cards.length+1);
     store.boards[nb.id]=nb; store.order.push(nb.id);
     if(!firstNewId) firstNewId = nb.id;
