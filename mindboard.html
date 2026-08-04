@@ -673,30 +673,40 @@ function scheduleGithubSync(){
   if(githubSyncTimer) clearTimeout(githubSyncTimer);
   githubSyncTimer = setTimeout(function(){ syncNow(); }, GITHUB_SYNC_DELAY);
 }
-async function pushToGithub(cfg, dataObj, opts){
-  opts = opts||{};
+async function fetchRemoteSha(cfg){
   var url = githubContentsUrl(cfg)+'?ref='+encodeURIComponent(cfg.branch||'main');
-  var sha = null;
   var getResp = await fetch(url, { headers: ghHeaders(cfg) });
   if(getResp.status===200){
     var getJson = await getResp.json();
-    sha = getJson.sha;
+    return getJson.sha;
   } else if(getResp.status!==404){
     throw new Error('读取远程文件失败 (HTTP '+getResp.status+')');
   }
-  var body = {
-    message: '同步 MindBoard 数据 · '+new Date().toLocaleString('zh-CN'),
-    content: utf8ToBase64(JSON.stringify(dataObj, null, 2)),
-    branch: cfg.branch||'main'
-  };
-  if(sha) body.sha = sha;
-  var putResp = await fetch(githubContentsUrl(cfg), {
-    method:'PUT',
-    headers: Object.assign({'Content-Type':'application/json'}, ghHeaders(cfg)),
-    body: JSON.stringify(body),
-    keepalive: !!opts.keepalive
-  });
-  if(!putResp.ok){
+  return null;
+}
+async function pushToGithub(cfg, dataObj, opts){
+  opts = opts||{};
+  var maxAttempts = 3;
+  var sha = await fetchRemoteSha(cfg);
+  for(var attempt=1; attempt<=maxAttempts; attempt++){
+    var body = {
+      message: '同步 MindBoard 数据 · '+new Date().toLocaleString('zh-CN'),
+      content: utf8ToBase64(JSON.stringify(dataObj, null, 2)),
+      branch: cfg.branch||'main'
+    };
+    if(sha) body.sha = sha;
+    var putResp = await fetch(githubContentsUrl(cfg), {
+      method:'PUT',
+      headers: Object.assign({'Content-Type':'application/json'}, ghHeaders(cfg)),
+      body: JSON.stringify(body),
+      keepalive: !!opts.keepalive
+    });
+    if(putResp.ok) return;
+    // 409 = 远程文件版本号(sha)已过期，通常是多个标签页/设备同时同步导致的竞争 —— 重新获取最新 sha 后重试
+    if(putResp.status===409 && attempt<maxAttempts){
+      sha = await fetchRemoteSha(cfg);
+      continue;
+    }
     var errText = '';
     try{ errText = (await putResp.json()).message || ''; }catch(e){}
     throw new Error('推送失败 (HTTP '+putResp.status+') '+errText);
