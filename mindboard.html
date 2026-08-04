@@ -292,6 +292,9 @@
   /* ---------- Multi-select / rubber band ---------- */
   .card.selected{outline:2px solid var(--orange);outline-offset:1px;}
   .card.multi-selected{outline:2px solid #3b82f6;outline-offset:1px;}
+  .card.locked .resize-handle{display:none;}
+  .card.locked .card-bar{cursor:default;}
+  .card.locked .card-bar:active{cursor:default;}
   .rubber-band{
     position:absolute;border:1px dashed var(--orange);background:rgba(255,149,0,.08);
     pointer-events:none;z-index:9999;
@@ -518,8 +521,10 @@
         <div><b>右键菜单</b> — 卡片或空白处右键可快捷操作</div>
         <div><b>富文本</b> — 便签/标题内选中文字可加粗/斜体/列表</div>
         <div><b>新建便签</b> — 双击空白处</div>
-        <div><b>删除</b> — 选中后按 Delete / Backspace（进回收站）</div>
-        <div><b>复制</b> — 选中后按 Ctrl/⌘ + D</div>
+        <div><b>移到回收站</b> — 选中后按 Delete / Backspace</div>
+        <div><b>重复</b> — 选中后按 Ctrl/⌘ + D</div>
+        <div><b>剪切/拷贝/粘贴</b> — Ctrl/⌘ + X / C / V（可跨看板粘贴）</div>
+        <div><b>锁定位置</b> — 右键卡片菜单里可锁定，防止误拖动</div>
         <div><b>撤销/重做</b> — Ctrl/⌘ + Z ／ Ctrl/⌘ + Shift + Z</div>
         <div><b>粘贴图片</b> — 复制图片后 Ctrl/⌘ + V</div>
         <div><b>拖放文件</b> — 直接从系统拖拽文件到画布</div>
@@ -1041,6 +1046,7 @@ var state = {
   rubber: null,                 // 框选状态
   spaceHeld: false,             // 空格键是否按住（用于平移模式）
   connectDrag: null,            // 连线创建状态
+  clipboard: null,              // 内部剪贴板 {cards, connectors}，可跨看板粘贴
   editingBreadcrumb:false
 };
 
@@ -1449,7 +1455,7 @@ function buildCardEl(card){
   var el = document.createElement('div');
   var isSel = state.selectedCards.has(card.id);
   var isMulti = state.selectedCards.size>1;
-  el.className = 'card type-'+card.type + (isSel && !isMulti ? ' selected':'') + (isSel && isMulti ? ' multi-selected':'');
+  el.className = 'card type-'+card.type + (isSel && !isMulti ? ' selected':'') + (isSel && isMulti ? ' multi-selected':'') + (card.locked ? ' locked':'');
   el.style.left = card.x+'px'; el.style.top = card.y+'px';
   el.style.width = card.w+'px'; el.style.height = card.h+'px';
   el.style.zIndex = card.z||1;
@@ -1466,6 +1472,7 @@ function buildCardEl(card){
   bar.className = 'card-bar';
   bar.innerHTML =
     (card.type==='header' ? '<span class="card-bar-icon">'+CARD_ICONS[card.type]+'</span>' : '<span class="card-color-dot" style="background:'+(card.color||'#fff')+'"></span>') +
+    (card.locked ? '<span class="card-bar-icon" title="已锁定位置">🔒</span>' : '') +
     '<span class="card-bar-spacer"></span>'+
     '<button class="card-btn dup-btn" title="复制">⧉</button>'+
     '<button class="card-btn del-btn" title="删除">🗑</button>';
@@ -1483,6 +1490,7 @@ function buildCardEl(card){
     el.appendChild(rh);
     rh.addEventListener('mousedown', function(e){
       e.stopPropagation(); e.preventDefault();
+      if(card.locked) return;
       startCardResize(card, el, e, dir);
     });
   });
@@ -1516,6 +1524,7 @@ function buildCardEl(card){
     e.stopPropagation();
     if(e.shiftKey||e.ctrlKey||e.metaKey){ toggleCardInSelection(card.id); return; }
     if(!(state.selectedCards.has(card.id) && state.selectedCards.size>1)) selectCardOnly(card.id);
+    if(card.locked) return;
     startCardDrag(card, el, e);
   });
   el.addEventListener('mousedown', function(e){
@@ -2015,6 +2024,73 @@ function duplicateCards(ids){
   scheduleSave();
 }
 
+/* ---- 剪贴板 (内部剪贴板，可跨看板粘贴) ---- */
+function copySelectionToClipboard(ids){
+  var b = activeBoard();
+  var idSet = {}; ids.forEach(function(id){ idSet[id]=true; });
+  var cards = b.cards.filter(function(c){ return idSet[c.id]; }).map(function(c){ return JSON.parse(JSON.stringify(c)); });
+  if(!cards.length) return false;
+  var connectors = b.connectors.filter(function(cn){ return idSet[cn.from] && idSet[cn.to]; }).map(function(cn){ return JSON.parse(JSON.stringify(cn)); });
+  state.clipboard = { cards:cards, connectors:connectors };
+  return true;
+}
+function cutSelectionToClipboard(ids){
+  if(copySelectionToClipboard(ids)) deleteCards(ids);
+}
+function pasteClipboardAt(x, y){
+  if(!state.clipboard || !state.clipboard.cards.length) return;
+  var b = activeBoard();
+  pushHistory();
+  var minX = Math.min.apply(null, state.clipboard.cards.map(function(c){return c.x;}));
+  var minY = Math.min.apply(null, state.clipboard.cards.map(function(c){return c.y;}));
+  var idMap = {};
+  var newIds = [];
+  state.clipboard.cards.forEach(function(card){
+    var copy = JSON.parse(JSON.stringify(card));
+    var oldId = copy.id;
+    copy.id = uid('c');
+    idMap[oldId] = copy.id;
+    copy.x = x + (card.x - minX);
+    copy.y = y + (card.y - minY);
+    copy.z = ++b.maxZ;
+    copy.locked = false;
+    if(copy.items) copy.items = copy.items.map(function(it){ return Object.assign({}, it, {id:uid('t')}); });
+    b.cards.push(copy);
+    newIds.push(copy.id);
+  });
+  state.clipboard.connectors.forEach(function(cn){
+    if(idMap[cn.from] && idMap[cn.to]){
+      b.connectors.push({id:uid('n'), from:idMap[cn.from], to:idMap[cn.to], label:cn.label||'', color:cn.color});
+    }
+  });
+  newIds.forEach(function(id){
+    var card = b.cards.find(function(c){return c.id===id;});
+    document.getElementById('canvasContent').appendChild(buildCardEl(card));
+  });
+  state.selectedCards = new Set(newIds);
+  state.selectedConnectorId = null;
+  refreshSelectionClasses();
+  document.getElementById('emptyHint').style.display='none';
+  renderConnectors();
+  scheduleSave();
+}
+
+/* ---- 锁定位置 ---- */
+function toggleLockCards(ids){
+  var b = activeBoard();
+  pushHistory();
+  var anyUnlocked = ids.some(function(id){
+    var c = b.cards.find(function(cc){return cc.id===id;});
+    return c && !c.locked;
+  });
+  ids.forEach(function(id){
+    var c = b.cards.find(function(cc){return cc.id===id;});
+    if(c) c.locked = anyUnlocked;
+  });
+  scheduleSave();
+  renderBoard();
+}
+
 /* ---- Drag ---- */
 function startCardDrag(primaryCard, el, e){
   var b = activeBoard();
@@ -2022,8 +2098,9 @@ function startCardDrag(primaryCard, el, e){
   var items = ids.map(function(id){
     var c = b.cards.find(function(cc){return cc.id===id;});
     var cel = document.querySelector('.card[data-id="'+id+'"]');
-    return c && cel ? {card:c, el:cel, origX:c.x, origY:c.y} : null;
+    return c && cel && !c.locked ? {card:c, el:cel, origX:c.x, origY:c.y} : null;
   }).filter(Boolean);
+  if(!items.length) return;
   state.drag = { items:items, startX:e.clientX, startY:e.clientY, zoom:b.vzoom, historyPushed:false };
 }
 function onCardDragMove(e){
@@ -2216,17 +2293,27 @@ function closeContextMenu(){
 function openCardContextMenu(card, x, y){
   var multi = state.selectedCards.size>1 && state.selectedCards.has(card.id);
   var ids = multi ? Array.from(state.selectedCards) : [card.id];
+  var b = activeBoard();
+  var anyLocked = ids.some(function(id){
+    var c = b.cards.find(function(cc){return cc.id===id;});
+    return c && c.locked;
+  });
+  var suffix = multi ? ' ('+ids.length+')' : '';
   var items = [
+    {label:'剪切'+suffix, action:function(){ cutSelectionToClipboard(ids); }},
+    {label:'拷贝'+suffix, action:function(){ copySelectionToClipboard(ids); }},
+    {label: multi ? '重复所选'+suffix : '重复', action:function(){ duplicateCards(ids); }},
+    {separator:true},
     {label: multi ? '换颜色（应用到选中项）' : '换颜色', action:function(){
       var el = document.querySelector('.card[data-id="'+card.id+'"]');
       if(el) togglePalette(el, card);
     }},
-    {label: multi ? '复制所选 ('+ids.length+')' : '复制', action:function(){ duplicateCards(ids); }},
+    {label: anyLocked ? '解锁位置' : '锁定位置', action:function(){ toggleLockCards(ids); }},
     {separator:true},
     {label:'置于顶层', action:function(){ ids.forEach(bringCardToFront); scheduleSave(); }},
     {label:'置于底层', action:function(){ ids.forEach(sendCardToBack); }},
     {separator:true},
-    {label: multi ? '删除所选 ('+ids.length+')' : '删除', danger:true, action:function(){ deleteCards(ids); }}
+    {label: multi ? '移到回收站'+suffix : '移到回收站', danger:true, action:function(){ deleteCards(ids); }}
   ];
   openContextMenu(items, x, y);
 }
@@ -2249,13 +2336,18 @@ function openConnectorContextMenu(connId, x, y){
   openContextMenu(items, x, y);
 }
 function openCanvasContextMenu(localX, localY, clientX, clientY){
+  var items = [];
+  if(state.clipboard && state.clipboard.cards.length){
+    items.push({label:'粘贴 ('+state.clipboard.cards.length+')', action:function(){ pasteClipboardAt(localX, localY); }});
+    items.push({separator:true});
+  }
   var addTypes = [
     ['note','🗒 新建便签'], ['todo','☑ 新建清单'], ['column','🗂 新建看板列'],
     ['image','🖼 新建图片'], ['file','📎 新建文件'], ['link','🔗 新建链接'],
     ['header','🔤 新建标题'], ['boardlink','📁 新建子看板']
   ];
-  var items = addTypes.map(function(t){
-    return { label:t[1], action:function(){ addCardAt(t[0], localX, localY); } };
+  addTypes.forEach(function(t){
+    items.push({ label:t[1], action:function(){ addCardAt(t[0], localX, localY); } });
   });
   items.push({separator:true});
   items.push({label:'适应画布', action:fitToScreen});
@@ -2585,6 +2677,17 @@ function wireGlobalEvents(){
     } else if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='d' && state.selectedCards.size>0){
       e.preventDefault();
       duplicateCards(Array.from(state.selectedCards));
+    } else if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='c' && state.selectedCards.size>0){
+      e.preventDefault();
+      copySelectionToClipboard(Array.from(state.selectedCards));
+    } else if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='x' && state.selectedCards.size>0){
+      e.preventDefault();
+      cutSelectionToClipboard(Array.from(state.selectedCards));
+    } else if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='v' && state.clipboard && state.clipboard.cards.length){
+      e.preventDefault();
+      var vpc = document.getElementById('viewport').getBoundingClientRect();
+      var localc = screenToLocal(vpc.left+vpc.width/2, vpc.top+vpc.height/2);
+      pasteClipboardAt(localc.x, localc.y);
     } else if((e.ctrlKey||e.metaKey) && !e.shiftKey && e.key.toLowerCase()==='z'){
       e.preventDefault(); undo();
     } else if((e.ctrlKey||e.metaKey) && (e.key.toLowerCase()==='y' || (e.shiftKey && e.key.toLowerCase()==='z'))){
