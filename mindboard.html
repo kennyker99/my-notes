@@ -337,6 +337,16 @@
     100%{box-shadow:0 1px 2px rgba(0,0,0,.06),0 2px 10px rgba(0,0,0,.05);}
   }
   .card.flash{animation:flashPulse 1.4s ease;}
+  .card.type-boardlink.drop-target{outline:2px dashed var(--orange);outline-offset:2px;background:rgba(255,149,0,.08);}
+
+  /* ---------- Toast ---------- */
+  .toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(8px);z-index:5000;
+    background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:10px 18px;
+    border-radius:8px;font-size:12.5px;box-shadow:0 8px 24px rgba(0,0,0,.4);opacity:0;
+    transition:opacity .2s ease, transform .2s ease;pointer-events:none;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
   /* ---------- Context menu ---------- */
   .context-menu{
@@ -477,6 +487,8 @@
 </style>
 </head>
 <body>
+
+  <div class="toast" id="toast"></div>
 
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
@@ -688,6 +700,15 @@ function getContrastText(hex){
   var r = parseInt(h.substr(0,2),16), g = parseInt(h.substr(2,2),16), b = parseInt(h.substr(4,2),16);
   var lum = (0.299*r + 0.587*g + 0.114*b)/255;
   return lum > 0.6 ? '#1a1a1c' : '#f0f0f2';
+}
+var toastTimer = null;
+function showToast(msg){
+  var t = document.getElementById('toast');
+  if(!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2200);
 }
 function formatBytes(n){
   if(!n) return '0 B';
@@ -1891,8 +1912,18 @@ function buildTodoItemEl(card, item){
   row.appendChild(cb);
   var txt = document.createElement('div');
   txt.className='ti-text'; txt.contentEditable='true'; txt.innerText = item.text||'';
+  txt.style.marginLeft = ((item.indent||0)*18)+'px';
   txt.addEventListener('mousedown', function(e){e.stopPropagation();});
   txt.addEventListener('blur', function(){ item.text = txt.innerText; scheduleSave(); });
+  txt.addEventListener('keydown', function(e){
+    if(e.key==='Tab'){
+      e.preventDefault(); e.stopPropagation();
+      pushHistory();
+      item.indent = clamp((item.indent||0) + (e.shiftKey?-1:1), 0, 4);
+      txt.style.marginLeft = (item.indent*18)+'px';
+      scheduleSave();
+    }
+  });
   row.appendChild(txt);
   var del = document.createElement('button');
   del.className='ti-del'; del.textContent='✕';
@@ -1913,8 +1944,18 @@ function buildColumnItemEl(card, item, idx, rerender){
   row.className = 'col-item';
   var txt = document.createElement('div');
   txt.className='ti-text'; txt.contentEditable='true'; txt.innerText = item.text||'';
+  txt.style.marginLeft = ((item.indent||0)*18)+'px';
   txt.addEventListener('mousedown', function(e){e.stopPropagation();});
   txt.addEventListener('blur', function(){ item.text = txt.innerText; scheduleSave(); });
+  txt.addEventListener('keydown', function(e){
+    if(e.key==='Tab'){
+      e.preventDefault(); e.stopPropagation();
+      pushHistory();
+      item.indent = clamp((item.indent||0) + (e.shiftKey?-1:1), 0, 4);
+      txt.style.marginLeft = (item.indent*18)+'px';
+      scheduleSave();
+    }
+  });
   row.appendChild(txt);
   var ctrl = document.createElement('div');
   ctrl.className = 'col-item-ctrl';
@@ -2269,9 +2310,74 @@ function onCardDragMove(e){
     it.el.style.top = it.card.y+'px';
   });
   renderConnectors();
+  updateBoardDropTarget(e, d);
+}
+function updateBoardDropTarget(e, d){
+  var draggedEls = d.items.map(function(it){ return it.el; });
+  var stack = document.elementsFromPoint(e.clientX, e.clientY);
+  var tile = null;
+  for(var i=0;i<stack.length;i++){
+    var candidate = stack[i].closest ? stack[i].closest('.card.type-boardlink') : null;
+    if(candidate && draggedEls.indexOf(candidate)===-1){ tile = candidate; break; }
+  }
+  document.querySelectorAll('.card.drop-target').forEach(function(t){
+    if(t!==tile) t.classList.remove('drop-target');
+  });
+  if(tile) tile.classList.add('drop-target');
 }
 function endCardDrag(){
-  if(state.drag){ state.drag=null; scheduleSave(); }
+  if(!state.drag) return;
+  var d = state.drag;
+  var tile = document.querySelector('.card.drop-target');
+  if(tile){
+    tile.classList.remove('drop-target');
+    var b = activeBoard();
+    var tileCard = b.cards.find(function(c){ return c.id===tile.dataset.id; });
+    if(tileCard && tileCard.targetBoardId && store.boards[tileCard.targetBoardId] && tileCard.targetBoardId!==b.id){
+      moveCardsToBoard(d.items.map(function(it){return it.card.id;}), tileCard.targetBoardId);
+      state.drag = null;
+      return;
+    }
+  }
+  state.drag=null; scheduleSave();
+}
+function moveCardsToBoard(cardIds, targetBoardId){
+  var b = activeBoard();
+  var target = store.boards[targetBoardId];
+  if(!target) return;
+  var idSet = {}; cardIds.forEach(function(id){ idSet[id]=true; });
+  var moving = b.cards.filter(function(c){ return idSet[c.id] && !c.locked; });
+  if(!moving.length) return;
+  var idMap = {};
+  var newCards = moving.map(function(c){
+    var copy = JSON.parse(JSON.stringify(c));
+    idMap[c.id] = copy.id = uid('c');
+    copy.x = 60; copy.y = 60 + newCardsOffset(target);
+    copy.z = ++target.maxZ;
+    if(copy.items) copy.items = copy.items.map(function(it){ return Object.assign({}, it, {id:uid('t')}); });
+    return copy;
+  });
+  var movingConns = b.connectors.filter(function(cn){ return idSet[cn.from] && idSet[cn.to]; });
+  var newConns = movingConns.map(function(cn){
+    return { id:uid('n'), from:idMap[cn.from], to:idMap[cn.to], label:cn.label||'', color:cn.color };
+  });
+  b.cards = b.cards.filter(function(c){ return !idSet[c.id]; });
+  b.connectors = b.connectors.filter(function(cn){ return !(idSet[cn.from] && idSet[cn.to]); });
+  target.cards = target.cards.concat(newCards);
+  target.connectors = target.connectors.concat(newConns);
+  moving.forEach(function(c){
+    var el = document.querySelector('.card[data-id="'+c.id+'"]');
+    if(el) el.remove();
+  });
+  state.selectedCards.clear();
+  renderConnectors();
+  document.getElementById('emptyHint').style.display = b.cards.length===0 ? 'block':'none';
+  renderSidebar(document.getElementById('boardSearch').value);
+  scheduleSave();
+  showToast('已移动 '+newCards.length+' 项到「'+target.name+'」');
+}
+function newCardsOffset(board){
+  return (board.cards.length % 6) * 20;
 }
 
 /* ---- Resize ---- */
