@@ -193,11 +193,628 @@
       "vzoom": 1.0010118193601694,
       "maxZ": 59,
       "updatedAt": 1785852078549
+    },
+    "b_mser0o3u_8": {
+      "id": "b_mser0o3u_8",
+      "name": "基本面框架",
+      "icon": "📊",
+      "cards": [
+        {
+          "id": "c_mser0o3u_9",
+          "type": "note",
+          "x": 1360,
+          "y": 40,
+          "w": 280,
+          "h": 70,
+          "color": "#c9d9ff",
+          "z": 1,
+          "text": "财政政策\n• 调节税收，津贴 & 开支\n• 宽松（带动经济有效增长） vs 紧缩（避免贫富差距扩大）"
+        },
+        {
+          "id": "c_mser0o3u_a",
+          "type": "note",
+          "x": 1360,
+          "y": 170,
+          "w": 280,
+          "h": 70,
+          "color": "#c9d9ff",
+          "z": 1,
+          "text": "货币政策\n• 调节汇率，利率 & 流动性\n• 宽松（刺激经济增长） vs 紧缩（预防经济过热）"
+        },
+        {
+          "id": "c_mser0o3u_b",
+          "type": "header",
+          "x": 1020,
+          "y": 105,
+          "w": 280,
+          "h": 70,
+          "color": "#c9d9ff",
+          "z": 1,
+          "text": "货币政策 vs 财政政策"
+        },
+        {
+          "id": "c_mser0o3u_c",
+          "type": "header",
+          "x": 659.2317105913125,
+          "y": -77.76094679644956,
+          "w": 295.23007889970415,
+          "h": 176.6105522979289,
+          "color": "#fff6b3",
+          "z": 42,
+          "text": "1. 内在因素<br>• 政策<br>• 经济结构<br>• 人口结构"
+        },
+        {
+          "id": "c_mser0o3u_d",
+          "type": "note",
+          "x": 681.3845526272459,
+          "y": 215.5422897380044,
+          "w": 335.3821050898332,
+          "h": 157.22681551648728,
+          "color": "#f2f2f2",
+          "z": 60,
+          "text": "<b>2. 外在因素<br>• 国债/信用<br>• 贸易/联盟<br>• 国际货币流</b>"
+        },
+        {
+          "id": "c_mser0o3u_e",
+          "type": "note",
+          "x": 680,
+          "y": 430,
+          "w": 320.15202619012905,
+          "h": 107.3829209356374,
+          "color": "#ffc9d6",
+          "z": 1,
+          "text": "3. 突发性因素<br>• 天灾<br>• 战争/恐怖主义<br>• 疫情"
+        },
+        {
+          "id": "c_mser0o3u_f",
+          "type": "header",
+          "x": 340,
+          "y": 267.5,
+          "w": 280,
+          "h": 70,
+          "color": "#e3c9ff",
+          "z": 53,
+          "text": "经济齿轮转动的关键"
+        },
+        {
+          "id": "c_mser0o3u_h",
+          "type": "header",
+          "x": 370.46015779940825,
+          "y": 560,
+          "w": 280,
+          "h": 70,
+          "color": "#e3c9ff",
+          "z": 34,
+          "text": "全球经济运行模式"
+        },
+        {
+          "id": "c_mser0o3u_i",
+          "type": "note",
+          "x": 340,
+          "y": 690,
+          "w": 280,
+          "h": 70,
+          "color": "#ffd9b3",
+          "z": 1,
+          "text": "资金撤离和流入方向"
+        },
+        {
+          "id": "c_mser0o3u_j",
+          "type": "note",
+          "x": 680,
+          "y": 820,
+          "w": 280,
+          "h": 70,
+          "color": "#ffc9d6",
+          "z": 1,
+          "text": "国内生产总值 GDP<br><br>= 消费 Consumer + 投资 Investment + 政府支出 Government Spending + 净出口 Export (X-M)"
+        },
+        {
+          "id": "c_mser0o3v_k",
+          "type": "header",
+          "x": 340,
+          "y": 820,
+          "w": 280,
+          "h": 70,
+          "color": "#e3c9ff",
+          "z": 1,
+          "text": "GDP资金循环"
+        },
+        {
+          "id": "c_mser0o3v_l",
+          "type": "header",
+          "x": 0,
+          "y": 543.75,
+          "w": 320,
+          "h": 70,
+          "color": "#f2f2f2",
+          "z": 1,
+          "text": "基本面框架"
+        },
+        {
+          "id": "c_mser0o3v_m",
+          "type": "note",
+          "x": 2060,
+          "y": 195,
+          "w": 260,
+          "h": 130,
+          "color": "#fff6b3",
+          "z": 1,
+          "text": "国际贸易 International Trade\n• 产品，服务，资源 & 技术\n• \"齿轮的输入端\" (the gear's input end)"
+        },
+        {
+          "id": "c_mser0o3v_n",
+          "type": "note",
+          "x": 2337.12812921102,
+          "y": 355,
+          "w": 260,
+          "h": 130,
+          "color": "#ffd9b3",
+          "z": 1,
+          "text": "劳动力与消费力 Labor & Consumption Power\n• 就业机会多、发展项目多。内需引擎 (many jobs and projects; the engine of domestic demand)"
+        },
+        {
+          "id": "c_mser0o3v_o",
+          "type": "note",
+          "x": 2337.12812921102,
+          "y": 675,
+          "w": 260,
+          "h": 130,
+          "color": "#ffc9d6",
+          "z": 1,
+          "text": "资产货币化 Asset Monetization<br>• 资产 → 可流通的钱。整台机器的放大器 (assets become liquid money; the amplifier of the whole machine)"
+        },
+        {
+          "id": "c_mser0o3v_p",
+          "type": "note",
+          "x": 2060,
+          "y": 835,
+          "w": 260,
+          "h": 130,
+          "color": "#e3c9ff",
+          "z": 1,
+          "text": "固定资产投资 Investment in Fixed Assets\n• 稳定、低收益，慢齿轮 (stable, low yield, the slow gear)"
+        },
+        {
+          "id": "c_mser0o3v_q",
+          "type": "note",
+          "x": 1782.8718707889798,
+          "y": 675.0000000000001,
+          "w": 260,
+          "h": 130,
+          "color": "#c9d9ff",
+          "z": 1,
+          "text": "金融资产投资 Financial Asset Investment\n• 高收益，快齿轮 (high yield, the fast gear)\n• \"快齿轮先转、慢齿轮后转\" (the fast gear turns first, the slow gear follows)"
+        },
+        {
+          "id": "c_mser0o3v_r",
+          "type": "note",
+          "x": 1782.8718707889798,
+          "y": 355,
+          "w": 260,
+          "h": 130,
+          "color": "#c6f0d4",
+          "z": 1,
+          "text": "国际货币流 International Currency Flow\n• 追求安全、高收益率 (pursuing safety and high yield)\n• \"齿轮的输出/输入闸门\" (the gear's output/input gate)"
+        },
+        {
+          "id": "c_mser0o3v_s",
+          "type": "header",
+          "x": 1121.2664406627082,
+          "y": 574.9177671866764,
+          "w": 300,
+          "h": 60,
+          "color": "#e3c9ff",
+          "z": 62,
+          "text": "🔁 六大齿轮 (Six Major Gears)"
+        },
+        {
+          "id": "c_mser0o3v_t",
+          "type": "note",
+          "x": 340,
+          "y": 1210,
+          "w": 200,
+          "h": 70,
+          "color": "#c6f0d4",
+          "z": 1,
+          "text": "Central Bank"
+        },
+        {
+          "id": "c_mser0o3v_u",
+          "type": "note",
+          "x": 80,
+          "y": 1370,
+          "w": 200,
+          "h": 70,
+          "color": "#c6f0d4",
+          "z": 1,
+          "text": "Financial Institution"
+        },
+        {
+          "id": "c_mser0o3v_v",
+          "type": "note",
+          "x": 600,
+          "y": 1370,
+          "w": 200,
+          "h": 70,
+          "color": "#c6f0d4",
+          "z": 1,
+          "text": "Government"
+        },
+        {
+          "id": "c_mser0o3v_w",
+          "type": "note",
+          "x": 0,
+          "y": 1590,
+          "w": 200,
+          "h": 70,
+          "color": "#c6f0d4",
+          "z": 1,
+          "text": "Business / Firm (1)"
+        },
+        {
+          "id": "c_mser0o3v_x",
+          "type": "note",
+          "x": 400,
+          "y": 1590,
+          "w": 200,
+          "h": 70,
+          "color": "#c6f0d4",
+          "z": 1,
+          "text": "Business / Firm (2)"
+        },
+        {
+          "id": "c_mser0o3v_y",
+          "type": "note",
+          "x": 80,
+          "y": 1810,
+          "w": 200,
+          "h": 70,
+          "color": "#c6f0d4",
+          "z": 1,
+          "text": "Households"
+        },
+        {
+          "id": "c_mser0o3v_z",
+          "type": "note",
+          "x": 600,
+          "y": 1810,
+          "w": 200,
+          "h": 70,
+          "color": "#c6f0d4",
+          "z": 1,
+          "text": "Rest of World / Environment"
+        },
+        {
+          "id": "c_mser0o3v_10",
+          "type": "header",
+          "x": 0,
+          "y": 1120,
+          "w": 320,
+          "h": 60,
+          "color": "#c9d9ff",
+          "z": 1,
+          "text": "💰 GDP 资金循环 - Circular Flow of Income Diagram"
+        },
+        {
+          "id": "c_mser0o3v_11",
+          "type": "header",
+          "x": 2060,
+          "y": 1035,
+          "w": 340,
+          "h": 60,
+          "color": "#f2f2f2",
+          "z": 1,
+          "text": "📋 经济体的体检报告"
+        },
+        {
+          "id": "c_mser0o3v_12",
+          "type": "note",
+          "x": 2060,
+          "y": 1125,
+          "w": 300,
+          "h": 300,
+          "color": "#fff6b3",
+          "z": 1,
+          "text": "左列\n• GDP GROWTH\n• INFLATION RATE\n• UNEMPLOYMENT RATE\n• WAGE GROWTH\n• CONSUMER CONFIDENCE\n• PURCHASING MANAGER INDEX\n• RETAIL SALES\n• BUSINESS CONFIDENCE\n• POPULATION"
+        },
+        {
+          "id": "c_mser0o3v_13",
+          "type": "note",
+          "x": 2400,
+          "y": 1125,
+          "w": 300,
+          "h": 300,
+          "color": "#ffc9d6",
+          "z": 1,
+          "text": "右列<br>• 10YR BOND YIELD%<br>• DEBT TO GDP<br>• CURRENT ACCOUNT<br>• BALANCE OF TRADE<br>• EXPORT (PARTNERS &amp; PRODUCTS)<br>• IMPORT (PARTNERS &amp; PRODUCTS)<br>• TAX RATE<br>• INTEREST RATE<br>• CENTRAL BANK BALANCE SHEET"
+        }
+      ],
+      "connectors": [
+        {
+          "id": "n_mser0o3v_14",
+          "from": "c_mser0o3u_b",
+          "to": "c_mser0o3u_9",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_15",
+          "from": "c_mser0o3u_b",
+          "to": "c_mser0o3u_a",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_16",
+          "from": "c_mser0o3u_c",
+          "to": "c_mser0o3u_b",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_17",
+          "from": "c_mser0o3u_f",
+          "to": "c_mser0o3u_c",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_18",
+          "from": "c_mser0o3u_f",
+          "to": "c_mser0o3u_d",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_19",
+          "from": "c_mser0o3u_f",
+          "to": "c_mser0o3u_e",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_1b",
+          "from": "c_mser0o3v_k",
+          "to": "c_mser0o3u_j",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_1c",
+          "from": "c_mser0o3v_l",
+          "to": "c_mser0o3u_f",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_1d",
+          "from": "c_mser0o3v_l",
+          "to": "c_mser0o3u_h",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_1e",
+          "from": "c_mser0o3v_l",
+          "to": "c_mser0o3u_i",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_1f",
+          "from": "c_mser0o3v_l",
+          "to": "c_mser0o3v_k",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_1g",
+          "from": "c_mser0o3v_m",
+          "to": "c_mser0o3v_n",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_1h",
+          "from": "c_mser0o3v_n",
+          "to": "c_mser0o3v_o",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_1i",
+          "from": "c_mser0o3v_o",
+          "to": "c_mser0o3v_p",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_1j",
+          "from": "c_mser0o3v_p",
+          "to": "c_mser0o3v_q",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_1k",
+          "from": "c_mser0o3v_q",
+          "to": "c_mser0o3v_r",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_1l",
+          "from": "c_mser0o3v_r",
+          "to": "c_mser0o3v_m",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_1m",
+          "from": "c_mser0o3v_s",
+          "to": "c_mser0o3v_m",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_1o",
+          "from": "c_mser0o3v_t",
+          "to": "c_mser0o3v_u",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_1p",
+          "from": "c_mser0o3v_t",
+          "to": "c_mser0o3v_v",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_1q",
+          "from": "c_mser0o3v_u",
+          "to": "c_mser0o3v_w",
+          "label": "I - Investment"
+        },
+        {
+          "id": "n_mser0o3v_1r",
+          "from": "c_mser0o3v_u",
+          "to": "c_mser0o3v_x",
+          "label": "I - Investment"
+        },
+        {
+          "id": "n_mser0o3v_1s",
+          "from": "c_mser0o3v_u",
+          "to": "c_mser0o3v_v",
+          "label": "Taxes"
+        },
+        {
+          "id": "n_mser0o3v_1t",
+          "from": "c_mser0o3v_v",
+          "to": "c_mser0o3v_w",
+          "label": "G - Government Spending"
+        },
+        {
+          "id": "n_mser0o3v_1u",
+          "from": "c_mser0o3v_v",
+          "to": "c_mser0o3v_x",
+          "label": "G - Government Spending"
+        },
+        {
+          "id": "n_mser0o3v_1v",
+          "from": "c_mser0o3v_x",
+          "to": "c_mser0o3v_v",
+          "label": "Taxes"
+        },
+        {
+          "id": "n_mser0o3v_1w",
+          "from": "c_mser0o3v_w",
+          "to": "c_mser0o3v_x",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_1x",
+          "from": "c_mser0o3v_x",
+          "to": "c_mser0o3v_y",
+          "label": "Income"
+        },
+        {
+          "id": "n_mser0o3v_1y",
+          "from": "c_mser0o3v_y",
+          "to": "c_mser0o3v_v",
+          "label": "Taxes"
+        },
+        {
+          "id": "n_mser0o3v_1z",
+          "from": "c_mser0o3v_y",
+          "to": "c_mser0o3v_x",
+          "label": "C = Consumer Spending"
+        },
+        {
+          "id": "n_mser0o3v_20",
+          "from": "c_mser0o3v_y",
+          "to": "c_mser0o3v_z",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_21",
+          "from": "c_mser0o3v_z",
+          "to": "c_mser0o3v_w",
+          "label": "S = Savings"
+        },
+        {
+          "id": "n_mser0o3v_22",
+          "from": "c_mser0o3v_y",
+          "to": "c_mser0o3v_w",
+          "label": "S = Savings"
+        },
+        {
+          "id": "n_mser0o3v_23",
+          "from": "c_mser0o3v_10",
+          "to": "c_mser0o3v_t",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_24",
+          "from": "c_mser0o3u_j",
+          "to": "c_mser0o3v_10",
+          "label": "参见资金循环图"
+        },
+        {
+          "id": "n_mser0o3v_25",
+          "from": "c_mser0o3v_11",
+          "to": "c_mser0o3v_12",
+          "label": ""
+        },
+        {
+          "id": "n_mser0o3v_26",
+          "from": "c_mser0o3v_11",
+          "to": "c_mser0o3v_13",
+          "label": ""
+        },
+        {
+          "id": "n_mser4fhy_29",
+          "from": "c_mser0o3u_h",
+          "to": "c_mser0o3v_s",
+          "label": ""
+        }
+      ],
+      "trash": [
+        {
+          "card": {
+            "id": "c_mser0o3u_g",
+            "type": "note",
+            "x": 747.8430787350457,
+            "y": 565.5382105089833,
+            "w": 160,
+            "h": 100,
+            "color": "#ffc9d6",
+            "z": 61,
+            "text": "六大齿轮<br><br><br>"
+          },
+          "deletedAt": 1785853593361
+        },
+        {
+          "card": {
+            "id": "c_mser2xoq_28",
+            "type": "note",
+            "x": 669.325174363329,
+            "y": 232.79984502512093,
+            "w": 220,
+            "h": 150,
+            "color": "#fff6b3",
+            "z": 46,
+            "text": ""
+          },
+          "deletedAt": 1785853532855
+        },
+        {
+          "card": {
+            "id": "c_mser268b_27",
+            "type": "header",
+            "x": 394.46015779940825,
+            "y": 584,
+            "w": 280,
+            "h": 70,
+            "color": "#e3c9ff",
+            "z": 36,
+            "text": "全球经济运行模"
+          },
+          "deletedAt": 1785853499293
+        }
+      ],
+      "vx": 324.98276061385195,
+      "vy": 89.91750839266501,
+      "vzoom": 0.5902912574721221,
+      "maxZ": 62,
+      "updatedAt": 1785853422858
     }
   },
   "order": [
-    "b_mseq7utx_1"
+    "b_mseq7utx_1",
+    "b_mser0o3u_8"
   ],
-  "activeId": "b_mseq7utx_1",
-  "syncedAt": 1785853131558
+  "activeId": "b_mser0o3u_8",
+  "syncedAt": 1785853625446
 }
