@@ -158,12 +158,19 @@
   .palette-swatch:hover{transform:scale(1.15);}
 
   .resize-handle{
-    position:absolute;right:0;bottom:0;width:15px;height:15px;cursor:nwse-resize;z-index:5;
+    position:absolute;width:15px;height:15px;z-index:5;
   }
   .resize-handle:after{
-    content:'';position:absolute;right:3px;bottom:3px;width:7px;height:7px;
-    border-right:2px solid rgba(0,0,0,.22);border-bottom:2px solid rgba(0,0,0,.22);
+    content:'';position:absolute;width:7px;height:7px;
   }
+  .resize-handle.rh-se{right:0;bottom:0;cursor:nwse-resize;}
+  .resize-handle.rh-se:after{right:3px;bottom:3px;border-right:2px solid rgba(0,0,0,.22);border-bottom:2px solid rgba(0,0,0,.22);}
+  .resize-handle.rh-nw{left:0;top:0;cursor:nwse-resize;}
+  .resize-handle.rh-nw:after{left:3px;top:3px;border-left:2px solid rgba(0,0,0,.22);border-top:2px solid rgba(0,0,0,.22);}
+  .resize-handle.rh-ne{right:0;top:0;cursor:nesw-resize;}
+  .resize-handle.rh-ne:after{right:3px;top:3px;border-right:2px solid rgba(0,0,0,.22);border-top:2px solid rgba(0,0,0,.22);}
+  .resize-handle.rh-sw{left:0;bottom:0;cursor:nesw-resize;}
+  .resize-handle.rh-sw:after{left:3px;bottom:3px;border-left:2px solid rgba(0,0,0,.22);border-bottom:2px solid rgba(0,0,0,.22);}
   .connect-handle{
     position:absolute;width:13px;height:13px;border-radius:50%;background:#fff;border:2px solid var(--orange);
     z-index:6;opacity:0;transition:opacity .1s;cursor:crosshair;
@@ -1270,10 +1277,16 @@ function buildCardEl(card){
   buildBody(card, body, el);
   el.appendChild(body);
 
-  // resize handle
-  var rh = document.createElement('div');
-  rh.className = 'resize-handle';
-  el.appendChild(rh);
+  // resize handles (4 corners, each anchored on the opposite corner)
+  ['nw','ne','sw','se'].forEach(function(dir){
+    var rh = document.createElement('div');
+    rh.className = 'resize-handle rh-'+dir;
+    el.appendChild(rh);
+    rh.addEventListener('mousedown', function(e){
+      e.stopPropagation(); e.preventDefault();
+      startCardResize(card, el, e, dir);
+    });
+  });
 
   // connect handles
   ['top','right','bottom','left'].forEach(function(side){
@@ -1315,11 +1328,6 @@ function buildCardEl(card){
     e.preventDefault(); e.stopPropagation();
     if(!(state.selectedCards.has(card.id) && state.selectedCards.size>1)) selectCardOnly(card.id);
     openCardContextMenu(card, e.clientX, e.clientY);
-  });
-
-  rh.addEventListener('mousedown', function(e){
-    e.stopPropagation(); e.preventDefault();
-    startCardResize(card, el, e);
   });
 
   return el;
@@ -1833,9 +1841,12 @@ function endCardDrag(){
 }
 
 /* ---- Resize ---- */
-function startCardResize(card, el, e){
+function startCardResize(card, el, e, dir){
   var b = activeBoard();
-  state.resize = { card:card, el:el, startX:e.clientX, startY:e.clientY, origW:card.w, origH:card.h, zoom:b.vzoom, historyPushed:false };
+  state.resize = {
+    card:card, el:el, dir:dir||'se', startX:e.clientX, startY:e.clientY,
+    origX:card.x, origY:card.y, origW:card.w, origH:card.h, zoom:b.vzoom, historyPushed:false
+  };
 }
 function onCardResizeMove(e){
   var r = state.resize;
@@ -1843,10 +1854,25 @@ function onCardResizeMove(e){
   var dx = (e.clientX - r.startX)/r.zoom;
   var dy = (e.clientY - r.startY)/r.zoom;
   var minW = MIN_W[r.card.type]||120, minH = MIN_H[r.card.type]||60;
-  r.card.w = Math.max(minW, r.origW+dx);
-  r.card.h = Math.max(minH, r.origH+dy);
-  r.el.style.width = r.card.w+'px';
-  r.el.style.height = r.card.h+'px';
+  var dir = r.dir;
+  var newX = r.origX, newY = r.origY, newW = r.origW, newH = r.origH;
+
+  if(dir.indexOf('e')!==-1){
+    newW = Math.max(minW, r.origW+dx);
+  } else if(dir.indexOf('w')!==-1){
+    newW = Math.max(minW, r.origW-dx);
+    newX = r.origX + r.origW - newW;
+  }
+  if(dir.indexOf('s')!==-1){
+    newH = Math.max(minH, r.origH+dy);
+  } else if(dir.indexOf('n')!==-1){
+    newH = Math.max(minH, r.origH-dy);
+    newY = r.origY + r.origH - newH;
+  }
+
+  r.card.x = newX; r.card.y = newY; r.card.w = newW; r.card.h = newH;
+  r.el.style.left = newX+'px'; r.el.style.top = newY+'px';
+  r.el.style.width = newW+'px'; r.el.style.height = newH+'px';
   renderConnectors();
 }
 function endCardResize(){
