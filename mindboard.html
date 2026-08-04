@@ -129,6 +129,25 @@
   }
   .empty-hint b{color:#7d7660;}
 
+  /* ---------- 画布滚动条 ---------- */
+  .canvas-hscroll{
+    position:absolute;left:0;right:13px;bottom:0;height:13px;background:rgba(0,0,0,.03);z-index:50;
+  }
+  .canvas-vscroll{
+    position:absolute;top:0;bottom:13px;right:0;width:13px;background:rgba(0,0,0,.03);z-index:50;
+  }
+  .canvas-scroll-corner{
+    position:absolute;right:0;bottom:0;width:13px;height:13px;background:rgba(0,0,0,.03);z-index:50;
+  }
+  .canvas-hscroll-thumb{
+    position:absolute;top:2px;height:9px;min-width:30px;background:rgba(0,0,0,.22);border-radius:5px;cursor:pointer;
+  }
+  .canvas-hscroll-thumb:hover{background:rgba(0,0,0,.35);}
+  .canvas-vscroll-thumb{
+    position:absolute;left:2px;width:9px;min-height:30px;background:rgba(0,0,0,.22);border-radius:5px;cursor:pointer;
+  }
+  .canvas-vscroll-thumb:hover{background:rgba(0,0,0,.35);}
+
   /* ---------- Cards ---------- */
   .card{
     position:absolute;background:#fffdf7;border:1px solid rgba(0,0,0,.08);border-radius:8px;
@@ -463,6 +482,9 @@
         <button data-cmd="insertUnorderedList" title="项目符号列表">≡</button>
         <button data-cmd="removeFormat" title="清除格式">✕</button>
       </div>
+      <div class="canvas-hscroll" id="hScroll"><div class="canvas-hscroll-thumb" id="hScrollThumb"></div></div>
+      <div class="canvas-vscroll" id="vScroll"><div class="canvas-vscroll-thumb" id="vScrollThumb"></div></div>
+      <div class="canvas-scroll-corner"></div>
     </div>
   </div>
 
@@ -1159,6 +1181,106 @@ function applyViewportTransform(){
   var content = document.getElementById('canvasContent');
   content.style.transform = 'translate('+b.vx+'px,'+b.vy+'px) scale('+b.vzoom+')';
   document.getElementById('zoomPct').textContent = Math.round(b.vzoom*100)+'%';
+  updateScrollbars();
+}
+
+/* ---- 画布滚动条 ---- */
+var SCROLL_PAD = 600;
+function getContentBounds(){
+  var b = activeBoard();
+  if(!b || !b.cards.length) return {minX:-800,minY:-800,maxX:800,maxY:800};
+  var minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+  b.cards.forEach(function(c){
+    minX=Math.min(minX,c.x); minY=Math.min(minY,c.y);
+    maxX=Math.max(maxX,c.x+c.w); maxY=Math.max(maxY,c.y+c.h);
+  });
+  return {minX:minX-SCROLL_PAD, minY:minY-SCROLL_PAD, maxX:maxX+SCROLL_PAD, maxY:maxY+SCROLL_PAD};
+}
+function updateScrollbars(){
+  var b = activeBoard();
+  var vpEl = document.getElementById('viewport');
+  var hThumb = document.getElementById('hScrollThumb'), vThumb = document.getElementById('vScrollThumb');
+  if(!b || !vpEl || !hThumb || !vThumb) return;
+  var vpRect = vpEl.getBoundingClientRect();
+  var bounds = getContentBounds();
+  var visMinX = -b.vx/b.vzoom, visMaxX = visMinX + vpRect.width/b.vzoom;
+  var visMinY = -b.vy/b.vzoom, visMaxY = visMinY + vpRect.height/b.vzoom;
+  var totalMinX = Math.min(bounds.minX, visMinX), totalMaxX = Math.max(bounds.maxX, visMaxX);
+  var totalMinY = Math.min(bounds.minY, visMinY), totalMaxY = Math.max(bounds.maxY, visMaxY);
+  var totalW = Math.max(1, totalMaxX-totalMinX), totalH = Math.max(1, totalMaxY-totalMinY);
+  var trackW = Math.max(1, vpRect.width-13), trackH = Math.max(1, vpRect.height-13);
+
+  var thumbW = clamp(trackW * ((visMaxX-visMinX)/totalW), 30, trackW);
+  var thumbH = clamp(trackH * ((visMaxY-visMinY)/totalH), 30, trackH);
+  var thumbX = clamp(trackW * ((visMinX-totalMinX)/totalW), 0, trackW-thumbW);
+  var thumbY = clamp(trackH * ((visMinY-totalMinY)/totalH), 0, trackH-thumbH);
+
+  hThumb.style.width = thumbW+'px'; hThumb.style.left = thumbX+'px';
+  vThumb.style.height = thumbH+'px'; vThumb.style.top = thumbY+'px';
+
+  state._scrollMeta = {totalMinX:totalMinX, totalMinY:totalMinY, totalW:totalW, totalH:totalH, trackW:trackW, trackH:trackH};
+}
+function startHScrollDrag(e){
+  var b = activeBoard();
+  var meta = state._scrollMeta;
+  if(!meta) return;
+  var startX = e.clientX, startVx = b.vx;
+  function onMove(ev){
+    var dPx = ev.clientX - startX;
+    var dLocal = (dPx/meta.trackW) * meta.totalW;
+    b.vx = startVx - dLocal*b.vzoom;
+    applyViewportTransform();
+  }
+  function onUp(){
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup', onUp);
+    scheduleSave();
+  }
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
+}
+function startVScrollDrag(e){
+  var b = activeBoard();
+  var meta = state._scrollMeta;
+  if(!meta) return;
+  var startY = e.clientY, startVy = b.vy;
+  function onMove(ev){
+    var dPx = ev.clientY - startY;
+    var dLocal = (dPx/meta.trackH) * meta.totalH;
+    b.vy = startVy - dLocal*b.vzoom;
+    applyViewportTransform();
+  }
+  function onUp(){
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup', onUp);
+    scheduleSave();
+  }
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
+}
+function jumpHScroll(e){
+  var meta = state._scrollMeta;
+  if(!meta) return;
+  var b = activeBoard();
+  var vpRect = document.getElementById('viewport').getBoundingClientRect();
+  var clickX = e.clientX - vpRect.left;
+  var targetLocalCenter = meta.totalMinX + (clickX/meta.trackW)*meta.totalW;
+  var visW = vpRect.width/b.vzoom;
+  b.vx = -(targetLocalCenter - visW/2)*b.vzoom;
+  applyViewportTransform();
+  scheduleSave();
+}
+function jumpVScroll(e){
+  var meta = state._scrollMeta;
+  if(!meta) return;
+  var b = activeBoard();
+  var vpRect = document.getElementById('viewport').getBoundingClientRect();
+  var clickY = e.clientY - vpRect.top;
+  var targetLocalCenter = meta.totalMinY + (clickY/meta.trackH)*meta.totalH;
+  var visH = vpRect.height/b.vzoom;
+  b.vy = -(targetLocalCenter - visH/2)*b.vzoom;
+  applyViewportTransform();
+  scheduleSave();
 }
 
 function renderBoard(){
@@ -1239,6 +1361,7 @@ function renderConnectors(){
       svg.appendChild(txt);
     }
   });
+  updateScrollbars();
 }
 
 function editConnectorLabel(conn, x, y){
@@ -2268,7 +2391,7 @@ function wireGlobalEvents(){
   var viewport = document.getElementById('viewport');
 
   viewport.addEventListener('mousedown', function(e){
-    if(e.target.closest('.card, #contextMenu, #richToolbar')) return;
+    if(e.target.closest('.card, #contextMenu, #richToolbar, #hScroll, #vScroll')) return;
     closeContextMenu();
     if(e.button===1 || (e.button===0 && state.spaceHeld)){
       e.preventDefault();
@@ -2531,6 +2654,25 @@ function wireGlobalEvents(){
       e.preventDefault();
       document.execCommand(btn.dataset.cmd, false, null);
     });
+  });
+
+  document.getElementById('hScrollThumb').addEventListener('mousedown', function(e){
+    e.stopPropagation(); e.preventDefault();
+    startHScrollDrag(e);
+  });
+  document.getElementById('vScrollThumb').addEventListener('mousedown', function(e){
+    e.stopPropagation(); e.preventDefault();
+    startVScrollDrag(e);
+  });
+  document.getElementById('hScroll').addEventListener('mousedown', function(e){
+    if(e.target.id!=='hScroll') return;
+    e.stopPropagation();
+    jumpHScroll(e);
+  });
+  document.getElementById('vScroll').addEventListener('mousedown', function(e){
+    if(e.target.id!=='vScroll') return;
+    e.stopPropagation();
+    jumpVScroll(e);
   });
 
   document.getElementById('boardSearch').addEventListener('input', function(e){
