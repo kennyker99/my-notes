@@ -1,0 +1,108 @@
+{
+  "boards": {
+    "b_mseq7utx_1": {
+      "id": "b_mseq7utx_1",
+      "name": "欢迎看板",
+      "icon": "👋",
+      "cards": [
+        {
+          "id": "c_mseq7uty_2",
+          "type": "header",
+          "x": 40,
+          "y": 40,
+          "w": 320,
+          "h": 56,
+          "color": "#f2f2f2",
+          "z": 1,
+          "text": "👋 欢迎使用 MindBoard"
+        },
+        {
+          "id": "c_mseq7uty_3",
+          "type": "note",
+          "x": 40,
+          "y": 130,
+          "w": 220,
+          "h": 150,
+          "color": "#fff6b3",
+          "z": 2,
+          "text": "这是一张便签卡片。\n拖动顶部色条移动位置，点击色点可换颜色。"
+        },
+        {
+          "id": "c_mseq7uty_4",
+          "type": "note",
+          "x": 380,
+          "y": 130,
+          "w": 220,
+          "h": 150,
+          "color": "#c9d9ff",
+          "z": 3,
+          "text": "拖动卡片边缘的橙色圆点，可以把便签连成思维导图。"
+        },
+        {
+          "id": "c_mseq7uty_8",
+          "type": "todo",
+          "x": 40,
+          "y": 330,
+          "w": 240,
+          "h": 220,
+          "color": "#ffc9d6",
+          "z": 4,
+          "title": "试试待办清单",
+          "items": [
+            {
+              "id": "t_mseq7uty_6",
+              "text": "勾选我试试",
+              "done": false
+            },
+            {
+              "id": "t_mseq7uty_7",
+              "text": "在下方输入框添加新事项",
+              "done": false
+            }
+          ]
+        },
+        {
+          "id": "c_mseq7uty_9",
+          "type": "boardlink",
+          "x": 380,
+          "y": 330,
+          "w": 220,
+          "h": 100,
+          "color": "#fff6b3",
+          "z": 5,
+          "targetBoardId": null
+        },
+        {
+          "id": "c_mseq7uty_a",
+          "type": "note",
+          "x": 620,
+          "y": 330,
+          "w": 220,
+          "h": 150,
+          "color": "#e3c9ff",
+          "z": 6,
+          "text": "左侧「+ 新建看板」可选择：\n思维导图 / 创作企划 / 视觉记忆 / 旅行计划"
+        }
+      ],
+      "connectors": [
+        {
+          "id": "n_mseq7uty_5",
+          "from": "c_mseq7uty_3",
+          "to": "c_mseq7uty_4",
+          "label": "像这样"
+        }
+      ],
+      "trash": [],
+      "vx": 0,
+      "vy": 0,
+      "vzoom": 1,
+      "maxZ": 7,
+      "updatedAt": 1785852078549
+    }
+  },
+  "order": [
+    "b_mseq7utx_1"
+  ],
+  "activeId": "b_mseq7utx_1",
+  "syncedAt": 1785852123121
+}
