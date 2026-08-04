@@ -4,95 +4,175 @@
       "id": "b_mseq7utx_1",
       "name": "欢迎看板",
       "icon": "👋",
-      "cards": [
-        {
-          "id": "c_mseq7uty_3",
-          "type": "note",
-          "x": 358,
-          "y": 121,
-          "w": 220,
-          "h": 150,
-          "color": "#fff6b3",
-          "z": 11,
-          "text": "这是一张便签卡片。<br>拖动顶部色条移动位置，点击色点可换颜色。"
-        },
-        {
-          "id": "c_mseq7uty_4",
-          "type": "note",
-          "x": 827,
-          "y": 143,
-          "w": 207,
-          "h": 134,
-          "color": "#fff6b3",
-          "z": 19,
-          "text": "拖动卡片边缘的橙色圆点，可以把便签连成思维导图。"
-        },
-        {
-          "id": "c_mseq7uty_8",
-          "type": "todo",
-          "x": 40,
-          "y": 330,
-          "w": 240,
-          "h": 220,
-          "color": "#ffc9d6",
-          "z": 4,
-          "title": "试试待办清单",
-          "items": [
-            {
-              "id": "t_mseq7uty_6",
-              "text": "勾选我试试",
-              "done": false
-            },
-            {
-              "id": "t_mseq7uty_7",
-              "text": "在下方输入框添加新事项",
-              "done": false
-            }
-          ]
-        },
-        {
-          "id": "c_mseq7uty_9",
-          "type": "boardlink",
-          "x": 380,
-          "y": 330,
-          "w": 220,
-          "h": 100,
-          "color": "#fff6b3",
-          "z": 5,
-          "targetBoardId": null
-        },
-        {
-          "id": "c_mseq7uty_a",
-          "type": "note",
-          "x": 620,
-          "y": 330,
-          "w": 220,
-          "h": 150,
-          "color": "#e3c9ff",
-          "z": 6,
-          "text": "左侧「+ 新建看板」可选择：\n思维导图 / 创作企划 / 视觉记忆 / 旅行计划"
-        },
-        {
-          "id": "c_mseqjumz_1",
-          "type": "note",
-          "x": 988.1679784269879,
-          "y": 394.6254390510146,
-          "w": 220,
-          "h": 150,
-          "color": "#fff6b3",
-          "z": 23,
-          "text": ""
-        }
-      ],
-      "connectors": [
-        {
-          "id": "n_mseq7uty_5",
-          "from": "c_mseq7uty_3",
-          "to": "c_mseq7uty_4",
-          "label": "像这样"
-        }
-      ],
+      "cards": [],
+      "connectors": [],
       "trash": [
+        {
+          "card": {
+            "id": "c_mseqsu3m_4",
+            "type": "boardlink",
+            "x": 256.7308792162022,
+            "y": 180.8604786156376,
+            "w": 363.854445287212,
+            "h": 173.92520105037283,
+            "color": "#fff6b3",
+            "z": 59,
+            "targetBoardId": null
+          },
+          "deletedAt": 1785853111542
+        },
+        {
+          "card": {
+            "id": "c_mseqt7p1_5",
+            "type": "boardlink",
+            "x": -433.5464012029406,
+            "y": 183.88170534458584,
+            "w": 363.854445287212,
+            "h": 173.92520105037283,
+            "color": "#fff6b3",
+            "z": 58,
+            "targetBoardId": null
+          },
+          "deletedAt": 1785853110266
+        },
+        {
+          "card": {
+            "id": "c_mseqtmxl_7",
+            "type": "note",
+            "x": 70.45611964796842,
+            "y": 220.1233080362361,
+            "w": 220,
+            "h": 150,
+            "color": "#fff6b3",
+            "z": 53,
+            "text": ""
+          },
+          "deletedAt": 1785853098548
+        },
+        {
+          "card": {
+            "id": "c_mseq7uty_4",
+            "type": "note",
+            "x": 827,
+            "y": 143,
+            "w": 207,
+            "h": 134,
+            "color": "#fff6b3",
+            "z": 38,
+            "text": "拖动卡片边缘的橙色圆点，可以把便签连成思维导图。"
+          },
+          "deletedAt": 1785853044980
+        },
+        {
+          "card": {
+            "id": "c_mseq7uty_3",
+            "type": "note",
+            "x": 358,
+            "y": 121,
+            "w": 220,
+            "h": 150,
+            "color": "#fff6b3",
+            "z": 37,
+            "text": "这是一张便签卡片。<br>拖动顶部色条移动位置，点击色点可换颜色。"
+          },
+          "deletedAt": 1785853043442
+        },
+        {
+          "card": {
+            "id": "c_mseq7uty_8",
+            "type": "todo",
+            "x": 40,
+            "y": 330,
+            "w": 240,
+            "h": 220,
+            "color": "#ffc9d6",
+            "z": 36,
+            "title": "试试待办清单",
+            "items": [
+              {
+                "id": "t_mseq7uty_6",
+                "text": "勾选我试试",
+                "done": false
+              },
+              {
+                "id": "t_mseq7uty_7",
+                "text": "在下方输入框添加新事项",
+                "done": false
+              }
+            ]
+          },
+          "deletedAt": 1785853042085
+        },
+        {
+          "card": {
+            "id": "c_mseq7uty_9",
+            "type": "boardlink",
+            "x": 380,
+            "y": 330,
+            "w": 220,
+            "h": 100,
+            "color": "#fff6b3",
+            "z": 35,
+            "targetBoardId": null
+          },
+          "deletedAt": 1785853040780
+        },
+        {
+          "card": {
+            "id": "c_mseq7uty_a",
+            "type": "note",
+            "x": 620,
+            "y": 330,
+            "w": 220,
+            "h": 150,
+            "color": "#e3c9ff",
+            "z": 32,
+            "text": "左侧「+ 新建看板」可选择：<br>思维导图 / 创作企划 / 视觉记忆 / 旅行计划ghgghgf'g"
+          },
+          "deletedAt": 1785853037869
+        },
+        {
+          "card": {
+            "id": "c_mseqryd9_3",
+            "type": "note",
+            "x": 45.180432955035826,
+            "y": 136.8891467962077,
+            "w": 220,
+            "h": 150,
+            "color": "#fff6b3",
+            "z": 30,
+            "text": ""
+          },
+          "deletedAt": 1785853031817
+        },
+        {
+          "card": {
+            "id": "c_mseqjumz_1",
+            "type": "note",
+            "x": 988.1679784269879,
+            "y": 394.6254390510146,
+            "w": 220,
+            "h": 150,
+            "color": "#fff6b3",
+            "z": 29,
+            "text": ""
+          },
+          "deletedAt": 1785853029012
+        },
+        {
+          "card": {
+            "id": "c_mseqrxls_2",
+            "type": "note",
+            "x": -122.55270962348929,
+            "y": -45.16267868536222,
+            "w": 220,
+            "h": 150,
+            "color": "#fff6b3",
+            "z": 28,
+            "text": ""
+          },
+          "deletedAt": 1785853021730
+        },
         {
           "card": {
             "id": "c_mseq7uty_2",
@@ -108,10 +188,10 @@
           "deletedAt": 1785852156624
         }
       ],
-      "vx": 679.1366654991529,
-      "vy": 182.4133756144533,
-      "vzoom": 0.48887178013499205,
-      "maxZ": 23,
+      "vx": 614.3612913565107,
+      "vy": 198.57808048705562,
+      "vzoom": 1.0010118193601694,
+      "maxZ": 59,
       "updatedAt": 1785852078549
     }
   },
@@ -119,5 +199,5 @@
     "b_mseq7utx_1"
   ],
   "activeId": "b_mseq7utx_1",
-  "syncedAt": 1785852873836
+  "syncedAt": 1785853131558
 }
