@@ -334,6 +334,41 @@
   .sr-board{font-size:10.5px;color:var(--orange);}
   .sr-snippet{font-size:11.5px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
+  /* ---------- 云同步 ---------- */
+  .cloud-badge-dot{
+    display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:4px;flex-shrink:0;
+    background:#5c5c5c;
+  }
+  .cloud-badge-dot.ok{background:var(--green);}
+  .cloud-badge-dot.err{background:var(--red);}
+  .cloud-badge-dot.busy{background:var(--orange);animation:pulseDot 1s infinite;}
+  @keyframes pulseDot{0%,100%{opacity:1;}50%{opacity:.35;}}
+  .sync-body{padding:20px;display:flex;flex-direction:column;gap:14px;}
+  .sync-status-box{
+    border:1px solid var(--border);background:var(--bg3);border-radius:7px;padding:10px 12px;
+    font-size:12px;color:var(--text-dim);display:flex;align-items:center;gap:8px;line-height:1.6;
+  }
+  .sync-field{display:flex;flex-direction:column;gap:4px;}
+  .sync-field label{font-size:11.5px;color:var(--text-dim);}
+  .sync-field input{
+    background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:8px 10px;
+    border-radius:6px;font-size:12.5px;outline:none;font-family:'IBM Plex Mono',monospace;
+  }
+  .sync-field input:focus{border-color:var(--orange);}
+  .sync-row{display:flex;gap:10px;}
+  .sync-row .sync-field{flex:1;}
+  .sync-hint{font-size:11px;color:var(--text-faint);line-height:1.7;}
+  .sync-hint a{color:var(--orange);}
+  .sync-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+  .sync-actions button{
+    background:transparent;border:1px solid var(--border2);color:var(--text-dim);padding:8px 14px;
+    border-radius:6px;font-size:12px;transition:.15s;
+  }
+  .sync-actions button.primary{border-color:var(--orange);color:var(--orange);}
+  .sync-actions button.primary:hover{background:rgba(255,149,0,.1);}
+  .sync-actions button:hover{border-color:var(--text-dim);color:var(--text);}
+  .sync-actions button.danger:hover{border-color:var(--red);color:var(--red);}
+
   ::-webkit-scrollbar{width:8px;height:8px;}
   ::-webkit-scrollbar-thumb{background:#333;border-radius:4px;}
   ::-webkit-scrollbar-track{background:transparent;}
@@ -382,6 +417,7 @@
         </div>
         <button class="icon-btn" id="fitBtn" title="适应画布">⤢</button>
         <button class="icon-btn" id="trashBtn" title="回收站">🗑<span class="trash-badge" id="trashBadge" style="display:none;"></span></button>
+        <button class="icon-btn" id="cloudBtn" title="GitHub 同步">☁<span class="cloud-badge-dot" id="cloudBadgeDot"></span></button>
         <button class="icon-btn" id="exportBoardBtn" title="导出当前看板">⭳</button>
         <button class="icon-btn" id="helpBtn" title="使用说明">?</button>
       </div>
@@ -447,6 +483,52 @@
         </div>
       </div>
       <div class="trash-list" id="trashList"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="syncModal">
+    <div class="tmpl-modal">
+      <div class="tmpl-modal-header">
+        <div class="tmpl-modal-title">GitHub 同步</div>
+        <button class="tmpl-modal-close" id="syncModalClose">✕</button>
+      </div>
+      <div class="sync-body">
+        <div class="sync-status-box" id="syncStatusBox">未配置同步</div>
+        <div class="sync-row">
+          <div class="sync-field">
+            <label>GitHub 用户名</label>
+            <input type="text" id="syncOwner" placeholder="kennyker99">
+          </div>
+          <div class="sync-field">
+            <label>仓库名</label>
+            <input type="text" id="syncRepo" placeholder="my-notes">
+          </div>
+        </div>
+        <div class="sync-row">
+          <div class="sync-field">
+            <label>数据文件路径</label>
+            <input type="text" id="syncPath" placeholder="mindboard_data.json">
+          </div>
+          <div class="sync-field">
+            <label>分支</label>
+            <input type="text" id="syncBranch" placeholder="main">
+          </div>
+        </div>
+        <div class="sync-field">
+          <label>Personal Access Token</label>
+          <input type="password" id="syncToken" placeholder="ghp_... 或 github_pat_...">
+        </div>
+        <div class="sync-hint">
+          Token 只保存在你当前浏览器本地（localStorage），只会发送给 GitHub API，不会经过任何其他服务器。<br>
+          建议在 GitHub → Settings → Developer settings → <b>Fine-grained tokens</b> 生成一个只授权本仓库、且只勾选 <b>Contents: Read and write</b> 权限的 Token。
+        </div>
+        <div class="sync-actions">
+          <button class="primary" id="syncSaveBtn">保存设置</button>
+          <button id="syncNowBtn">立即同步 ⭱</button>
+          <button id="syncPullBtn">从 GitHub 拉取 ⭳</button>
+          <button class="danger" id="syncDisconnectBtn">断开连接</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -534,9 +616,149 @@ function scheduleSave(){
     try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }
     catch(e){ console.warn('save failed', e); }
   }, 250);
+  scheduleGithubSync();
 }
 function saveNow(){
   if(saveTimer){ clearTimeout(saveTimer); saveTimer=null; }
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }catch(e){ console.warn('save failed', e); }
+  syncNow({keepalive:true});
+}
+
+/* ============================== GitHub 云同步 ============================== */
+var SYNC_CFG_KEY = 'mindboard_sync_cfg_v1';
+var GITHUB_SYNC_DELAY = 20000;
+var githubSyncTimer = null;
+var syncState = { syncing:false, lastSyncAt:null, lastError:null };
+
+function utf8ToBase64(str){
+  var bytes = new TextEncoder().encode(str);
+  var binary = '';
+  for(var i=0;i<bytes.length;i++) binary += String.fromCharCode(bytes[i]);
+  return btoa(binary);
+}
+function base64ToUtf8(b64){
+  var binary = atob(b64.replace(/\n/g,''));
+  var bytes = new Uint8Array(binary.length);
+  for(var i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+function loadSyncCfg(){
+  try{
+    var raw = localStorage.getItem(SYNC_CFG_KEY);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+function saveSyncCfg(cfg){
+  try{ localStorage.setItem(SYNC_CFG_KEY, JSON.stringify(cfg)); }catch(e){ console.warn('save sync cfg failed', e); }
+}
+function clearSyncCfg(){
+  try{ localStorage.removeItem(SYNC_CFG_KEY); }catch(e){}
+}
+function githubContentsUrl(cfg){
+  return 'https://api.github.com/repos/'+encodeURIComponent(cfg.owner)+'/'+encodeURIComponent(cfg.repo)+'/contents/'+cfg.path.split('/').map(encodeURIComponent).join('/');
+}
+function ghHeaders(cfg){
+  return { 'Authorization':'Bearer '+cfg.token, 'Accept':'application/vnd.github+json' };
+}
+function scheduleGithubSync(){
+  var cfg = loadSyncCfg();
+  if(!cfg || !cfg.owner || !cfg.repo || !cfg.token) return;
+  if(githubSyncTimer) clearTimeout(githubSyncTimer);
+  githubSyncTimer = setTimeout(function(){ syncNow(); }, GITHUB_SYNC_DELAY);
+}
+async function pushToGithub(cfg, dataObj, opts){
+  opts = opts||{};
+  var url = githubContentsUrl(cfg)+'?ref='+encodeURIComponent(cfg.branch||'main');
+  var sha = null;
+  var getResp = await fetch(url, { headers: ghHeaders(cfg) });
+  if(getResp.status===200){
+    var getJson = await getResp.json();
+    sha = getJson.sha;
+  } else if(getResp.status!==404){
+    throw new Error('读取远程文件失败 (HTTP '+getResp.status+')');
+  }
+  var body = {
+    message: '同步 MindBoard 数据 · '+new Date().toLocaleString('zh-CN'),
+    content: utf8ToBase64(JSON.stringify(dataObj, null, 2)),
+    branch: cfg.branch||'main'
+  };
+  if(sha) body.sha = sha;
+  var putResp = await fetch(githubContentsUrl(cfg), {
+    method:'PUT',
+    headers: Object.assign({'Content-Type':'application/json'}, ghHeaders(cfg)),
+    body: JSON.stringify(body),
+    keepalive: !!opts.keepalive
+  });
+  if(!putResp.ok){
+    var errText = '';
+    try{ errText = (await putResp.json()).message || ''; }catch(e){}
+    throw new Error('推送失败 (HTTP '+putResp.status+') '+errText);
+  }
+}
+function updateSyncStatusUI(kind, msg){
+  var box = document.getElementById('syncStatusBox');
+  var dot = document.getElementById('cloudBadgeDot');
+  if(!box || !dot) return;
+  dot.className = 'cloud-badge-dot' + (kind==='ok'?' ok':kind==='error'?' err':kind==='busy'?' busy':'');
+  if(kind==='unconfigured'){ box.textContent = '未配置同步'; return; }
+  if(kind==='busy'){ box.textContent = '☁ 同步中...'; return; }
+  if(kind==='ok'){
+    box.textContent = '✅ 已连接 · 上次同步：'+new Date(syncState.lastSyncAt).toLocaleString('zh-CN');
+    return;
+  }
+  if(kind==='error'){
+    box.textContent = '⚠ 同步失败：'+(msg||syncState.lastError||'未知错误');
+    return;
+  }
+}
+async function syncNow(opts){
+  var cfg = loadSyncCfg();
+  if(!cfg || !cfg.owner || !cfg.repo || !cfg.token){
+    updateSyncStatusUI('unconfigured');
+    return;
+  }
+  if(syncState.syncing) return;
+  syncState.syncing = true;
+  updateSyncStatusUI('busy');
+  try{
+    var payload = Object.assign({}, store, { syncedAt: Date.now() });
+    await pushToGithub(cfg, payload, opts);
+    syncState.lastSyncAt = Date.now();
+    syncState.lastError = null;
+    updateSyncStatusUI('ok');
+  }catch(e){
+    syncState.lastError = e.message;
+    updateSyncStatusUI('error');
+    console.warn('GitHub sync failed', e);
+  }finally{
+    syncState.syncing = false;
+  }
+}
+async function pullFromGithub(){
+  var cfg = loadSyncCfg();
+  if(!cfg || !cfg.owner || !cfg.repo){ alert('请先保存同步设置（用户名 / 仓库名）'); return; }
+  try{
+    var url = githubContentsUrl(cfg)+'?ref='+encodeURIComponent(cfg.branch||'main');
+    var resp = await fetch(url, { headers: ghHeaders(cfg) });
+    if(resp.status===404){ alert('GitHub 上还没有同步过的数据文件'); return; }
+    if(!resp.ok){ var t=''; try{t=(await resp.json()).message||'';}catch(e){} alert('拉取失败 (HTTP '+resp.status+') '+t); return; }
+    var json = await resp.json();
+    var remoteData = JSON.parse(base64ToUtf8(json.content));
+    if(!remoteData || !remoteData.boards || !remoteData.order){ alert('远程数据格式不正确'); return; }
+    if(!confirm('确定要用 GitHub 上的数据覆盖当前浏览器里的全部看板吗？此操作不可撤销。')) return;
+    store = remoteData;
+    if(!store.activeId || !store.boards[store.activeId]) store.activeId = store.order[0];
+    state.activeId = store.activeId;
+    state.trail = [state.activeId];
+    saveLocalOnly();
+    renderSidebar();
+    renderBoard();
+    alert('已从 GitHub 拉取最新数据');
+  }catch(e){
+    alert('拉取失败：'+e.message);
+  }
+}
+function saveLocalOnly(){
   try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }catch(e){ console.warn('save failed', e); }
 }
 
@@ -1844,6 +2066,23 @@ function openTrashModal(){
   document.getElementById('trashModal').classList.add('active');
 }
 function closeTrashModal(){ document.getElementById('trashModal').classList.remove('active'); }
+
+/* ---- 同步弹窗 ---- */
+function fillSyncForm(){
+  var cfg = loadSyncCfg() || {};
+  document.getElementById('syncOwner').value = cfg.owner||'';
+  document.getElementById('syncRepo').value = cfg.repo||'';
+  document.getElementById('syncPath').value = cfg.path||'mindboard_data.json';
+  document.getElementById('syncBranch').value = cfg.branch||'main';
+  document.getElementById('syncToken').value = cfg.token||'';
+}
+function openSyncModal(){
+  fillSyncForm();
+  var cfg = loadSyncCfg();
+  updateSyncStatusUI(cfg && cfg.token ? (syncState.lastError ? 'error' : (syncState.lastSyncAt ? 'ok' : 'unconfigured')) : 'unconfigured');
+  document.getElementById('syncModal').classList.add('active');
+}
+function closeSyncModal(){ document.getElementById('syncModal').classList.remove('active'); }
 function trashItemLabel(card){
   if(card.title) return card.title;
   if(card.text) return stripHtml(card.text).slice(0,40) || (CARD_ICONS[card.type]+' '+card.type);
@@ -2220,6 +2459,36 @@ function wireGlobalEvents(){
     if(e.target.id==='trashModal') closeTrashModal();
   });
   document.getElementById('emptyTrashBtn').addEventListener('click', emptyTrash);
+
+  document.getElementById('cloudBtn').addEventListener('click', openSyncModal);
+  document.getElementById('syncModalClose').addEventListener('click', closeSyncModal);
+  document.getElementById('syncModal').addEventListener('mousedown', function(e){
+    if(e.target.id==='syncModal') closeSyncModal();
+  });
+  document.getElementById('syncSaveBtn').addEventListener('click', function(){
+    var cfg = {
+      owner: document.getElementById('syncOwner').value.trim(),
+      repo: document.getElementById('syncRepo').value.trim(),
+      path: document.getElementById('syncPath').value.trim() || 'mindboard_data.json',
+      branch: document.getElementById('syncBranch').value.trim() || 'main',
+      token: document.getElementById('syncToken').value.trim()
+    };
+    if(!cfg.owner || !cfg.repo || !cfg.token){
+      alert('请填写 GitHub 用户名、仓库名和 Token');
+      return;
+    }
+    saveSyncCfg(cfg);
+    syncNow();
+  });
+  document.getElementById('syncNowBtn').addEventListener('click', function(){ syncNow(); });
+  document.getElementById('syncPullBtn').addEventListener('click', pullFromGithub);
+  document.getElementById('syncDisconnectBtn').addEventListener('click', function(){
+    if(!confirm('断开 GitHub 同步？本地保存的 Token 和同步设置会被清除（GitHub 上已同步的数据不受影响）。')) return;
+    clearSyncCfg();
+    if(githubSyncTimer){ clearTimeout(githubSyncTimer); githubSyncTimer=null; }
+    fillSyncForm();
+    updateSyncStatusUI('unconfigured');
+  });
 
   document.querySelectorAll('#richToolbar button').forEach(function(btn){
     btn.addEventListener('mousedown', function(e){
