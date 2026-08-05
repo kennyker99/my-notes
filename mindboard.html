@@ -8,13 +8,43 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
+  :root, :root[data-theme="dark"]{
     --bg:#151517; --bg2:#1a1a1c; --bg3:#232326; --border:#2c2c30; --border2:#3a3a3f;
     --text:#e8e8ea; --text-dim:#9a9a9f; --text-faint:#68686d;
     --orange:#ff9500; --green:#00d084; --purple:#a78bfa; --blue:#5eb0ff; --red:#e05263;
-    --canvas-bg:#1a1a1c; --canvas-dot:#2a2a2e;
+    --canvas-bg:#1a1a1c; --canvas-dot:#1a1a1c;
     --card-bg:#2b2b30; --card-bg-2:#333338; --card-text:#f0f0f2; --card-text-dim:#a5a5ab;
     --card-accent:#ffb84d; --arrow:#8f8f96; --arrow-selected:#e8e8ea;
+    --link-color:#7ab8ff; --scrollbar-track:rgba(255,255,255,.03);
+    --scrollbar-thumb:rgba(255,255,255,.16); --scrollbar-thumb-hover:rgba(255,255,255,.28);
+    --img-placeholder-bg:#1e1e21; --rt-toolbar-bg:#242424; --rt-toolbar-hover:#3a3a3a;
+    color-scheme:dark;
+  }
+  :root[data-theme="light"]{
+    --bg:#ffffff; --bg2:#ffffff; --bg3:#f1f1f3; --border:#e6e6e9; --border2:#dcdce0;
+    --text:#1c1c1f; --text-dim:#6c6c72; --text-faint:#9d9da3;
+    --orange:#ff9500; --green:#00a86b; --purple:#8b6ff0; --blue:#2a7de1; --red:#d13a52;
+    --canvas-bg:#ffffff; --canvas-dot:#ffffff;
+    --card-bg:#ffffff; --card-bg-2:#f5f5f7; --card-text:#1c1c1f; --card-text-dim:#6c6c72;
+    --card-accent:#ff9500; --arrow:#9a9aa0; --arrow-selected:#1c1c1f;
+    --link-color:#1a73e8; --scrollbar-track:rgba(0,0,0,.03);
+    --scrollbar-thumb:rgba(0,0,0,.14); --scrollbar-thumb-hover:rgba(0,0,0,.24);
+    --img-placeholder-bg:#f1f1f3; --rt-toolbar-bg:#2a2a2a; --rt-toolbar-hover:#404040;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme]){
+      --bg:#ffffff; --bg2:#ffffff; --bg3:#f1f1f3; --border:#e6e6e9; --border2:#dcdce0;
+      --text:#1c1c1f; --text-dim:#6c6c72; --text-faint:#9d9da3;
+      --orange:#ff9500; --green:#00a86b; --purple:#8b6ff0; --blue:#2a7de1; --red:#d13a52;
+      --canvas-bg:#ffffff; --canvas-dot:#ffffff;
+      --card-bg:#ffffff; --card-bg-2:#f5f5f7; --card-text:#1c1c1f; --card-text-dim:#6c6c72;
+      --card-accent:#ff9500; --arrow:#9a9aa0; --arrow-selected:#1c1c1f;
+      --link-color:#1a73e8; --scrollbar-track:rgba(0,0,0,.03);
+      --scrollbar-thumb:rgba(0,0,0,.14); --scrollbar-thumb-hover:rgba(0,0,0,.24);
+      --img-placeholder-bg:#f1f1f3; --rt-toolbar-bg:#2a2a2a; --rt-toolbar-hover:#404040;
+      color-scheme:light;
+    }
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   html,body{height:100%;overflow:hidden;}
@@ -22,6 +52,7 @@
     background:var(--bg); color:var(--text);
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     display:flex; height:100vh; width:100vw;
+    transition:background-color .15s ease, color .15s ease;
   }
   .mono{font-family:'IBM Plex Mono',monospace;}
   button{font-family:inherit;cursor:pointer;}
@@ -68,7 +99,7 @@
   .board-item.active .board-item-name{color:var(--orange);}
   .board-item-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0;}
   .board-item-name{
-    flex:1; font-size:13px; color:#d0d0d0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    flex:1; font-size:13px; color:var(--text-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     outline:none; border-radius:3px;
   }
   .board-item-name[contenteditable="true"]:focus{background:var(--bg);padding:0 2px;text-overflow:clip;overflow:visible;}
@@ -87,27 +118,15 @@
 
   /* ---------- Main ---------- */
   .main{flex:1;display:flex;flex-direction:column;min-width:0;height:100%;}
-  .topbar{
-    height:52px;flex-shrink:0;background:var(--bg2);border-bottom:1px solid var(--border);
-    display:flex;align-items:center;gap:6px;padding:0 12px;
-  }
   .breadcrumb{display:flex;align-items:center;gap:4px;min-width:0;margin-right:8px;}
   .breadcrumb-item{
-    font-size:13px;color:var(--text-dim);white-space:nowrap;max-width:180px;overflow:hidden;text-overflow:ellipsis;
+    font-size:12.5px;color:var(--text-dim);white-space:nowrap;max-width:180px;overflow:hidden;text-overflow:ellipsis;
     background:none;border:none;padding:2px 4px;border-radius:4px;
   }
   .breadcrumb-item:hover{color:var(--orange);background:var(--bg3);}
   .breadcrumb-item.current{color:var(--text);font-weight:600;outline:none;}
   .breadcrumb-item.current[contenteditable="true"]:focus{background:var(--bg3);}
   .breadcrumb-sep{color:var(--text-faint);font-size:12px;}
-  .toolbar{display:flex;align-items:center;gap:3px;flex-wrap:nowrap;overflow-x:auto;}
-  .tool-btn{
-    display:flex;align-items:center;gap:5px;background:transparent;border:1px solid transparent;color:var(--text-dim);
-    padding:6px 9px;border-radius:5px;font-size:12px;white-space:nowrap;transition:.12s;
-  }
-  .tool-btn:hover{border-color:var(--border2);color:var(--text);background:var(--bg3);}
-  .toolbar-sep{width:1px;height:20px;background:var(--border);margin:0 4px;flex-shrink:0;}
-  .topbar-right{margin-left:auto;display:flex;align-items:center;gap:4px;flex-shrink:0;}
   .zoom-controls{display:flex;align-items:center;gap:2px;background:transparent;border-radius:6px;padding:2px;}
   .zoom-controls button{background:none;border:none;color:var(--text-dim);width:24px;height:24px;border-radius:4px;font-size:14px;}
   .zoom-controls button:hover{background:var(--bg3);color:var(--text);}
@@ -142,41 +161,41 @@
 
   /* ---------- 画布滚动条 ---------- */
   .canvas-hscroll{
-    position:absolute;left:0;right:13px;bottom:0;height:13px;background:rgba(255,255,255,.03);z-index:50;
+    position:absolute;left:0;right:13px;bottom:0;height:13px;background:var(--scrollbar-track);z-index:50;
   }
   .canvas-vscroll{
-    position:absolute;top:0;bottom:13px;right:0;width:13px;background:rgba(255,255,255,.03);z-index:50;
+    position:absolute;top:0;bottom:13px;right:0;width:13px;background:var(--scrollbar-track);z-index:50;
   }
   .canvas-scroll-corner{
-    position:absolute;right:0;bottom:0;width:13px;height:13px;background:rgba(255,255,255,.03);z-index:50;
+    position:absolute;right:0;bottom:0;width:13px;height:13px;background:var(--scrollbar-track);z-index:50;
   }
   .canvas-hscroll-thumb{
-    position:absolute;top:2px;height:9px;min-width:30px;background:rgba(255,255,255,.16);border-radius:5px;cursor:pointer;
+    position:absolute;top:2px;height:9px;min-width:30px;background:var(--scrollbar-thumb);border-radius:5px;cursor:pointer;
   }
-  .canvas-hscroll-thumb:hover{background:rgba(255,255,255,.28);}
+  .canvas-hscroll-thumb:hover{background:var(--scrollbar-thumb-hover);}
   .canvas-vscroll-thumb{
-    position:absolute;left:2px;width:9px;min-height:30px;background:rgba(255,255,255,.16);border-radius:5px;cursor:pointer;
+    position:absolute;left:2px;width:9px;min-height:30px;background:var(--scrollbar-thumb);border-radius:5px;cursor:pointer;
   }
-  .canvas-vscroll-thumb:hover{background:rgba(255,255,255,.28);}
+  .canvas-vscroll-thumb:hover{background:var(--scrollbar-thumb-hover);}
 
   /* ---------- Cards ---------- */
   .card{
-    position:absolute;background:var(--card-bg);border:1px solid rgba(255,255,255,.06);border-radius:8px;
-    box-shadow:0 1px 2px rgba(0,0,0,.25),0 4px 14px rgba(0,0,0,.3);
+    position:absolute;background:var(--card-bg);border:1px solid color-mix(in srgb, var(--ctext) 12%, transparent);border-radius:8px;
+    box-shadow:0 1px 2px rgba(0,0,0,.12),0 4px 14px rgba(0,0,0,.14);
     display:flex;flex-direction:column;overflow:hidden;z-index:1;
   }
-  .card.selected{outline:2px solid #fff;outline-offset:1px;}
+  .card.selected{outline:2px solid var(--orange);outline-offset:1px;}
   .card-bar{
     height:20px;flex-shrink:0;display:flex;align-items:center;gap:4px;padding:0 5px;cursor:grab;
     background:transparent;opacity:0;transition:opacity .12s;
   }
   .card:hover .card-bar, .card.selected .card-bar{opacity:1;}
   .card-bar:active{cursor:grabbing;}
-  .card-color-dot{width:12px;height:12px;border-radius:50%;border:1px solid rgba(255,255,255,.25);flex-shrink:0;cursor:pointer;}
+  .card-color-dot{width:12px;height:12px;border-radius:50%;border:1px solid color-mix(in srgb, var(--ctext) 35%, transparent);flex-shrink:0;cursor:pointer;}
   .card-bar-spacer{flex:1;}
   .card-bar-icon{font-size:11px;color:color-mix(in srgb, var(--ctext) 60%, transparent);flex-shrink:0;}
   .card-btn{background:none;border:none;color:color-mix(in srgb, var(--ctext) 60%, transparent);font-size:11px;padding:2px 5px;border-radius:4px;line-height:1;}
-  .card-btn:hover{background:rgba(255,255,255,.1);color:var(--ctext);}
+  .card-btn:hover{background:color-mix(in srgb, var(--ctext) 14%, transparent);color:var(--ctext);}
   .card-body{flex:1;overflow:auto;padding:12px 14px;font-size:13.5px;line-height:1.55;color:var(--ctext);min-height:0;}
   .card-body:focus{outline:none;}
   .card-body[contenteditable="true"]:empty:before{content:attr(data-placeholder);color:color-mix(in srgb, var(--ctext) 60%, transparent);}
@@ -185,7 +204,7 @@
     position:absolute;top:24px;left:6px;z-index:50;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
     padding:6px;display:flex;gap:5px;box-shadow:0 4px 16px rgba(0,0,0,.4);
   }
-  .palette-swatch{width:18px;height:18px;border-radius:50%;border:1px solid rgba(255,255,255,.2);cursor:pointer;}
+  .palette-swatch{width:18px;height:18px;border-radius:50%;border:1px solid var(--border2);cursor:pointer;}
   .palette-swatch:hover{transform:scale(1.15);}
 
   /* ---------- 标签 (Labels) ---------- */
@@ -300,15 +319,15 @@
 
   /* image card */
   .card.type-image .card-body{padding:0;display:flex;flex-direction:column;}
-  .img-holder{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;background:#1e1e21;overflow:hidden;position:relative;}
+  .img-holder{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;background:var(--img-placeholder-bg);overflow:hidden;position:relative;}
   .img-holder img{width:100%;height:100%;object-fit:cover;display:block;}
   .img-empty{display:flex;flex-direction:column;align-items:center;gap:6px;color:color-mix(in srgb, var(--ctext) 60%, transparent);font-size:12px;cursor:pointer;padding:12px;text-align:center;}
-  .img-caption{padding:8px 10px;font-size:11.5px;color:color-mix(in srgb, var(--ctext) 60%, transparent);outline:none;border-top:1px solid rgba(255,255,255,.06);}
+  .img-caption{padding:8px 10px;font-size:11.5px;color:color-mix(in srgb, var(--ctext) 60%, transparent);outline:none;border-top:1px solid color-mix(in srgb, var(--ctext) 10%, transparent);}
   .img-caption:empty:before{content:attr(data-placeholder);color:color-mix(in srgb, var(--ctext) 60%, transparent);}
 
   /* link card */
   .link-title{font-weight:700;outline:none;margin-bottom:4px;color:var(--ctext);}
-  .link-url{font-size:11.5px;color:#7ab8ff;word-break:break-all;text-decoration:none;display:block;margin-bottom:5px;}
+  .link-url{font-size:11.5px;color:var(--link-color);word-break:break-all;text-decoration:none;display:block;margin-bottom:5px;}
   .link-desc{font-size:12px;color:color-mix(in srgb, var(--ctext) 60%, transparent);outline:none;}
   .link-desc:empty:before{content:attr(data-placeholder);color:color-mix(in srgb, var(--ctext) 60%, transparent);}
 
@@ -317,7 +336,7 @@
   .bl-target{
     display:flex;align-items:center;gap:8px;width:100%;padding:8px;border-radius:6px;cursor:pointer;
   }
-  .bl-target:hover{background:rgba(255,255,255,.06);}
+  .bl-target:hover{background:color-mix(in srgb, var(--ctext) 8%, transparent);}
   .bl-target-icon{font-size:22px;}
   .bl-target-info{flex:1;min-width:0;}
   .bl-target-name{font-weight:700;font-size:13px;color:var(--ctext);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -394,11 +413,11 @@
 
   /* ---------- Rich text toolbar ---------- */
   .rt-toolbar{
-    display:none;position:fixed;z-index:1500;background:#242424;border-radius:7px;padding:4px;gap:2px;
+    display:none;position:fixed;z-index:1500;background:var(--rt-toolbar-bg);border-radius:7px;padding:4px;gap:2px;
     box-shadow:0 6px 18px rgba(0,0,0,.45);
   }
   .rt-toolbar button{width:26px;height:26px;background:transparent;border:none;color:#eee;border-radius:4px;font-size:13px;}
-  .rt-toolbar button:hover{background:#3a3a3a;color:var(--orange);}
+  .rt-toolbar button:hover{background:var(--rt-toolbar-hover);color:var(--orange);}
   .card-body ul{padding-left:18px;margin:2px 0;}
   .card-body li{margin:2px 0;}
 
@@ -410,17 +429,17 @@
   .file-name{font-weight:700;font-size:12.5px;color:var(--ctext);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .file-size{font-size:10.5px;color:color-mix(in srgb, var(--ctext) 60%, transparent);}
   .file-dl{flex-shrink:0;text-decoration:none;color:color-mix(in srgb, var(--ctext) 60%, transparent);font-size:16px;padding:4px;border-radius:4px;}
-  .file-dl:hover{background:rgba(255,255,255,.1);}
+  .file-dl:hover{background:color-mix(in srgb, var(--ctext) 14%, transparent);}
   .file-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:100%;color:color-mix(in srgb, var(--ctext) 60%, transparent);font-size:12px;cursor:pointer;text-align:center;}
 
   /* ---------- Column (kanban) card ---------- */
   .col-items{display:flex;flex-direction:column;gap:0;}
-  .col-item{display:flex;align-items:flex-start;gap:4px;font-size:12.5px;padding:4px 0;border-bottom:1px dashed rgba(255,255,255,.08);}
+  .col-item{display:flex;align-items:flex-start;gap:4px;font-size:12.5px;padding:4px 0;border-bottom:1px dashed color-mix(in srgb, var(--ctext) 10%, transparent);}
   .col-item .ti-text{flex:1;outline:none;word-break:break-word;color:var(--ctext);}
   .col-item-ctrl{display:flex;gap:1px;opacity:0;flex-shrink:0;}
   .col-item:hover .col-item-ctrl{opacity:1;}
   .col-item-ctrl button{background:none;border:none;color:color-mix(in srgb, var(--ctext) 60%, transparent);font-size:10px;padding:2px 3px;border-radius:3px;}
-  .col-item-ctrl button:hover{background:rgba(255,255,255,.1);color:var(--ctext);}
+  .col-item-ctrl button:hover{background:color-mix(in srgb, var(--ctext) 14%, transparent);color:var(--ctext);}
 
   /* ---------- Trash panel ---------- */
   .trash-list{padding:8px 20px 20px;display:flex;flex-direction:column;gap:6px;}
@@ -457,7 +476,7 @@
   /* ---------- 云同步 ---------- */
   .cloud-badge-dot{
     display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:4px;flex-shrink:0;
-    background:#5c5c5c;
+    background:var(--text-faint);
   }
   .cloud-badge-dot.ok{background:var(--green);}
   .cloud-badge-dot.err{background:var(--red);}
@@ -490,7 +509,7 @@
   .sync-actions button.danger:hover{border-color:var(--red);color:var(--red);}
 
   ::-webkit-scrollbar{width:8px;height:8px;}
-  ::-webkit-scrollbar-thumb{background:#333;border-radius:4px;}
+  ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
   ::-webkit-scrollbar-track{background:transparent;}
 
   /* ---------- 左侧元素工具栏 (Milanote 风格竖排图标) ---------- */
@@ -507,20 +526,85 @@
   .el-label{font-size:9px;letter-spacing:.01em;}
   .el-sep{height:1px;background:var(--border);margin:8px 10px;}
   .el-spacer{flex:1;}
+  .more-tool-pop{
+    display:none;position:fixed;z-index:2000;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
+    padding:4px;min-width:130px;box-shadow:0 10px 30px rgba(0,0,0,.4);
+  }
+  .more-tool-pop.active{display:block;}
+  .more-tool-item{
+    display:flex;align-items:center;gap:8px;padding:7px 10px;font-size:12.5px;color:var(--text);border-radius:5px;cursor:pointer;
+  }
+  .more-tool-item:hover{background:var(--bg3);color:var(--orange);}
 
-  /* ---------- 顶部栏改版 ---------- */
-  .topbar{
-    height:58px;flex-shrink:0;background:var(--bg2);border-bottom:1px solid var(--border);
-    display:flex;align-items:center;padding:0 16px;position:relative;gap:8px;
+  /* ---------- 顶部栏（两行，仿 Milanote 布局） ---------- */
+  .topbar-row1{
+    height:38px;flex-shrink:0;background:var(--bg2);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;padding:0 16px;gap:8px;
+  }
+  .topbar-row1-right{margin-left:auto;display:flex;align-items:center;gap:2px;flex-shrink:0;}
+  .topbar-divider{width:1px;height:18px;background:var(--border);margin:0 4px;flex-shrink:0;}
+  .icon-btn.sm{width:26px;height:26px;font-size:12.5px;}
+  .topbar-row2{
+    height:56px;flex-shrink:0;background:var(--bg2);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;padding:6px 20px;gap:8px;
   }
   .topbar-title{
-    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-    font-size:16px;font-weight:700;color:var(--text);max-width:34%;
+    flex:1;text-align:center;font-size:17px;font-weight:700;color:var(--text);
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;
   }
+  .topbar-row2-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  .pill-btn{
+    display:flex;align-items:center;gap:5px;background:transparent;border:1px solid var(--border2);color:var(--text-dim);
+    padding:7px 13px;border-radius:20px;font-size:12.5px;font-weight:600;white-space:nowrap;transition:.12s;
+  }
+  .pill-btn:hover{border-color:var(--text-dim);color:var(--text);background:var(--bg3);}
+  .zoom-controls.pill-btn{padding:2px 4px 2px 10px;gap:0;}
+
+  /* ---------- Unsorted 未分类抽屉 ---------- */
+  .unsorted-pill{
+    position:absolute;top:14px;right:16px;z-index:40;background:var(--bg2);border:1px solid var(--border2);
+    color:var(--text-dim);padding:6px 13px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;transition:.12s;
+  }
+  .unsorted-pill:hover{border-color:var(--orange);color:var(--text);}
+  .unsorted-pill.has-items{color:var(--orange);border-color:var(--orange);}
+  .unsorted-drawer{
+    position:absolute;top:0;right:0;bottom:0;width:280px;background:var(--bg2);border-left:1px solid var(--border);
+    z-index:45;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .18s ease;
+    box-shadow:-8px 0 24px rgba(0,0,0,.25);
+  }
+  .unsorted-drawer.open{transform:translateX(0);}
+  .unsorted-drawer-head{
+    display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border);
+    font-size:13.5px;font-weight:700;color:var(--text);
+  }
+  .unsorted-drawer-close{background:none;border:none;color:var(--text-dim);font-size:14px;padding:2px 4px;border-radius:4px;}
+  .unsorted-drawer-close:hover{color:var(--text);background:var(--bg3);}
+  .unsorted-drawer-hint{padding:0 16px 12px;font-size:11px;color:var(--text-faint);line-height:1.6;}
+  .unsorted-drawer-list{flex:1;overflow-y:auto;padding:4px 10px 10px;display:flex;flex-direction:column;gap:6px;}
+  .unsorted-drawer-empty{padding:20px 10px;text-align:center;font-size:12px;color:var(--text-faint);}
+  .unsorted-item{
+    display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:7px;cursor:pointer;
+    background:var(--bg3);border:1px solid var(--border);font-size:12px;color:var(--text);transition:.12s;
+  }
+  .unsorted-item:hover{border-color:var(--orange);}
+  .unsorted-item-icon{font-size:14px;flex-shrink:0;}
+  .unsorted-item-text{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .unsorted-item-back{flex-shrink:0;font-size:10px;color:var(--text-faint);}
 </style>
 </head>
 <body>
+<script>
+  // 尽早设置主题，减少首屏闪烁
+  (function(){
+    try{
+      var t = localStorage.getItem('mindboard_theme');
+      if(t!=='light' && t!=='dark'){
+        t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+      }
+      document.documentElement.setAttribute('data-theme', t);
+    }catch(e){}
+  })();
+</script>
 
   <div class="toast" id="toast"></div>
 
@@ -546,40 +630,63 @@
   </div>
 
   <aside class="elrail" id="elRail">
-    <button class="el-btn" data-add="note"><span class="el-icon">🗒</span><span class="el-label">便签</span></button>
-    <button class="el-btn" data-add="link"><span class="el-icon">🔗</span><span class="el-label">链接</span></button>
-    <button class="el-btn" data-add="todo"><span class="el-icon">☑</span><span class="el-label">清单</span></button>
-    <button class="el-btn" data-add="column"><span class="el-icon">🗂</span><span class="el-label">看板列</span></button>
-    <button class="el-btn" data-add="boardlink"><span class="el-icon">📁</span><span class="el-label">子看板</span></button>
-    <button class="el-btn" data-add="header"><span class="el-icon">🔤</span><span class="el-label">标题</span></button>
+    <button class="el-btn" data-add="note"><span class="el-icon">🗒</span><span class="el-label">Note</span></button>
+    <button class="el-btn" data-add="link"><span class="el-icon">🔗</span><span class="el-label">Link</span></button>
+    <button class="el-btn" data-add="todo"><span class="el-icon">☑</span><span class="el-label">To-do</span></button>
+    <button class="el-btn" id="lineToolBtn"><span class="el-icon">↗</span><span class="el-label">Line</span></button>
+    <button class="el-btn" data-add="boardlink"><span class="el-icon">📁</span><span class="el-label">Board</span></button>
+    <button class="el-btn" data-add="column"><span class="el-icon">🗂</span><span class="el-label">Column</span></button>
+    <button class="el-btn" id="commentToolBtn"><span class="el-icon">💬</span><span class="el-label">Comment</span></button>
+    <button class="el-btn" id="moreToolBtn"><span class="el-icon">⋯</span></button>
     <div class="el-sep"></div>
-    <button class="el-btn" data-add="image"><span class="el-icon">🖼</span><span class="el-label">图片</span></button>
-    <button class="el-btn" data-add="file"><span class="el-icon">📎</span><span class="el-label">文件</span></button>
+    <button class="el-btn" data-add="image"><span class="el-icon">🖼</span><span class="el-label">Add image</span></button>
+    <button class="el-btn" data-add="file"><span class="el-icon">📤</span><span class="el-label">Upload</span></button>
+    <div class="el-sep"></div>
+    <button class="el-btn" id="drawToolBtn"><span class="el-icon">✏</span><span class="el-label">Draw</span></button>
     <div class="el-spacer"></div>
-    <div class="el-sep"></div>
-    <button class="el-btn" id="trashBtn"><span class="el-icon">🗑<span class="trash-badge" id="trashBadge" style="display:none;"></span></span><span class="el-label">回收站</span></button>
+    <button class="el-btn" id="trashBtn"><span class="el-icon">🗑<span class="trash-badge" id="trashBadge" style="display:none;"></span></span><span class="el-label">Trash</span></button>
   </aside>
+  <div class="more-tool-pop" id="moreToolPop">
+    <div class="more-tool-item" data-add="header"><span class="el-icon">🔤</span>Header</div>
+    <div class="more-tool-item" data-add="file"><span class="el-icon">📄</span>File</div>
+  </div>
 
   <div class="main">
-    <div class="topbar">
+    <div class="topbar-row1">
       <div class="breadcrumb" id="breadcrumb"></div>
+      <div class="topbar-row1-right">
+        <button class="icon-btn sm" id="undoBtn" title="撤销 Ctrl+Z">↶</button>
+        <button class="icon-btn sm" id="redoBtn" title="重做 Ctrl+Shift+Z">↷</button>
+        <div class="topbar-divider"></div>
+        <button class="icon-btn sm" id="fitBtn" title="适应画布">⤢</button>
+        <button class="icon-btn sm" id="themeToggleBtn" title="切换深色/浅色模式">☀</button>
+        <button class="icon-btn sm" id="cloudBtn" title="GitHub 同步">☁<span class="cloud-badge-dot" id="cloudBadgeDot"></span></button>
+        <button class="icon-btn sm" id="helpBtn" title="使用说明">?</button>
+      </div>
+    </div>
+    <div class="topbar-row2">
       <div class="topbar-title" id="topbarTitle"></div>
-      <div class="topbar-right">
-        <button class="icon-btn" id="undoBtn" title="撤销 Ctrl+Z">↶</button>
-        <button class="icon-btn" id="redoBtn" title="重做 Ctrl+Shift+Z">↷</button>
-        <div class="zoom-controls">
+      <div class="topbar-row2-right">
+        <button class="pill-btn" id="shareBtn" title="通过 GitHub 同步分享">👤+ Share</button>
+        <button class="pill-btn" id="exportBoardBtn" title="导出当前看板为 JSON">Export ⌄</button>
+        <div class="zoom-controls pill-btn">
           <button id="zoomOut">−</button>
           <span class="zoom-pct mono" id="zoomPct">100%</span>
           <button id="zoomIn">+</button>
         </div>
-        <button class="icon-btn" id="fitBtn" title="适应画布">⤢</button>
-        <button class="icon-btn" id="cloudBtn" title="GitHub 同步">☁<span class="cloud-badge-dot" id="cloudBadgeDot"></span></button>
-        <button class="icon-btn" id="exportBoardBtn" title="导出当前看板">⭳</button>
-        <button class="icon-btn" id="helpBtn" title="使用说明">?</button>
       </div>
     </div>
 
     <div class="canvas-viewport" id="viewport">
+      <button class="unsorted-pill" id="unsortedBtn"><span id="unsortedCount">0</span> Unsorted</button>
+      <aside class="unsorted-drawer" id="unsortedDrawer">
+        <div class="unsorted-drawer-head">
+          <span>Unsorted notes</span>
+          <button class="unsorted-drawer-close" id="unsortedDrawerClose">✕</button>
+        </div>
+        <div class="unsorted-drawer-hint">还没想好放哪的内容，先放这里。右键卡片选择"移入未分类"发送到这里，点击下面的项目放回画布。</div>
+        <div class="unsorted-drawer-list" id="unsortedDrawerList"></div>
+      </aside>
       <div class="canvas-content" id="canvasContent">
         <svg class="connectors-svg" id="connSvg"><defs></defs></svg>
       </div>
@@ -622,6 +729,8 @@
 
   <input type="file" id="imageFileInput" accept="image/*" hidden>
   <input type="file" id="fileAttachInput" hidden>
+  <input type="file" id="videoFileInput" accept="video/*" hidden>
+  <input type="file" id="audioFileInput" accept="audio/*" hidden>
   <input type="file" id="importFileInput" accept="application/json" hidden>
 
   <div class="modal-overlay" id="tmplModal">
@@ -700,6 +809,8 @@
 /* ============================== 常量 ============================== */
 var STORAGE_KEY = 'mindboard_store_v1';
 var PALETTE = ['#2b2b30','#3d331f','#3d2530','#2e2540','#1f2d40','#1f3327','#3a3a3f'];
+var LIGHT_PALETTE = ['#ffffff','#fff6b3','#ffd9d9','#e6d9ff','#d6ecff','#d7f5df','#f0f0f0'];
+function currentPalette(){ return getTheme()==='light' ? LIGHT_PALETTE : PALETTE; }
 var MIN_W = {note:160,todo:200,image:180,link:200,header:220,boardlink:180,file:160,column:180};
 var MIN_H = {note:100,todo:120,image:150,link:90,header:56,boardlink:70,file:70,column:140};
 var DEFAULT_SIZE = {
@@ -713,6 +824,26 @@ var HISTORY_LIMIT = 60;
 var MAX_UPLOAD_BYTES = 4*1024*1024;
 var _uidCounter = 1;
 function uid(prefix){ return prefix+'_'+Date.now().toString(36)+'_'+(_uidCounter++).toString(36); }
+
+/* ---------- 深色 / 浅色主题 ---------- */
+var THEME_KEY = 'mindboard_theme';
+function getTheme(){
+  try{
+    var t = localStorage.getItem(THEME_KEY);
+    if(t==='light'||t==='dark') return t;
+  }catch(e){}
+  return (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+}
+function applyTheme(){
+  var t = getTheme();
+  document.documentElement.setAttribute('data-theme', t);
+  var btn = document.getElementById('themeToggleBtn');
+  if(btn) btn.textContent = t==='light' ? '🌙' : '☀';
+}
+function setTheme(t){
+  try{ localStorage.setItem(THEME_KEY, t); }catch(e){}
+  applyTheme();
+}
 function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g, function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
 function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
 function textToHtml(s){
@@ -1143,6 +1274,7 @@ function activeBoard(){ return store.boards[state.activeId]; }
 
 /* ============================== 初始化 ============================== */
 function init(){
+  applyTheme();
   store = loadStore();
   if(!store){
     store = defaultStore();
@@ -1449,12 +1581,14 @@ function renderBoard(){
   markerColors = {};
   var svg = document.getElementById('connSvg');
   svg.innerHTML = '<defs></defs>';
-  b.cards.forEach(function(c){ content.appendChild(buildCardEl(c)); });
+  var visibleCards = b.cards.filter(function(c){ return !c.unsorted; });
+  visibleCards.forEach(function(c){ content.appendChild(buildCardEl(c)); });
   applyViewportTransform();
   renderConnectors();
-  document.getElementById('emptyHint').style.display = (b.cards.length===0) ? 'block' : 'none';
+  document.getElementById('emptyHint').style.display = (visibleCards.length===0) ? 'block' : 'none';
   updateUndoRedoButtons();
   updateTrashBadge();
+  renderUnsortedDrawer();
 }
 
 function renderConnectors(){
@@ -1465,7 +1599,7 @@ function renderConnectors(){
   b.connectors.forEach(function(conn){
     var c1 = b.cards.find(function(c){return c.id===conn.from;});
     var c2 = b.cards.find(function(c){return c.id===conn.to;});
-    if(!c1||!c2) return;
+    if(!c1||!c2||c1.unsorted||c2.unsorted) return;
     var p1 = edgePoint(c1,c2), p2 = edgePoint(c2,c1);
     var mx=(p1.x+p2.x)/2, my=(p1.y+p2.y)/2;
     var dx=p2.x-p1.x, dy=p2.y-p1.y;
@@ -1638,7 +1772,7 @@ function togglePalette(cardEl, card){
   document.querySelectorAll('.palette-pop').forEach(function(p){p.remove();});
   var pop = document.createElement('div');
   pop.className = 'palette-pop';
-  PALETTE.forEach(function(col){
+  currentPalette().forEach(function(col){
     var sw = document.createElement('div');
     sw.className='palette-swatch';
     sw.style.background = col;
@@ -2309,10 +2443,10 @@ function addCardAt(type, x, y){
   pushHistory();
   var b = activeBoard();
   var size = DEFAULT_SIZE[type];
-  var card = { id:uid('c'), type:type, x:x-size[0]/2, y:y-size[1]/2, w:size[0], h:size[1], color:PALETTE[0], z:++b.maxZ };
+  var card = { id:uid('c'), type:type, x:x-size[0]/2, y:y-size[1]/2, w:size[0], h:size[1], color:currentPalette()[0], z:++b.maxZ };
   if(type==='todo'){ card.title='清单'; card.items=[]; }
   if(type==='column'){ card.title='列表'; card.items=[]; }
-  if(type==='header'){ card.text='标题'; card.color=PALETTE[6]; }
+  if(type==='header'){ card.text='标题'; card.color=currentPalette()[6]; }
   if(type==='note'){ card.text=''; }
   if(type==='link'){ card.title='链接标题'; card.url=''; card.description=''; }
   if(type==='image'){ card.dataUrl=''; card.caption=''; }
@@ -2755,6 +2889,8 @@ function openCardContextMenu(card, x, y){
     {label:'置于顶层', action:function(){ ids.forEach(bringCardToFront); scheduleSave(); }},
     {label:'置于底层', action:function(){ ids.forEach(sendCardToBack); }},
     {separator:true},
+    {label: multi ? '移入未分类'+suffix : '移入未分类', action:function(){ ids.forEach(moveCardToUnsorted); }},
+    {separator:true},
     {label: multi ? '移到回收站'+suffix : '移到回收站', danger:true, action:function(){ deleteCards(ids); }}
   ];
   openContextMenu(items, x, y);
@@ -2870,6 +3006,68 @@ function relativeTime(ts){
   if(h<24) return h+' 小时前';
   var d = Math.floor(h/24);
   return d+' 天前';
+}
+/* ---- Unsorted notes 未分类抽屉 ---- */
+function moveCardToUnsorted(id){
+  pushHistory();
+  var b = activeBoard();
+  var card = b.cards.find(function(c){return c.id===id;});
+  if(!card) return;
+  card.unsorted = true;
+  state.selectedCards.delete(id);
+  scheduleSave();
+  renderBoard();
+}
+function restoreFromUnsorted(id){
+  pushHistory();
+  var b = activeBoard();
+  var card = b.cards.find(function(c){return c.id===id;});
+  if(!card) return;
+  var vp = document.getElementById('viewport').getBoundingClientRect();
+  var local = screenToLocal(vp.left+vp.width/2, vp.top+vp.height/2);
+  card.x = local.x - card.w/2 + (Math.random()*40-20);
+  card.y = local.y - card.h/2 + (Math.random()*40-20);
+  card.unsorted = false;
+  card.z = ++b.maxZ;
+  scheduleSave();
+  renderBoard();
+  selectCardOnly(id);
+}
+function toggleUnsortedDrawer(){
+  var drawer = document.getElementById('unsortedDrawer');
+  drawer.classList.toggle('open');
+}
+function closeUnsortedDrawer(){
+  document.getElementById('unsortedDrawer').classList.remove('open');
+}
+function renderUnsortedDrawer(){
+  var b = activeBoard();
+  var btn = document.getElementById('unsortedBtn');
+  var countEl = document.getElementById('unsortedCount');
+  var list = document.getElementById('unsortedDrawerList');
+  if(!b || !btn || !list) return;
+  var items = b.cards.filter(function(c){ return c.unsorted; });
+  countEl.textContent = items.length;
+  btn.classList.toggle('has-items', items.length>0);
+  list.innerHTML = '';
+  if(!items.length){
+    var empty = document.createElement('div');
+    empty.className = 'unsorted-drawer-empty';
+    empty.textContent = '暂无未分类内容';
+    list.appendChild(empty);
+    return;
+  }
+  items.forEach(function(card){
+    var row = document.createElement('div');
+    row.className = 'unsorted-item';
+    row.innerHTML =
+      '<span class="unsorted-item-icon">'+(CARD_ICONS[card.type]||'🗒')+'</span>'+
+      '<span class="unsorted-item-text"></span>'+
+      '<span class="unsorted-item-back">放到画布 →</span>';
+    row.querySelector('.unsorted-item-text').textContent = trashItemLabel(card);
+    row.addEventListener('click', function(){ restoreFromUnsorted(card.id); });
+    list.appendChild(row);
+  });
 }
 function renderTrashPanel(){
   var b = activeBoard();
@@ -3184,12 +3382,68 @@ function wireGlobalEvents(){
     }
   });
 
+  function addCardAtViewportCenter(type){
+    var vp = document.getElementById('viewport').getBoundingClientRect();
+    var local = screenToLocal(vp.left+vp.width/2, vp.top+vp.height/2);
+    addCardAt(type, local.x+ (Math.random()*40-20), local.y+(Math.random()*40-20));
+  }
   document.querySelectorAll('.el-btn[data-add]').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var vp = document.getElementById('viewport').getBoundingClientRect();
-      var local = screenToLocal(vp.left+vp.width/2, vp.top+vp.height/2);
-      addCardAt(btn.dataset.add, local.x+ (Math.random()*40-20), local.y+(Math.random()*40-20));
+    btn.addEventListener('click', function(){ addCardAtViewportCenter(btn.dataset.add); });
+  });
+
+  // ---- More(...)  弹出面板 ----
+  document.getElementById('moreToolBtn').addEventListener('click', function(e){
+    e.stopPropagation();
+    var pop = document.getElementById('moreToolPop');
+    var isOpen = pop.classList.contains('active');
+    pop.classList.remove('active');
+    if(isOpen) return;
+    var r = e.currentTarget.getBoundingClientRect();
+    pop.style.left = (r.right+6)+'px';
+    pop.style.top = r.top+'px';
+    pop.classList.add('active');
+  });
+  document.querySelectorAll('.more-tool-item[data-add]').forEach(function(item){
+    item.addEventListener('click', function(){
+      document.getElementById('moreToolPop').classList.remove('active');
+      addCardAtViewportCenter(item.dataset.add);
     });
+  });
+  document.addEventListener('click', function(e){
+    var pop = document.getElementById('moreToolPop');
+    if(pop.classList.contains('active') && !pop.contains(e.target) && e.target.id!=='moreToolBtn'){
+      pop.classList.remove('active');
+    }
+  });
+
+  // ---- Line / Comment / Draw：目前的行为提示（尚未做成独立工具） ----
+  document.getElementById('lineToolBtn').addEventListener('click', function(){
+    showToast('从卡片边缘的橙色圆点拖拽即可画连线');
+  });
+  document.getElementById('commentToolBtn').addEventListener('click', function(){
+    var id = state.selectedCards.size===1 ? Array.from(state.selectedCards)[0] : null;
+    if(!id){ showToast('请先选中一张卡片，再添加评论'); return; }
+    var card = activeBoard().cards.find(function(c){return c.id===id;});
+    var el = document.querySelector('.card[data-id="'+id+'"]');
+    if(card && el) toggleCommentPicker(el, card);
+  });
+  document.getElementById('drawToolBtn').addEventListener('click', function(){
+    showToast('手绘功能即将上线');
+  });
+
+  // ---- Unsorted 未分类抽屉 ----
+  document.getElementById('unsortedBtn').addEventListener('click', function(e){
+    e.stopPropagation();
+    toggleUnsortedDrawer();
+  });
+  document.getElementById('unsortedDrawerClose').addEventListener('click', closeUnsortedDrawer);
+
+  // ---- Share：目前用 GitHub 同步作为分享机制 ----
+  document.getElementById('shareBtn').addEventListener('click', openSyncModal);
+
+  // ---- 深色/浅色模式切换 ----
+  document.getElementById('themeToggleBtn').addEventListener('click', function(){
+    setTheme(getTheme()==='light' ? 'dark' : 'light');
   });
 
   document.getElementById('zoomIn').addEventListener('click', function(){ zoomBy(1.15); });
