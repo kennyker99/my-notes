@@ -584,10 +584,13 @@
   .el-label{font-size:10.5px;letter-spacing:.01em;}
   .el-sep{height:1px;background:var(--border);margin:8px 10px;}
   .el-spacer{flex:1;}
-  .elrail-normal-group, .elrail-multi-group{display:flex;flex-direction:column;}
-  .elrail-multi-group{display:none;}
-  .elrail.multi-mode .elrail-normal-group{display:none;}
+  .elrail-normal-group, .elrail-multi-group, .elrail-conn-group{display:flex;flex-direction:column;}
+  .elrail-multi-group, .elrail-conn-group{display:none;}
+  .elrail.multi-mode .elrail-normal-group, .elrail.multi-mode .elrail-conn-group{display:none;}
   .elrail.multi-mode .elrail-multi-group{display:flex;}
+  .elrail.conn-mode .elrail-normal-group, .elrail.conn-mode .elrail-multi-group{display:none;}
+  .elrail.conn-mode .elrail-conn-group{display:flex;}
+  .el-btn.active{background:var(--bg3);color:var(--orange);}
   .more-tool-pop{
     display:none;position:fixed;z-index:2000;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
     padding:4px;min-width:130px;box-shadow:0 10px 30px rgba(0,0,0,.4);
@@ -721,6 +724,14 @@
       <button class="el-btn" id="msLabelsBtn"><span class="el-icon">🏷</span><span class="el-label">Labels</span></button>
       <button class="el-btn" id="msAlignBtn"><span class="el-icon">▦</span><span class="el-label">Alignment</span></button>
       <button class="el-btn" id="msConnectBtn"><span class="el-icon">⤳</span><span class="el-label">Connect</span></button>
+    </div>
+    <div class="elrail-conn-group" id="elRailConn">
+      <button class="el-btn" id="connColorBtn"><span class="el-icon">🎨</span><span class="el-label">Color</span></button>
+      <button class="el-btn" id="connStartBtn"><span class="el-icon">←</span><span class="el-label">Start</span></button>
+      <button class="el-btn" id="connEndBtn"><span class="el-icon">→</span><span class="el-label">End</span></button>
+      <button class="el-btn" id="connLabelBtn"><span class="el-icon">🏷</span><span class="el-label">Label</span></button>
+      <button class="el-btn" id="connDashedBtn"><span class="el-icon">┄</span><span class="el-label">Dashed</span></button>
+      <button class="el-btn" id="connWeightBtn"><span class="el-icon">☰</span><span class="el-label">Weight</span></button>
     </div>
     <div class="el-spacer"></div>
     <button class="el-btn" id="trashBtn"><span class="el-icon">🗑<span class="trash-badge" id="trashBadge" style="display:none;"></span></span><span class="el-label">Trash</span></button>
@@ -928,6 +939,8 @@ var DEFAULT_SIZE = {
 };
 var CARD_ICONS = {note:'🗒',todo:'☑',image:'🖼',link:'🔗',header:'🔤',boardlink:'📁',file:'📎',column:'🗂',map:'🗺',video:'🎬',audio:'🎵'};
 var LABEL_PALETTE = ['#ff6b6b','#ffa94d','#ffd43b','#69db7c','#4dabf7','#9775fa','#f783ac','#66d9c4'];
+var CONNECTOR_PALETTE = ['#8a8570','#1c1c1f','#e05263','#ff9500','#00a86b','#2a7de1','#8b6ff0'];
+var CONNECTOR_WEIGHTS = [['细',1.5],['中',2.2],['粗',3.5]];
 var EMOJI_ICONS = ['📋','📝','🧠','🎬','🖼️','🧳','💡','📚','🗓','🎨','🔬','💼','🎯','🌱','🏠','⭐','🔖','🧩','📊','🎵','🍳','✈️','📷','🗂'];
 var HISTORY_LIMIT = 60;
 var MAX_UPLOAD_BYTES = 4*1024*1024;
@@ -1750,6 +1763,8 @@ function renderConnectors(){
     var d = 'M'+p1.x+','+p1.y+' C'+c1x+','+c1y+' '+c2x+','+c2y+' '+p2.x+','+p2.y;
     var color = conn.color || '#8a8570';
     var markerId = ensureMarker(color);
+    var isSelected = state.selectedConnectorId===conn.id;
+    var weight = conn.weight || 2.2;
 
     var hit = document.createElementNS(ns,'path');
     hit.setAttribute('class','conn-hit');
@@ -1758,10 +1773,13 @@ function renderConnectors(){
     svg.appendChild(hit);
 
     var line = document.createElementNS(ns,'path');
-    line.setAttribute('class','conn-line'+(state.selectedConnectorId===conn.id?' selected':''));
+    line.setAttribute('class','conn-line'+(isSelected?' selected':''));
     line.setAttribute('d', d);
     line.setAttribute('stroke', color);
-    line.setAttribute('marker-end','url(#'+markerId+')');
+    line.style.strokeWidth = isSelected ? (weight+1) : weight;
+    if(conn.dashed) line.setAttribute('stroke-dasharray','7 5');
+    if(conn.startArrow) line.setAttribute('marker-start','url(#'+markerId+')');
+    if(conn.endArrow!==false) line.setAttribute('marker-end','url(#'+markerId+')');
     line.setAttribute('data-id', conn.id);
     svg.appendChild(line);
 
@@ -1802,6 +1820,105 @@ function editConnectorLabel(conn, x, y){
   conn.label = v.trim();
   scheduleSave();
   renderConnectors();
+}
+
+/* ---- 连线设置 (左侧工具栏在选中一条连线时切换为这一组) ----
+   起止点始终按卡片位置自动重新计算 (edgePoint)，这里只负责外观：颜色/箭头/标签/虚线/粗细 */
+function currentSelectedConnector(){
+  if(!state.selectedConnectorId) return null;
+  var b = activeBoard();
+  return b.connectors.find(function(c){ return c.id===state.selectedConnectorId; }) || null;
+}
+function toggleConnFlag(key, defaultTrue){
+  var conn = currentSelectedConnector();
+  if(!conn) return;
+  pushHistory();
+  var current = defaultTrue ? (conn[key]!==false) : !!conn[key];
+  conn[key] = !current;
+  scheduleSave();
+  renderConnectors();
+  updateConnectorRailButtons();
+}
+function updateConnectorRailButtons(){
+  var conn = currentSelectedConnector();
+  var startBtn = document.getElementById('connStartBtn');
+  var endBtn = document.getElementById('connEndBtn');
+  var dashedBtn = document.getElementById('connDashedBtn');
+  if(!startBtn || !endBtn || !dashedBtn) return;
+  if(!conn){
+    startBtn.classList.remove('active'); endBtn.classList.remove('active'); dashedBtn.classList.remove('active');
+    return;
+  }
+  startBtn.classList.toggle('active', !!conn.startArrow);
+  endBtn.classList.toggle('active', conn.endArrow!==false);
+  dashedBtn.classList.toggle('active', !!conn.dashed);
+}
+function closeFloatingPops(){
+  document.querySelectorAll('.palette-pop,.label-picker-pop,.comment-picker-pop,#connWeightPop').forEach(function(p){ p.remove(); });
+}
+function openConnColorPicker(anchorBtn){
+  var conn = currentSelectedConnector();
+  if(!conn) return;
+  var existing = document.getElementById('connColorPop');
+  if(existing){ existing.remove(); return; }
+  closeFloatingPops();
+  var pop = document.createElement('div');
+  pop.id = 'connColorPop';
+  pop.className = 'palette-pop';
+  pop.style.position = 'fixed';
+  var r = anchorBtn.getBoundingClientRect();
+  pop.style.left = (r.right+8)+'px'; pop.style.top = r.top+'px';
+  CONNECTOR_PALETTE.forEach(function(col){
+    var sw = document.createElement('div');
+    sw.className = 'palette-swatch';
+    sw.style.background = col;
+    sw.addEventListener('click', function(e){
+      e.stopPropagation();
+      pushHistory();
+      conn.color = col;
+      scheduleSave();
+      renderConnectors();
+      pop.remove();
+    });
+    pop.appendChild(sw);
+  });
+  document.body.appendChild(pop);
+  setTimeout(function(){
+    document.addEventListener('mousedown', function closer(e){
+      if(!pop.contains(e.target)){ pop.remove(); document.removeEventListener('mousedown',closer); }
+    });
+  },0);
+}
+function openConnWeightPicker(anchorBtn){
+  var conn = currentSelectedConnector();
+  if(!conn) return;
+  var existing = document.getElementById('connWeightPop');
+  if(existing){ existing.remove(); return; }
+  closeFloatingPops();
+  var pop = document.createElement('div');
+  pop.id = 'connWeightPop';
+  pop.className = 'more-tool-pop active';
+  var r = anchorBtn.getBoundingClientRect();
+  pop.style.left = (r.right+6)+'px'; pop.style.top = r.top+'px';
+  CONNECTOR_WEIGHTS.forEach(function(pair){
+    var item = document.createElement('div');
+    item.className = 'more-tool-item';
+    item.textContent = pair[0];
+    item.addEventListener('click', function(){
+      pushHistory();
+      conn.weight = pair[1];
+      scheduleSave();
+      renderConnectors();
+      pop.remove();
+    });
+    pop.appendChild(item);
+  });
+  document.body.appendChild(pop);
+  setTimeout(function(){
+    document.addEventListener('mousedown', function closer(e){
+      if(!pop.contains(e.target)){ pop.remove(); document.removeEventListener('mousedown',closer); }
+    });
+  },0);
 }
 
 function edgePoint(card, towardCard){
@@ -2784,8 +2901,12 @@ function refreshSelectionClasses(){
     el.classList.toggle('multi-selected', isSel && multi);
   });
   var rail = document.getElementById('elRail');
-  if(rail) rail.classList.toggle('multi-mode', state.selectedCards.size>=2);
+  if(rail){
+    rail.classList.toggle('multi-mode', state.selectedCards.size>=2);
+    rail.classList.toggle('conn-mode', !!state.selectedConnectorId);
+  }
   renderConnectors();
+  updateConnectorRailButtons();
 }
 
 /* ---- 多选批量操作 (左侧工具栏在选中 2+ 张卡片时切换为这一组) ---- */
@@ -3938,6 +4059,18 @@ function wireGlobalEvents(){
     if(pop.classList.contains('active') && !pop.contains(e.target) && e.target.id!=='msAlignBtn'){
       pop.classList.remove('active');
     }
+  });
+
+  // ---- 连线设置（左侧工具栏在选中一条连线时切换出的按钮） ----
+  document.getElementById('connColorBtn').addEventListener('click', function(e){ e.stopPropagation(); openConnColorPicker(e.currentTarget); });
+  document.getElementById('connWeightBtn').addEventListener('click', function(e){ e.stopPropagation(); openConnWeightPicker(e.currentTarget); });
+  document.getElementById('connStartBtn').addEventListener('click', function(e){ e.stopPropagation(); toggleConnFlag('startArrow'); });
+  document.getElementById('connEndBtn').addEventListener('click', function(e){ e.stopPropagation(); toggleConnFlag('endArrow', true); });
+  document.getElementById('connDashedBtn').addEventListener('click', function(e){ e.stopPropagation(); toggleConnFlag('dashed'); });
+  document.getElementById('connLabelBtn').addEventListener('click', function(e){
+    e.stopPropagation();
+    var conn = currentSelectedConnector();
+    if(conn) editConnectorLabel(conn, 0, 0);
   });
 
   // ---- Line / Comment / Draw：目前的行为提示（尚未做成独立工具） ----
