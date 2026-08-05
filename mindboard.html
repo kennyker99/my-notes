@@ -220,6 +220,40 @@
   }
   .label-picker-new input:focus{border-color:var(--orange);}
 
+  /* ---------- 评论 (Comments) ---------- */
+  .comment-btn{position:relative;}
+  .comment-badge{
+    position:absolute;top:-3px;right:-2px;background:var(--orange);color:#141414;font-size:8px;font-weight:700;
+    border-radius:8px;min-width:12px;height:12px;line-height:12px;text-align:center;padding:0 2px;
+  }
+  .comment-picker-pop{
+    position:absolute;top:24px;right:6px;z-index:60;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
+    padding:8px;width:230px;box-shadow:0 4px 16px rgba(0,0,0,.4);display:flex;flex-direction:column;gap:6px;
+  }
+  .comment-list{display:flex;flex-direction:column;gap:8px;max-height:220px;overflow-y:auto;}
+  .comment-empty{font-size:11.5px;color:var(--text-faint);padding:4px 2px;}
+  .comment-item{display:flex;flex-direction:column;gap:2px;padding:6px 7px;border-radius:6px;background:var(--bg3);}
+  .comment-item-head{display:flex;align-items:baseline;gap:6px;}
+  .comment-item-author{font-size:11px;font-weight:700;color:var(--text);}
+  .comment-item-time{font-size:10px;color:var(--text-faint);flex:1;}
+  .comment-item-actions{display:none;gap:5px;}
+  .comment-item:hover .comment-item-actions{display:flex;}
+  .comment-item-actions span{font-size:10px;color:var(--text-dim);cursor:pointer;}
+  .comment-item-actions span:hover{color:var(--orange);}
+  .comment-item-text{font-size:12px;color:var(--text);line-height:1.4;white-space:pre-wrap;word-break:break-word;}
+  .comment-item-text[contenteditable="true"]{outline:1px solid var(--orange);border-radius:3px;padding:2px 3px;}
+  .comment-new{display:flex;gap:5px;border-top:1px solid var(--border);padding-top:6px;}
+  .comment-new textarea{
+    flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:5px 7px;
+    border-radius:5px;font-size:11.5px;outline:none;resize:none;height:44px;font-family:inherit;
+  }
+  .comment-new textarea:focus{border-color:var(--orange);}
+  .comment-new button{
+    align-self:flex-end;background:var(--orange);border:none;color:#141414;font-size:11px;font-weight:700;
+    padding:5px 9px;border-radius:5px;cursor:pointer;flex-shrink:0;
+  }
+  .comment-new button:hover{filter:brightness(1.08);}
+
   .resize-handle{
     position:absolute;width:15px;height:15px;z-index:5;opacity:0;transition:opacity .12s;
   }
@@ -1528,6 +1562,7 @@ function buildCardEl(card){
     (card.type==='header' ? '<span class="card-bar-icon">'+CARD_ICONS[card.type]+'</span>' : '<span class="card-color-dot" style="background:'+(card.color||'#fff')+'"></span>') +
     (card.locked ? '<span class="card-bar-icon" title="已锁定位置">🔒</span>' : '') +
     '<span class="card-bar-spacer"></span>'+
+    '<button class="card-btn comment-btn" title="评论">💬'+(cardComments(card).length>0 ? '<span class="comment-badge">'+(cardComments(card).length>99?'99+':cardComments(card).length)+'</span>' : '')+'</button>'+
     '<button class="card-btn dup-btn" title="复制">⧉</button>'+
     '<button class="card-btn del-btn" title="删除">🗑</button>';
   el.appendChild(bar);
@@ -1571,6 +1606,7 @@ function buildCardEl(card){
     });
   }
 
+  bar.querySelector('.comment-btn').addEventListener('click', function(e){ e.stopPropagation(); toggleCommentPicker(el, card); });
   bar.querySelector('.dup-btn').addEventListener('click', function(e){ e.stopPropagation(); duplicateSelectionOrCard(card.id); });
   bar.querySelector('.del-btn').addEventListener('click', function(e){ e.stopPropagation(); deleteSelectionOrCard(card.id); });
 
@@ -1628,6 +1664,143 @@ function togglePalette(cardEl, card){
     pop.appendChild(sw);
   });
   cardEl.appendChild(pop);
+  setTimeout(function(){
+    document.addEventListener('mousedown', function closer(e){
+      if(!pop.contains(e.target)){ pop.remove(); document.removeEventListener('mousedown',closer); }
+    });
+  },0);
+}
+
+/* ---------- 评论 (Comments) ---------- */
+function cardComments(card){ if(!card.comments) card.comments=[]; return card.comments; }
+function addComment(card, text){
+  text = (text||'').trim();
+  if(!text) return null;
+  pushHistory();
+  var c = { id:uid('cm'), text:text, ts:Date.now(), author:'我' };
+  cardComments(card).push(c);
+  scheduleSave();
+  return c;
+}
+function removeComment(card, commentId){
+  pushHistory();
+  card.comments = cardComments(card).filter(function(c){ return c.id!==commentId; });
+  scheduleSave();
+}
+function updateComment(card, commentId, text){
+  text = (text||'').trim();
+  if(!text) return;
+  var c = cardComments(card).find(function(cc){ return cc.id===commentId; });
+  if(!c) return;
+  pushHistory();
+  c.text = text; c.editedTs = Date.now();
+  scheduleSave();
+}
+function formatCommentTs(ts){
+  var diff = Date.now() - ts;
+  if(diff < 60000) return '刚刚';
+  if(diff < 3600000) return Math.floor(diff/60000)+' 分钟前';
+  if(diff < 86400000) return Math.floor(diff/3600000)+' 小时前';
+  if(diff < 86400000*7) return Math.floor(diff/86400000)+' 天前';
+  var d = new Date(ts);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function refreshCommentBadge(card, cardEl){
+  var el = cardEl || document.querySelector('.card[data-id="'+card.id+'"]');
+  if(!el) return;
+  var btn = el.querySelector('.comment-btn');
+  if(!btn) return;
+  var n = cardComments(card).length;
+  var badge = btn.querySelector('.comment-badge');
+  if(n>0){
+    if(!badge){ badge = document.createElement('span'); badge.className='comment-badge'; btn.appendChild(badge); }
+    badge.textContent = n>99 ? '99+' : String(n);
+  } else if(badge){
+    badge.remove();
+  }
+}
+function toggleCommentPicker(cardEl, card){
+  var existing = cardEl.querySelector('.comment-picker-pop');
+  if(existing){ existing.remove(); return; }
+  document.querySelectorAll('.comment-picker-pop,.label-picker-pop,.palette-pop').forEach(function(p){p.remove();});
+  var pop = document.createElement('div');
+  pop.className = 'comment-picker-pop';
+  pop.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+
+  var listWrap = document.createElement('div');
+  listWrap.className = 'comment-list';
+  pop.appendChild(listWrap);
+
+  function renderList(){
+    listWrap.innerHTML = '';
+    var comments = cardComments(card);
+    if(!comments.length){
+      var empty = document.createElement('div');
+      empty.className = 'comment-empty';
+      empty.textContent = '暂无评论，在下方写第一条评论';
+      listWrap.appendChild(empty);
+      return;
+    }
+    comments.forEach(function(c){
+      var item = document.createElement('div');
+      item.className = 'comment-item';
+      item.innerHTML =
+        '<div class="comment-item-head">'+
+          '<span class="comment-item-author"></span>'+
+          '<span class="comment-item-time"></span>'+
+          '<span class="comment-item-actions"><span class="cm-edit" title="编辑">✎</span><span class="cm-del" title="删除">✕</span></span>'+
+        '</div>'+
+        '<div class="comment-item-text"></div>';
+      item.querySelector('.comment-item-author').textContent = c.author || '我';
+      item.querySelector('.comment-item-time').textContent = formatCommentTs(c.ts) + (c.editedTs ? '（已编辑）' : '');
+      var textEl = item.querySelector('.comment-item-text');
+      textEl.textContent = c.text;
+      item.querySelector('.cm-del').addEventListener('click', function(e){
+        e.stopPropagation();
+        removeComment(card, c.id);
+        renderList();
+        refreshCommentBadge(card, cardEl);
+      });
+      item.querySelector('.cm-edit').addEventListener('click', function(e){
+        e.stopPropagation();
+        textEl.contentEditable = 'true';
+        textEl.focus();
+        document.execCommand('selectAll', false, null);
+        function commit(){
+          updateComment(card, c.id, textEl.textContent);
+          renderList();
+        }
+        textEl.addEventListener('blur', commit, {once:true});
+        textEl.addEventListener('keydown', function(e2){
+          if(e2.key==='Enter' && !e2.shiftKey){ e2.preventDefault(); textEl.blur(); }
+        });
+      });
+      listWrap.appendChild(item);
+    });
+  }
+
+  var newRow = document.createElement('div');
+  newRow.className = 'comment-new';
+  newRow.innerHTML = '<textarea placeholder="写评论... (Enter 发送)"></textarea><button>发送</button>';
+  var ta = newRow.querySelector('textarea');
+  function submit(){
+    if(!ta.value.trim()) return;
+    addComment(card, ta.value);
+    ta.value = '';
+    renderList();
+    refreshCommentBadge(card, cardEl);
+    listWrap.scrollTop = listWrap.scrollHeight;
+  }
+  ta.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+  ta.addEventListener('keydown', function(e){
+    e.stopPropagation();
+    if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); submit(); }
+  });
+  newRow.querySelector('button').addEventListener('click', function(e){ e.stopPropagation(); submit(); });
+  pop.appendChild(newRow);
+
+  cardEl.appendChild(pop);
+  renderList();
   setTimeout(function(){
     document.addEventListener('mousedown', function closer(e){
       if(!pop.contains(e.target)){ pop.remove(); document.removeEventListener('mousedown',closer); }
@@ -2574,6 +2747,11 @@ function openCardContextMenu(card, x, y){
     }},
     {label: anyLocked ? '解锁位置' : '锁定位置', action:function(){ toggleLockCards(ids); }},
     {separator:true},
+    {label:'评论'+(cardComments(card).length ? ' ('+cardComments(card).length+')' : ''), action:function(){
+      var el = document.querySelector('.card[data-id="'+card.id+'"]');
+      if(el) toggleCommentPicker(el, card);
+    }},
+    {separator:true},
     {label:'置于顶层', action:function(){ ids.forEach(bringCardToFront); scheduleSave(); }},
     {label:'置于底层', action:function(){ ids.forEach(sendCardToBack); }},
     {separator:true},
@@ -2760,6 +2938,9 @@ function extractCardText(card, board){
       var lbl = labels.find(function(l){return l.id===lid;});
       if(lbl) parts.push(lbl.text);
     });
+  }
+  if(card.comments && card.comments.length){
+    card.comments.forEach(function(c){ if(c.text) parts.push(c.text); });
   }
   return parts.join(' ');
 }
