@@ -130,11 +130,11 @@
           "type": "note",
           "x": 1767.7911909308882,
           "y": 985.5142333031397,
-          "w": 260,
-          "h": 130,
+          "w": 278.6861126478101,
+          "h": 183.18355138222864,
           "color": "#c9d9ff",
           "z": 212,
-          "text": "金融资产投资 Financial Asset Investment\n• 高收益，快齿轮 (high yield, the fast gear)\n• \"快齿轮先转、慢齿轮后转\" (the fast gear turns first, the slow gear follows)",
+          "text": "<h3>金融资产投资 Financial Asset Investment</h3>• 高收益，快齿轮 (high yield, the fast gear)<br>• \"快齿轮先转、慢齿轮后转\" (the fast gear turns first, the slow gear follows)",
           "comments": []
         },
         {
@@ -818,7 +818,7 @@
         }
       ],
       "vx": -125.50698249319271,
-      "vy": -175.1566636553526,
+      "vy": -270.15666413218975,
       "vzoom": 0.6957038226740835,
       "maxZ": 214,
       "updatedAt": 1785853422858
@@ -828,5 +828,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1785941536813
+  "syncedAt": 1785941607437
 }
