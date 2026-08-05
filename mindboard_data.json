@@ -70,11 +70,11 @@
           "type": "note",
           "x": 859.6741600750968,
           "y": 1008.2985197587013,
-          "w": 344.6826976270348,
-          "h": 160.55577667784877,
+          "w": 360.49402371364334,
+          "h": 137.55748418823637,
           "color": "#ffc9d6",
-          "z": 216,
-          "text": "国内生产总值 GDP<br><br>= 消费 Consumer + 投资 Investment + 政府支出 Government Spending + 净出口 Export (X-M)",
+          "z": 217,
+          "text": "<h2>国内生产总值 GDP</h2><b>= 消费 Consumer + 投资 Investment + 政府支出 Government Spending + 净出口 Export (X-M</b>)",
           "comments": []
         },
         {
@@ -820,7 +820,7 @@
       "vx": -125.50698249319271,
       "vy": -470.9900008431196,
       "vzoom": 0.6957038226740835,
-      "maxZ": 216,
+      "maxZ": 217,
       "updatedAt": 1785853422858
     }
   },
@@ -828,5 +828,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1785941977516
+  "syncedAt": 1785942038366
 }
