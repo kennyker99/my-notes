@@ -584,6 +584,10 @@
   .el-label{font-size:10.5px;letter-spacing:.01em;}
   .el-sep{height:1px;background:var(--border);margin:8px 10px;}
   .el-spacer{flex:1;}
+  .elrail-normal-group, .elrail-multi-group{display:flex;flex-direction:column;}
+  .elrail-multi-group{display:none;}
+  .elrail.multi-mode .elrail-normal-group{display:none;}
+  .elrail.multi-mode .elrail-multi-group{display:flex;}
   .more-tool-pop{
     display:none;position:fixed;z-index:2000;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
     padding:4px;min-width:130px;box-shadow:0 10px 30px rgba(0,0,0,.4);
@@ -697,22 +701,39 @@
   </div>
 
   <aside class="elrail" id="elRail">
-    <button class="el-btn" data-add="note"><span class="el-icon">🗒</span><span class="el-label">Note</span></button>
-    <button class="el-btn" data-add="link"><span class="el-icon">🔗</span><span class="el-label">Link</span></button>
-    <button class="el-btn" data-add="todo"><span class="el-icon">☑</span><span class="el-label">To-do</span></button>
-    <button class="el-btn" id="lineToolBtn"><span class="el-icon">↗</span><span class="el-label">Line</span></button>
-    <button class="el-btn" data-add="boardlink"><span class="el-icon">📁</span><span class="el-label">Board</span></button>
-    <button class="el-btn" data-add="column"><span class="el-icon">🗂</span><span class="el-label">Column</span></button>
-    <button class="el-btn" id="commentToolBtn"><span class="el-icon">💬</span><span class="el-label">Comment</span></button>
-    <button class="el-btn" id="moreToolBtn"><span class="el-icon">⋯</span></button>
-    <div class="el-sep"></div>
-    <button class="el-btn" data-add="image"><span class="el-icon">🖼</span><span class="el-label">Add image</span></button>
-    <button class="el-btn" data-add="file"><span class="el-icon">📤</span><span class="el-label">Upload</span></button>
-    <div class="el-sep"></div>
-    <button class="el-btn" id="drawToolBtn"><span class="el-icon">✏</span><span class="el-label">Draw</span></button>
+    <div class="elrail-normal-group" id="elRailNormal">
+      <button class="el-btn" data-add="note"><span class="el-icon">🗒</span><span class="el-label">Note</span></button>
+      <button class="el-btn" data-add="link"><span class="el-icon">🔗</span><span class="el-label">Link</span></button>
+      <button class="el-btn" data-add="todo"><span class="el-icon">☑</span><span class="el-label">To-do</span></button>
+      <button class="el-btn" id="lineToolBtn"><span class="el-icon">↗</span><span class="el-label">Line</span></button>
+      <button class="el-btn" data-add="boardlink"><span class="el-icon">📁</span><span class="el-label">Board</span></button>
+      <button class="el-btn" data-add="column"><span class="el-icon">🗂</span><span class="el-label">Column</span></button>
+      <button class="el-btn" id="commentToolBtn"><span class="el-icon">💬</span><span class="el-label">Comment</span></button>
+      <button class="el-btn" id="moreToolBtn"><span class="el-icon">⋯</span></button>
+      <div class="el-sep"></div>
+      <button class="el-btn" data-add="image"><span class="el-icon">🖼</span><span class="el-label">Add image</span></button>
+      <button class="el-btn" data-add="file"><span class="el-icon">📤</span><span class="el-label">Upload</span></button>
+      <div class="el-sep"></div>
+      <button class="el-btn" id="drawToolBtn"><span class="el-icon">✏</span><span class="el-label">Draw</span></button>
+    </div>
+    <div class="elrail-multi-group" id="elRailMulti">
+      <button class="el-btn" id="msColorBtn"><span class="el-icon">🎨</span><span class="el-label">Color</span></button>
+      <button class="el-btn" id="msLabelsBtn"><span class="el-icon">🏷</span><span class="el-label">Labels</span></button>
+      <button class="el-btn" id="msAlignBtn"><span class="el-icon">▦</span><span class="el-label">Alignment</span></button>
+      <button class="el-btn" id="msConnectBtn"><span class="el-icon">⤳</span><span class="el-label">Connect</span></button>
+    </div>
     <div class="el-spacer"></div>
     <button class="el-btn" id="trashBtn"><span class="el-icon">🗑<span class="trash-badge" id="trashBadge" style="display:none;"></span></span><span class="el-label">Trash</span></button>
   </aside>
+  <div class="more-tool-pop" id="alignPop">
+    <div class="more-tool-item" data-align="left">⯇ 左对齐</div>
+    <div class="more-tool-item" data-align="hcenter">▤ 水平居中</div>
+    <div class="more-tool-item" data-align="right">⯈ 右对齐</div>
+    <div class="rt-ts-sep"></div>
+    <div class="more-tool-item" data-align="top">⯅ 顶部对齐</div>
+    <div class="more-tool-item" data-align="vcenter">▤ 垂直居中</div>
+    <div class="more-tool-item" data-align="bottom">⯆ 底部对齐</div>
+  </div>
   <div class="more-tool-pop" id="moreToolPop">
     <div class="more-tool-item" data-add="header"><span class="el-icon">🔤</span>Header</div>
     <div class="more-tool-item" data-add="file"><span class="el-icon">📄</span>File</div>
@@ -794,7 +815,7 @@
         <div class="rt-sep"></div>
         <button data-cmd="insertUnorderedList" title="项目符号列表">•≡</button>
         <button data-cmd="insertOrderedList" title="编号列表">1≡</button>
-        <button id="rtQuoteBtn" title="引用">"</button>
+        <button id="rtAlignBtn" title="对齐">≡</button>
         <div class="rt-sep"></div>
         <button id="rtCodeBtn" title="代码">&lt;/&gt;</button>
         <button id="rtLinkBtn" title="插入链接">🔗</button>
@@ -2122,14 +2143,32 @@ function toggleLabelPicker(cardEl, card){
   if(existing){ existing.remove(); return; }
   document.querySelectorAll('.label-picker-pop,.palette-pop').forEach(function(p){p.remove();});
   var b = activeBoard();
+  var multi = state.selectedCards.has(card.id) && state.selectedCards.size>1;
+  var ids = multi ? Array.from(state.selectedCards) : [card.id];
   var pop = document.createElement('div');
   pop.className = 'label-picker-pop';
+
+  function cardsInSelection(){
+    return ids.map(function(id){ return b.cards.find(function(c){return c.id===id;}); }).filter(Boolean);
+  }
+  function allHave(labelId){
+    var cs = cardsInSelection();
+    return cs.length>0 && cs.every(function(c){ return c.labelIds && c.labelIds.indexOf(labelId)!==-1; });
+  }
+  function applyLabelToSelection(labelId, checked){
+    cardsInSelection().forEach(function(c){
+      if(checked){ c.labelIds = (c.labelIds||[]).filter(function(id){ return id!==labelId; }); }
+      else{ c.labelIds = c.labelIds||[]; if(c.labelIds.indexOf(labelId)===-1) c.labelIds.push(labelId); }
+      var liveEl = document.querySelector('.card[data-id="'+c.id+'"]');
+      if(liveEl) renderCardLabels(c, liveEl);
+    });
+  }
 
   function renderList(){
     var list = pop.querySelector('.label-picker-list');
     list.innerHTML = '';
     boardLabels(b).forEach(function(lbl){
-      var checked = card.labelIds && card.labelIds.indexOf(lbl.id)!==-1;
+      var checked = multi ? allHave(lbl.id) : (card.labelIds && card.labelIds.indexOf(lbl.id)!==-1);
       var item = document.createElement('div');
       item.className = 'label-picker-item'+(checked?' checked':'');
       item.innerHTML =
@@ -2138,11 +2177,14 @@ function toggleLabelPicker(cardEl, card){
       item.querySelector('.lp-name').textContent = lbl.text;
       item.addEventListener('click', function(){
         pushHistory();
-        toggleCardLabel(card, lbl.id);
+        if(multi) applyLabelToSelection(lbl.id, checked);
+        else toggleCardLabel(card, lbl.id);
         scheduleSave();
         renderList();
-        var liveEl = document.querySelector('.card[data-id="'+card.id+'"]');
-        if(liveEl) renderCardLabels(card, liveEl);
+        if(!multi){
+          var liveEl = document.querySelector('.card[data-id="'+card.id+'"]');
+          if(liveEl) renderCardLabels(card, liveEl);
+        }
       });
       list.appendChild(item);
     });
@@ -2163,14 +2205,23 @@ function toggleLabelPicker(cardEl, card){
       pushHistory();
       var lbl = findOrCreateLabel(b, input.value.trim());
       if(lbl){
-        card.labelIds = card.labelIds || [];
-        if(card.labelIds.indexOf(lbl.id)===-1) card.labelIds.push(lbl.id);
+        if(multi){
+          cardsInSelection().forEach(function(c){
+            c.labelIds = c.labelIds || [];
+            if(c.labelIds.indexOf(lbl.id)===-1) c.labelIds.push(lbl.id);
+            var liveEl = document.querySelector('.card[data-id="'+c.id+'"]');
+            if(liveEl) renderCardLabels(c, liveEl);
+          });
+        } else {
+          card.labelIds = card.labelIds || [];
+          if(card.labelIds.indexOf(lbl.id)===-1) card.labelIds.push(lbl.id);
+          var liveEl2 = document.querySelector('.card[data-id="'+card.id+'"]');
+          if(liveEl2) renderCardLabels(card, liveEl2);
+        }
       }
       input.value='';
       scheduleSave();
       renderList();
-      var liveEl = document.querySelector('.card[data-id="'+card.id+'"]');
-      if(liveEl) renderCardLabels(card, liveEl);
     }
   });
   pop.appendChild(newRow);
@@ -2732,7 +2783,73 @@ function refreshSelectionClasses(){
     el.classList.toggle('selected', isSel && !multi);
     el.classList.toggle('multi-selected', isSel && multi);
   });
+  var rail = document.getElementById('elRail');
+  if(rail) rail.classList.toggle('multi-mode', state.selectedCards.size>=2);
   renderConnectors();
+}
+
+/* ---- 多选批量操作 (左侧工具栏在选中 2+ 张卡片时切换为这一组) ---- */
+function openMultiColorPicker(){
+  var ids = Array.from(state.selectedCards);
+  if(ids.length<2) return;
+  var b = activeBoard();
+  var card = b.cards.find(function(c){ return c.id===ids[0]; });
+  var cardEl = document.querySelector('.card[data-id="'+ids[0]+'"]');
+  if(card && cardEl) togglePalette(cardEl, card);
+}
+function openMultiLabelPicker(){
+  var ids = Array.from(state.selectedCards);
+  if(ids.length<2) return;
+  var b = activeBoard();
+  var card = b.cards.find(function(c){ return c.id===ids[0]; });
+  var cardEl = document.querySelector('.card[data-id="'+ids[0]+'"]');
+  if(card && cardEl) toggleLabelPicker(cardEl, card);
+}
+function alignSelection(mode){
+  var ids = Array.from(state.selectedCards);
+  if(ids.length<2) return;
+  var b = activeBoard();
+  var cards = ids.map(function(id){ return b.cards.find(function(c){return c.id===id;}); }).filter(Boolean);
+  if(cards.length<2) return;
+  pushHistory();
+  if(mode==='left'){ var x = Math.min.apply(null, cards.map(function(c){return c.x;})); cards.forEach(function(c){ c.x = x; }); }
+  else if(mode==='right'){ var xr = Math.max.apply(null, cards.map(function(c){return c.x+c.w;})); cards.forEach(function(c){ c.x = xr-c.w; }); }
+  else if(mode==='hcenter'){
+    var minx = Math.min.apply(null, cards.map(function(c){return c.x;}));
+    var maxx = Math.max.apply(null, cards.map(function(c){return c.x+c.w;}));
+    var midx = (minx+maxx)/2;
+    cards.forEach(function(c){ c.x = midx-c.w/2; });
+  }
+  else if(mode==='top'){ var y = Math.min.apply(null, cards.map(function(c){return c.y;})); cards.forEach(function(c){ c.y = y; }); }
+  else if(mode==='bottom'){ var yb = Math.max.apply(null, cards.map(function(c){return c.y+c.h;})); cards.forEach(function(c){ c.y = yb-c.h; }); }
+  else if(mode==='vcenter'){
+    var miny = Math.min.apply(null, cards.map(function(c){return c.y;}));
+    var maxy = Math.max.apply(null, cards.map(function(c){return c.y+c.h;}));
+    var midy = (miny+maxy)/2;
+    cards.forEach(function(c){ c.y = midy-c.h/2; });
+  }
+  scheduleSave();
+  renderBoard();
+  ids.forEach(function(id){ state.selectedCards.add(id); });
+  refreshSelectionClasses();
+}
+function connectSelection(){
+  var ids = Array.from(state.selectedCards);
+  if(ids.length<2) return;
+  var b = activeBoard();
+  var cards = ids.map(function(id){ return b.cards.find(function(c){return c.id===id;}); }).filter(Boolean);
+  if(cards.length<2) return;
+  cards.sort(function(a,c2){ return a.x-c2.x; });
+  pushHistory();
+  var added = 0;
+  for(var i=0;i<cards.length-1;i++){
+    var from = cards[i].id, to = cards[i+1].id;
+    var exists = b.connectors.some(function(cn){ return (cn.from===from&&cn.to===to)||(cn.from===to&&cn.to===from); });
+    if(!exists){ b.connectors.push({id:uid('n'), from:from, to:to, label:''}); added++; }
+  }
+  scheduleSave();
+  renderConnectors();
+  showToast(added>0 ? ('已连接 '+added+' 条连线') : '所选卡片之间已经连好线了');
 }
 
 /* ============================== 卡片操作 ============================== */
@@ -3300,6 +3417,12 @@ function toggleInlineCode(){
     catch(e){ var frag = range.extractContents(); codeEl.appendChild(frag); range.insertNode(codeEl); }
   }
 }
+function cycleTextAlign(){
+  if(document.queryCommandState('justifyLeft')) document.execCommand('justifyCenter');
+  else if(document.queryCommandState('justifyCenter')) document.execCommand('justifyRight');
+  else if(document.queryCommandState('justifyRight')) document.execCommand('justifyLeft');
+  else document.execCommand('justifyCenter');
+}
 function toggleLinkOnSelection(){
   var sel = window.getSelection();
   if(!sel || sel.rangeCount===0 || sel.isCollapsed) return;
@@ -3789,6 +3912,34 @@ function wireGlobalEvents(){
     }
   });
 
+  // ---- 多选批量操作（左侧工具栏在选中 2+ 张卡片时切换出的按钮） ----
+  document.getElementById('msColorBtn').addEventListener('click', function(e){ e.stopPropagation(); openMultiColorPicker(); });
+  document.getElementById('msLabelsBtn').addEventListener('click', function(e){ e.stopPropagation(); openMultiLabelPicker(); });
+  document.getElementById('msConnectBtn').addEventListener('click', function(e){ e.stopPropagation(); connectSelection(); });
+  document.getElementById('msAlignBtn').addEventListener('click', function(e){
+    e.stopPropagation();
+    var pop = document.getElementById('alignPop');
+    var isOpen = pop.classList.contains('active');
+    pop.classList.remove('active');
+    if(isOpen) return;
+    var r = e.currentTarget.getBoundingClientRect();
+    pop.style.left = (r.right+6)+'px';
+    pop.style.top = r.top+'px';
+    pop.classList.add('active');
+  });
+  document.querySelectorAll('#alignPop .more-tool-item[data-align]').forEach(function(item){
+    item.addEventListener('click', function(){
+      document.getElementById('alignPop').classList.remove('active');
+      alignSelection(item.dataset.align);
+    });
+  });
+  document.addEventListener('click', function(e){
+    var pop = document.getElementById('alignPop');
+    if(pop.classList.contains('active') && !pop.contains(e.target) && e.target.id!=='msAlignBtn'){
+      pop.classList.remove('active');
+    }
+  });
+
   // ---- Line / Comment / Draw：目前的行为提示（尚未做成独立工具） ----
   document.getElementById('lineToolBtn').addEventListener('click', function(){
     showToast('从卡片边缘的橙色圆点拖拽即可画连线');
@@ -3948,7 +4099,7 @@ function wireGlobalEvents(){
     });
   });
   document.getElementById('rtTextStyleBtn').addEventListener('mousedown', function(e){ e.preventDefault(); toggleTextStylePop(); });
-  document.getElementById('rtQuoteBtn').addEventListener('mousedown', function(e){ e.preventDefault(); document.execCommand('formatBlock', false, 'blockquote'); });
+  document.getElementById('rtAlignBtn').addEventListener('mousedown', function(e){ e.preventDefault(); cycleTextAlign(); });
   document.getElementById('rtCodeBtn').addEventListener('mousedown', function(e){ e.preventDefault(); toggleInlineCode(); });
   document.getElementById('rtLinkBtn').addEventListener('mousedown', function(e){ e.preventDefault(); toggleLinkOnSelection(); });
   document.getElementById('rtCommentBtn').addEventListener('mousedown', function(e){ e.preventDefault(); commentOnCurrentEdit(); });
