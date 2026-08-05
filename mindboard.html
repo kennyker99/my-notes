@@ -432,6 +432,39 @@
   .file-dl:hover{background:color-mix(in srgb, var(--ctext) 14%, transparent);}
   .file-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:100%;color:color-mix(in srgb, var(--ctext) 60%, transparent);font-size:12px;cursor:pointer;text-align:center;}
 
+  /* ---------- Map / Video / Audio 内嵌卡片 ---------- */
+  .card-body.embed-body{padding:0;display:flex;flex-direction:column;}
+  .embed-wrap{position:relative;flex:1;display:flex;flex-direction:column;min-height:0;}
+  .embed-iframe{flex:1;width:100%;border:none;background:#000;}
+  .embed-edit-btn, .embed-open-btn{
+    position:absolute;top:6px;background:rgba(20,20,20,.65);color:#fff;border:none;font-size:11px;
+    padding:3px 6px;border-radius:4px;cursor:pointer;opacity:0;transition:opacity .12s;text-decoration:none;z-index:2;
+  }
+  .card:hover .embed-edit-btn, .card:hover .embed-open-btn{opacity:1;}
+  .embed-edit-btn{right:6px;}
+  .embed-open-btn{right:34px;}
+  .embed-empty{display:flex;flex-direction:column;gap:8px;padding:14px;align-items:center;justify-content:center;flex:1;color:color-mix(in srgb, var(--ctext) 65%, transparent);font-size:12px;text-align:center;}
+  .embed-empty-icon{font-size:22px;}
+  .embed-empty input{
+    width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 8px;
+    border-radius:5px;font-size:11.5px;outline:none;
+  }
+  .embed-empty input:focus{border-color:var(--orange);}
+  .embed-empty .embed-or{font-size:10px;opacity:.6;}
+  .embed-empty .embed-upload-btn{
+    background:var(--bg3);border:1px dashed var(--border2);color:var(--ctext);padding:7px;border-radius:6px;
+    cursor:pointer;font-size:11px;width:100%;
+  }
+  .embed-empty .embed-upload-btn:hover{border-color:var(--orange);}
+  .embed-caption{
+    padding:6px 10px;font-size:11px;color:color-mix(in srgb, var(--ctext) 60%, transparent);outline:none;
+    border-top:1px solid color-mix(in srgb, var(--ctext) 10%, transparent);flex-shrink:0;
+  }
+  .embed-caption:empty:before{content:attr(data-placeholder);color:color-mix(in srgb, var(--ctext) 60%, transparent);}
+  .embed-fallback-link{display:flex;flex-direction:column;gap:6px;padding:14px;flex:1;justify-content:center;align-items:center;text-align:center;font-size:12px;color:color-mix(in srgb, var(--ctext) 65%, transparent);}
+  .embed-fallback-link a{color:var(--link-color);font-size:12px;word-break:break-all;}
+  .card.type-audio .embed-iframe{background:transparent;}
+
   /* ---------- Column (kanban) card ---------- */
   .col-items{display:flex;flex-direction:column;gap:0;}
   .col-item{display:flex;align-items:flex-start;gap:4px;font-size:12.5px;padding:4px 0;border-bottom:1px dashed color-mix(in srgb, var(--ctext) 10%, transparent);}
@@ -658,6 +691,9 @@
   <div class="more-tool-pop" id="moreToolPop">
     <div class="more-tool-item" data-add="header"><span class="el-icon">🔤</span>Header</div>
     <div class="more-tool-item" data-add="file"><span class="el-icon">📄</span>File</div>
+    <div class="more-tool-item" data-add="map"><span class="el-icon">🗺</span>Map</div>
+    <div class="more-tool-item" data-add="video"><span class="el-icon">🎬</span>Video</div>
+    <div class="more-tool-item" data-add="audio"><span class="el-icon">🎵</span>Audio</div>
   </div>
 
   <div class="main">
@@ -819,13 +855,13 @@ var STORAGE_KEY = 'mindboard_store_v1';
 var PALETTE = ['#2b2b30','#3d331f','#3d2530','#2e2540','#1f2d40','#1f3327','#3a3a3f'];
 var LIGHT_PALETTE = ['#ffffff','#fff6b3','#ffd9d9','#e6d9ff','#d6ecff','#d7f5df','#f0f0f0'];
 function currentPalette(){ return getTheme()==='light' ? LIGHT_PALETTE : PALETTE; }
-var MIN_W = {note:160,todo:200,image:180,link:200,header:220,boardlink:180,file:160,column:180};
-var MIN_H = {note:100,todo:120,image:150,link:90,header:56,boardlink:70,file:70,column:140};
+var MIN_W = {note:160,todo:200,image:180,link:200,header:220,boardlink:180,file:160,column:180,map:200,video:220,audio:220};
+var MIN_H = {note:100,todo:120,image:150,link:90,header:56,boardlink:70,file:70,column:140,map:150,video:150,audio:90};
 var DEFAULT_SIZE = {
   note:[220,150], todo:[240,220], image:[260,210], link:[260,120], header:[300,64], boardlink:[220,100],
-  file:[220,88], column:[220,240]
+  file:[220,88], column:[220,240], map:[300,220], video:[320,220], audio:[300,110]
 };
-var CARD_ICONS = {note:'🗒',todo:'☑',image:'🖼',link:'🔗',header:'🔤',boardlink:'📁',file:'📎',column:'🗂'};
+var CARD_ICONS = {note:'🗒',todo:'☑',image:'🖼',link:'🔗',header:'🔤',boardlink:'📁',file:'📎',column:'🗂',map:'🗺',video:'🎬',audio:'🎵'};
 var LABEL_PALETTE = ['#ff6b6b','#ffa94d','#ffd43b','#69db7c','#4dabf7','#9775fa','#f783ac','#66d9c4'];
 var EMOJI_ICONS = ['📋','📝','🧠','🎬','🖼️','🧳','💡','📚','🗓','🎨','🔬','💼','🎯','🌱','🏠','⭐','🔖','🧩','📊','🎵','🍳','✈️','📷','🗂'];
 var HISTORY_LIMIT = 60;
@@ -874,6 +910,39 @@ function getContrastText(hex){
   var lum = (0.299*r + 0.587*g + 0.114*b)/255;
   return lum > 0.6 ? '#1a1a1c' : '#f0f0f2';
 }
+/* ---------- 内嵌链接解析 (Map / Video / Audio 卡片) ---------- */
+function mapEmbedSrc(url){
+  if(!url) return '';
+  if(url.indexOf('/maps/embed')!==-1) return url;
+  if(url.indexOf('google.com/maps')!==-1 || url.indexOf('goo.gl/maps')!==-1 || url.indexOf('maps.app.goo.gl')!==-1){
+    return url + (url.indexOf('?')!==-1 ? '&' : '?') + 'output=embed';
+  }
+  return url;
+}
+function videoEmbedSrc(url){
+  if(!url) return null;
+  var yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([\w-]{6,})/);
+  if(yt) return 'https://www.youtube.com/embed/'+yt[1];
+  var vm = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if(vm) return 'https://player.vimeo.com/video/'+vm[1];
+  return null;
+}
+function audioEmbedSrc(url){
+  if(!url) return null;
+  var yt = url.match(/(?:music\.youtube\.com\/watch\?v=|youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{6,})/);
+  if(yt) return 'https://www.youtube.com/embed/'+yt[1];
+  if(url.indexOf('open.spotify.com/')!==-1){
+    return url.replace('open.spotify.com/', 'open.spotify.com/embed/').split('?')[0];
+  }
+  if(url.indexOf('soundcloud.com/')!==-1){
+    return 'https://w.soundcloud.com/player/?url='+encodeURIComponent(url)+'&color=%23ff8a00&auto_play=false&show_comments=false';
+  }
+  if(url.indexOf('music.apple.com/')!==-1){
+    return url.replace('music.apple.com', 'embed.music.apple.com');
+  }
+  return null;
+}
+
 var toastTimer = null;
 function showToast(msg){
   var t = document.getElementById('toast');
@@ -1712,6 +1781,7 @@ function buildCardEl(card){
 
   var body = document.createElement('div');
   body.className = 'card-body';
+  if(card.type==='map' || card.type==='video' || card.type==='audio') body.classList.add('embed-body');
   buildBody(card, body, el);
   el.appendChild(body);
 
@@ -2209,6 +2279,188 @@ function buildBody(card, body, cardEl){
     body.appendChild(d);
   } else if(card.type==='boardlink'){
     renderBoardLinkBody(card, body, cardEl);
+  } else if(card.type==='map'){
+    renderMapBody(card, body);
+  } else if(card.type==='video'){
+    renderVideoBody(card, body);
+  } else if(card.type==='audio'){
+    renderAudioBody(card, body);
+  }
+}
+
+function buildEmbedEmptyState(card, body, opts){
+  var wrap = document.createElement('div');
+  wrap.className = 'embed-empty';
+  var iconEl = document.createElement('div');
+  iconEl.className = 'embed-empty-icon';
+  iconEl.textContent = opts.icon;
+  wrap.appendChild(iconEl);
+  var input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = opts.placeholder;
+  input.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+  input.addEventListener('keydown', function(e){
+    e.stopPropagation();
+    if(e.key==='Enter' && input.value.trim()) opts.onUrlSubmit(input.value.trim());
+  });
+  wrap.appendChild(input);
+  if(opts.uploadLabel){
+    var orEl = document.createElement('div');
+    orEl.className = 'embed-or';
+    orEl.textContent = '或';
+    wrap.appendChild(orEl);
+    var upBtn = document.createElement('div');
+    upBtn.className = 'embed-upload-btn';
+    upBtn.textContent = opts.uploadLabel;
+    upBtn.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+    upBtn.addEventListener('click', function(e){ e.stopPropagation(); opts.onUploadClick(); });
+    wrap.appendChild(upBtn);
+  }
+  body.appendChild(wrap);
+}
+
+function buildEmbedCaption(card, body){
+  var cap = document.createElement('div');
+  cap.className = 'embed-caption';
+  cap.contentEditable = 'true';
+  cap.dataset.placeholder = '说明文字...';
+  cap.innerText = card.caption||'';
+  cap.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+  cap.addEventListener('blur', function(){ card.caption = cap.innerText; scheduleSave(); });
+  body.appendChild(cap);
+}
+
+function renderMapBody(card, body){
+  body.innerHTML = '';
+  if(card.url){
+    var wrap = document.createElement('div');
+    wrap.className = 'embed-wrap';
+    var ifr = document.createElement('iframe');
+    ifr.className = 'embed-iframe'; ifr.src = mapEmbedSrc(card.url); ifr.loading = 'lazy';
+    ifr.referrerPolicy = 'no-referrer-when-downgrade';
+    wrap.appendChild(ifr);
+    var openBtn = document.createElement('a');
+    openBtn.className = 'embed-open-btn'; openBtn.href = card.url; openBtn.target = '_blank';
+    openBtn.rel = 'noopener noreferrer'; openBtn.title = '在新标签页打开'; openBtn.textContent = '↗';
+    openBtn.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+    wrap.appendChild(openBtn);
+    var editBtn = document.createElement('button');
+    editBtn.className = 'embed-edit-btn'; editBtn.title = '更改地图链接'; editBtn.textContent = '✎';
+    editBtn.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+    editBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var nv = prompt('Google 地图分享链接', card.url);
+      if(nv!==null){ pushHistory(); card.url = nv.trim(); scheduleSave(); renderMapBody(card, body); }
+    });
+    wrap.appendChild(editBtn);
+    body.appendChild(wrap);
+  } else {
+    buildEmbedEmptyState(card, body, {
+      icon: '🗺', placeholder: '粘贴 Google 地图分享链接，回车确认',
+      onUrlSubmit: function(url){ pushHistory(); card.url = url; scheduleSave(); renderMapBody(card, body); }
+    });
+  }
+}
+
+function renderVideoBody(card, body){
+  body.innerHTML = '';
+  if(card.dataUrl){
+    var wrap = document.createElement('div');
+    wrap.className = 'embed-wrap';
+    var v = document.createElement('video');
+    v.className = 'embed-iframe'; v.src = card.dataUrl; v.controls = true;
+    v.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+    wrap.appendChild(v);
+    body.appendChild(wrap);
+    buildEmbedCaption(card, body);
+  } else if(card.url){
+    var src = videoEmbedSrc(card.url);
+    var wrap2 = document.createElement('div');
+    wrap2.className = 'embed-wrap';
+    if(src){
+      var ifr = document.createElement('iframe');
+      ifr.className = 'embed-iframe'; ifr.src = src; ifr.loading = 'lazy'; ifr.allowFullscreen = true;
+      ifr.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      wrap2.appendChild(ifr);
+    } else {
+      var fb = document.createElement('div');
+      fb.className = 'embed-fallback-link';
+      fb.innerHTML = '🎬 无法预览此链接<br><a href="'+esc(card.url)+'" target="_blank" rel="noopener noreferrer">在新标签页打开 →</a>';
+      wrap2.appendChild(fb);
+    }
+    var editBtn2 = document.createElement('button');
+    editBtn2.className = 'embed-edit-btn'; editBtn2.title = '更改视频链接'; editBtn2.textContent = '✎';
+    editBtn2.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+    editBtn2.addEventListener('click', function(e){
+      e.stopPropagation();
+      var nv = prompt('YouTube / Vimeo 链接', card.url);
+      if(nv!==null){ pushHistory(); card.url = nv.trim(); scheduleSave(); renderVideoBody(card, body); }
+    });
+    wrap2.appendChild(editBtn2);
+    body.appendChild(wrap2);
+    buildEmbedCaption(card, body);
+  } else {
+    buildEmbedEmptyState(card, body, {
+      icon: '🎬', placeholder: '粘贴 YouTube / Vimeo 链接，回车确认',
+      onUrlSubmit: function(url){ pushHistory(); card.url = url; scheduleSave(); renderVideoBody(card, body); },
+      uploadLabel: '📤 上传视频文件 (最大 '+formatBytes(MAX_UPLOAD_BYTES)+')',
+      onUploadClick: function(){
+        var input = document.getElementById('videoFileInput');
+        input.dataset.cardId = card.id;
+        input.click();
+      }
+    });
+  }
+}
+
+function renderAudioBody(card, body){
+  body.innerHTML = '';
+  if(card.dataUrl){
+    var wrap = document.createElement('div');
+    wrap.className = 'embed-wrap';
+    var a = document.createElement('audio');
+    a.className = 'embed-iframe'; a.src = card.dataUrl; a.controls = true; a.style.height = 'auto'; a.style.margin = 'auto 10px';
+    a.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+    wrap.appendChild(a);
+    body.appendChild(wrap);
+    buildEmbedCaption(card, body);
+  } else if(card.url){
+    var src = audioEmbedSrc(card.url);
+    var wrap2 = document.createElement('div');
+    wrap2.className = 'embed-wrap';
+    if(src){
+      var ifr = document.createElement('iframe');
+      ifr.className = 'embed-iframe'; ifr.src = src; ifr.loading = 'lazy';
+      ifr.allow = 'autoplay; encrypted-media';
+      wrap2.appendChild(ifr);
+    } else {
+      var fb = document.createElement('div');
+      fb.className = 'embed-fallback-link';
+      fb.innerHTML = '🎵 无法预览此链接<br><a href="'+esc(card.url)+'" target="_blank" rel="noopener noreferrer">在新标签页打开 →</a>';
+      wrap2.appendChild(fb);
+    }
+    var editBtn2 = document.createElement('button');
+    editBtn2.className = 'embed-edit-btn'; editBtn2.title = '更改音频链接'; editBtn2.textContent = '✎';
+    editBtn2.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+    editBtn2.addEventListener('click', function(e){
+      e.stopPropagation();
+      var nv = prompt('Spotify / SoundCloud / Apple Music / YouTube 链接', card.url);
+      if(nv!==null){ pushHistory(); card.url = nv.trim(); scheduleSave(); renderAudioBody(card, body); }
+    });
+    wrap2.appendChild(editBtn2);
+    body.appendChild(wrap2);
+    buildEmbedCaption(card, body);
+  } else {
+    buildEmbedEmptyState(card, body, {
+      icon: '🎵', placeholder: '粘贴 Spotify / SoundCloud / Apple Music 链接，回车确认',
+      onUrlSubmit: function(url){ pushHistory(); card.url = url; scheduleSave(); renderAudioBody(card, body); },
+      uploadLabel: '📤 上传音频文件 (最大 '+formatBytes(MAX_UPLOAD_BYTES)+')',
+      onUploadClick: function(){
+        var input = document.getElementById('audioFileInput');
+        input.dataset.cardId = card.id;
+        input.click();
+      }
+    });
   }
 }
 
@@ -2460,6 +2712,9 @@ function addCardAt(type, x, y){
   if(type==='image'){ card.dataUrl=''; card.caption=''; }
   if(type==='file'){ card.dataUrl=''; card.fileName=''; card.fileSize=0; }
   if(type==='boardlink'){ card.targetBoardId=null; }
+  if(type==='map'){ card.url=''; }
+  if(type==='video'){ card.url=''; card.dataUrl=''; card.caption=''; }
+  if(type==='audio'){ card.url=''; card.dataUrl=''; card.caption=''; }
   b.cards.push(card);
   document.getElementById('canvasContent').appendChild(buildCardEl(card));
   document.getElementById('emptyHint').style.display='none';
@@ -2930,7 +3185,8 @@ function openCanvasContextMenu(localX, localY, clientX, clientY){
   var addTypes = [
     ['note','🗒 新建便签'], ['todo','☑ 新建清单'], ['column','🗂 新建看板列'],
     ['image','🖼 新建图片'], ['file','📎 新建文件'], ['link','🔗 新建链接'],
-    ['header','🔤 新建标题'], ['boardlink','📁 新建子看板']
+    ['header','🔤 新建标题'], ['boardlink','📁 新建子看板'],
+    ['map','🗺 新建地图'], ['video','🎬 新建视频'], ['audio','🎵 新建音频']
   ];
   addTypes.forEach(function(t){
     items.push({ label:t[1], action:function(){ addCardAt(t[0], localX, localY); } });
@@ -3003,6 +3259,7 @@ function trashItemLabel(card){
   if(card.text) return stripHtml(card.text).slice(0,40) || (CARD_ICONS[card.type]+' '+card.type);
   if(card.fileName) return card.fileName;
   if(card.caption) return card.caption;
+  if(card.url) return card.url;
   return CARD_ICONS[card.type]+' 未命名卡片';
 }
 function relativeTime(ts){
@@ -3497,6 +3754,32 @@ function wireGlobalEvents(){
       var b = activeBoard();
       var card = b.cards.find(function(c){return c.id===cardId;});
       if(card){ card.dataUrl = dataUrl; card.fileName = file.name; card.fileSize = file.size; renderBoard(); scheduleSave(); }
+    });
+    e.target.value='';
+  });
+
+  document.getElementById('videoFileInput').addEventListener('change', function(e){
+    var file = e.target.files[0];
+    var cardId = e.target.dataset.cardId;
+    if(!file || !cardId) return;
+    readFileAsDataUrl(file, function(dataUrl){
+      pushHistory();
+      var b = activeBoard();
+      var card = b.cards.find(function(c){return c.id===cardId;});
+      if(card){ card.dataUrl = dataUrl; renderBoard(); scheduleSave(); }
+    });
+    e.target.value='';
+  });
+
+  document.getElementById('audioFileInput').addEventListener('change', function(e){
+    var file = e.target.files[0];
+    var cardId = e.target.dataset.cardId;
+    if(!file || !cardId) return;
+    readFileAsDataUrl(file, function(dataUrl){
+      pushHistory();
+      var b = activeBoard();
+      var card = b.cards.find(function(c){return c.id===cardId;});
+      if(card){ card.dataUrl = dataUrl; renderBoard(); scheduleSave(); }
     });
     e.target.value='';
   });
