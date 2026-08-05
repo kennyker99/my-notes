@@ -8,13 +8,13 @@
         {
           "id": "c_mser0o3u_9",
           "type": "note",
-          "x": 1360,
-          "y": 40,
-          "w": 280,
-          "h": 70,
+          "x": 1364.0678720520061,
+          "y": -15.59425137741799,
+          "w": 300.33936026003096,
+          "h": 132.37403813076165,
           "color": "#c9d9ff",
-          "z": 1,
-          "text": "财政政策\n• 调节税收，津贴 & 开支\n• 宽松（带动经济有效增长） vs 紧缩（避免贫富差距扩大）",
+          "z": 118,
+          "text": "财政政策<br>• 调节税收，津贴 &amp; 开支<br>• 宽松（带动经济有效增长） vs 紧缩（避免贫富差距扩大）",
           "comments": []
         },
         {
@@ -22,35 +22,11 @@
           "type": "note",
           "x": 1360,
           "y": 170,
-          "w": 280,
-          "h": 70,
+          "w": 331.52637932541177,
+          "h": 121.5263793254118,
           "color": "#c9d9ff",
           "z": 1,
-          "text": "货币政策\n• 调节汇率，利率 & 流动性\n• 宽松（刺激经济增长） vs 紧缩（预防经济过热）",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3u_b",
-          "type": "header",
-          "x": 1020,
-          "y": 105,
-          "w": 280,
-          "h": 70,
-          "color": "#c9d9ff",
-          "z": 86,
-          "text": "货币政策 vs 财政政策",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3u_c",
-          "type": "header",
-          "x": 675.5031987993373,
-          "y": -91.32052030313687,
-          "w": 295.23007889970415,
-          "h": 176.6105522979289,
-          "color": "#fff6b3",
-          "z": 87,
-          "text": "1. 内在因素<br>• 政策<br>• 经济结构<br>• 人口结构",
+          "text": "<h2>货币政策</h2>• 调节汇率，利率 &amp; 流动性<br>• 宽松（刺激经济增长） vs 紧缩（预防经济过热）",
           "comments": []
         },
         {
@@ -62,7 +38,7 @@
           "h": 151.80298611381235,
           "color": "#f2f2f2",
           "z": 79,
-          "text": "<b>2. 外在因素</b><br><b>• 国债/信用</b><br><b>• 贸易/联盟</b><br><b>• 国际货币流</b>",
+          "text": "<h1><b>2. 外在因素</b></h1><b>• 国债/信用</b><br><b>• 贸易/联盟</b><br><b>• 国际货币流</b>",
           "comments": []
         },
         {
@@ -80,12 +56,12 @@
         {
           "id": "c_mser0o3u_f",
           "type": "header",
-          "x": 340,
-          "y": 267.5,
+          "x": 270.8461751158947,
+          "y": 252.58446914264397,
           "w": 280,
           "h": 70,
           "color": "#e3c9ff",
-          "z": 53,
+          "z": 108,
           "text": "经济齿轮转动的关键",
           "comments": []
         },
@@ -368,41 +344,29 @@
         {
           "id": "c_msg4sgyj_1",
           "type": "note",
-          "x": 917.182958581253,
-          "y": -179.10837226350378,
+          "x": 688.0261663182374,
+          "y": -62.496040105992876,
           "w": 160,
-          "h": 201.5263793254118,
+          "h": 171.6953176106997,
           "color": "#fff6b3",
-          "z": 95,
-          "text": "<span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; background-color: rgb(255, 255, 255);\">1. 内在因素</span><br style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; background-color: rgb(255, 255, 255);\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; background-color: rgb(255, 255, 255);\">• 政策</span><br style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; background-color: rgb(255, 255, 255);\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; background-color: rgb(255, 255, 255);\">• 经济结构</span><br style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; background-color: rgb(255, 255, 255);\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; background-color: rgb(255, 255, 255);\">• 人口结构</span>",
+          "z": 109,
+          "text": "<p style=\"text-align: left;\"><h1>1. 内在因素</h1><b>• 政策<br>• 经济结构<br>• 人口结构</b></p>",
+          "comments": []
+        },
+        {
+          "id": "c_msg6t3z1_4",
+          "type": "note",
+          "x": 1024.2314856620192,
+          "y": 86.10406891315668,
+          "w": 209.15234119465015,
+          "h": 100,
+          "color": "#fff6b3",
+          "z": 117,
+          "text": "<h2 style=\"text-align: center;\">货币政策 vs 财政政策</h2>",
           "comments": []
         }
       ],
       "connectors": [
-        {
-          "id": "n_mser0o3v_14",
-          "from": "c_mser0o3u_b",
-          "to": "c_mser0o3u_9",
-          "label": ""
-        },
-        {
-          "id": "n_mser0o3v_15",
-          "from": "c_mser0o3u_b",
-          "to": "c_mser0o3u_a",
-          "label": ""
-        },
-        {
-          "id": "n_mser0o3v_16",
-          "from": "c_mser0o3u_c",
-          "to": "c_mser0o3u_b",
-          "label": ""
-        },
-        {
-          "id": "n_mser0o3v_17",
-          "from": "c_mser0o3u_f",
-          "to": "c_mser0o3u_c",
-          "label": ""
-        },
         {
           "id": "n_mser0o3v_18",
           "from": "c_mser0o3u_f",
@@ -606,9 +570,78 @@
           "from": "c_mser0o3u_h",
           "to": "c_mser0o3v_s",
           "label": ""
+        },
+        {
+          "id": "n_msg6sx7b_2",
+          "from": "c_mser0o3u_f",
+          "to": "c_msg4sgyj_1",
+          "label": ""
+        },
+        {
+          "id": "n_msg6tv8k_5",
+          "from": "c_msg4sgyj_1",
+          "to": "c_msg6t3z1_4",
+          "label": ""
+        },
+        {
+          "id": "n_msg6twhl_6",
+          "from": "c_msg6t3z1_4",
+          "to": "c_mser0o3u_9",
+          "label": ""
+        },
+        {
+          "id": "n_msg6txr0_7",
+          "from": "c_msg6t3z1_4",
+          "to": "c_mser0o3u_a",
+          "label": ""
         }
       ],
       "trash": [
+        {
+          "card": {
+            "id": "c_mser0o3u_b",
+            "type": "header",
+            "x": 1020,
+            "y": 105,
+            "w": 280,
+            "h": 70,
+            "color": "#c9d9ff",
+            "z": 116,
+            "text": "货币政策 vs 财政政策",
+            "comments": []
+          },
+          "deletedAt": 1785940437018
+        },
+        {
+          "card": {
+            "id": "c_mser0o3u_c",
+            "type": "header",
+            "x": 675.5031987993373,
+            "y": -91.32052030313687,
+            "w": 295.23007889970415,
+            "h": 176.6105522979289,
+            "color": "#fff6b3",
+            "z": 105,
+            "text": "1. 内在因素<br>• 政策<br>• 经济结构<br>• 人口结构",
+            "comments": []
+          },
+          "deletedAt": 1785940345186
+        },
+        {
+          "card": {
+            "id": "c_msg6rdt8_1",
+            "type": "note",
+            "x": 942.4568053172572,
+            "y": -249.28177294061345,
+            "w": 220,
+            "h": 150,
+            "color": "#ffffff",
+            "z": 99,
+            "text": "",
+            "comments": []
+          },
+          "deletedAt": 1785940334375
+        },
         {
           "card": {
             "id": "c_msg4sn5n_2",
@@ -643,7 +676,7 @@
       "vx": 20.827501065423462,
       "vy": 251.53042380327162,
       "vzoom": 0.7374863224914999,
-      "maxZ": 95,
+      "maxZ": 118,
       "updatedAt": 1785853422858
     }
   },
@@ -651,5 +684,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1785940317010
+  "syncedAt": 1785940481641
 }
