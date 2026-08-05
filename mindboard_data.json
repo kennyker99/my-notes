@@ -56,12 +56,12 @@
         {
           "id": "c_mser0o3u_j",
           "type": "note",
-          "x": 915.7324980185269,
-          "y": 1088.7925434723447,
+          "x": 1068.096185762209,
+          "y": 1078.7307905081393,
           "w": 360.49402371364334,
           "h": 137.55748418823637,
           "color": "#ffc9d6",
-          "z": 241,
+          "z": 260,
           "text": "<h2>国内生产总值 GDP</h2><b>= 消费 Consumer + 投资 Investment + 政府支出 Government Spending + 净出口 Export (X-M</b>)",
           "comments": []
         },
@@ -140,32 +140,32 @@
         {
           "id": "c_mser0o3v_t",
           "type": "note",
-          "x": 340,
-          "y": 1210,
-          "w": 200,
-          "h": 70,
-          "color": "#c6f0d4",
-          "z": 1,
-          "text": "Central Bank",
+          "x": 1045.76010077498,
+          "y": 1592.346612639806,
+          "w": 201.4373932806008,
+          "h": 100,
+          "color": "#ffd9d9",
+          "z": 269,
+          "text": "<h1 style=\"text-align: center;\">Central Bank</h1>",
           "comments": []
         },
         {
           "id": "c_mser0o3v_u",
           "type": "note",
-          "x": 80,
-          "y": 1370,
+          "x": 785.7601007749801,
+          "y": 1752.346612639806,
           "w": 200,
-          "h": 70,
-          "color": "#c6f0d4",
-          "z": 1,
-          "text": "Financial Institution",
+          "h": 100,
+          "color": "#ffd9d9",
+          "z": 271,
+          "text": "<h2 style=\"text-align: center;\">Financial Institution</h2>",
           "comments": []
         },
         {
           "id": "c_mser0o3v_v",
           "type": "note",
-          "x": 600,
-          "y": 1370,
+          "x": 1305.76010077498,
+          "y": 1752.346612639806,
           "w": 200,
           "h": 70,
           "color": "#c6f0d4",
@@ -176,8 +176,8 @@
         {
           "id": "c_mser0o3v_w",
           "type": "note",
-          "x": 0,
-          "y": 1590,
+          "x": 705.7601007749801,
+          "y": 1972.346612639806,
           "w": 200,
           "h": 70,
           "color": "#c6f0d4",
@@ -188,8 +188,8 @@
         {
           "id": "c_mser0o3v_x",
           "type": "note",
-          "x": 400,
-          "y": 1590,
+          "x": 1105.76010077498,
+          "y": 1972.346612639806,
           "w": 200,
           "h": 70,
           "color": "#c6f0d4",
@@ -200,8 +200,8 @@
         {
           "id": "c_mser0o3v_y",
           "type": "note",
-          "x": 80,
-          "y": 1810,
+          "x": 785.7601007749801,
+          "y": 2192.3466126398057,
           "w": 200,
           "h": 70,
           "color": "#c6f0d4",
@@ -212,25 +212,13 @@
         {
           "id": "c_mser0o3v_z",
           "type": "note",
-          "x": 600,
-          "y": 1810,
+          "x": 1305.76010077498,
+          "y": 2192.3466126398057,
           "w": 200,
           "h": 70,
           "color": "#c6f0d4",
           "z": 1,
           "text": "Rest of World / Environment",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3v_10",
-          "type": "header",
-          "x": 0,
-          "y": 1120,
-          "w": 320,
-          "h": 60,
-          "color": "#c9d9ff",
-          "z": 1,
-          "text": "💰 GDP 资金循环 - Circular Flow of Income Diagram",
           "comments": []
         },
         {
@@ -308,12 +296,12 @@
         {
           "id": "c_msg78dyy_b",
           "type": "note",
-          "x": 799.781767276848,
-          "y": 854.0092371463427,
+          "x": 812.7183068022549,
+          "y": 780.7021798357032,
           "w": 179.32127947993806,
           "h": 100,
-          "color": "#ffffff",
-          "z": 255,
+          "color": "#e6d9ff",
+          "z": 259,
           "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">GDP资金循环</span></div>",
           "comments": []
         },
@@ -363,6 +351,18 @@
           "color": "#ffffff",
           "z": 254,
           "text": "<h1 style=\"text-align: center; \"><span style=\"text-align: start;\">资金撤离和流入方向</span></h1>",
+          "comments": []
+        },
+        {
+          "id": "c_msg819g8_z",
+          "type": "note",
+          "x": 917.5261527649665,
+          "y": 1415.2252484768721,
+          "w": 365.17672134067817,
+          "h": 100,
+          "color": "#ffffff",
+          "z": 267,
+          "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">💰 GDP 资金循环 - Circular Flow</span></div>",
           "comments": []
         }
       ],
@@ -494,12 +494,6 @@
           "label": "S = Savings"
         },
         {
-          "id": "n_mser0o3v_23",
-          "from": "c_mser0o3v_10",
-          "to": "c_mser0o3v_t",
-          "label": ""
-        },
-        {
           "id": "n_msg6tv8k_5",
           "from": "c_msg4sgyj_1",
           "to": "c_msg6t3z1_4",
@@ -588,9 +582,36 @@
           "from": "c_msg7bo0c_k",
           "to": "c_msg78dyy_b",
           "label": ""
+        },
+        {
+          "id": "n_msg80syu_y",
+          "from": "c_msg77rlw_9",
+          "to": "c_msg7z9kc_x",
+          "label": ""
+        },
+        {
+          "id": "n_msg81ql5_10",
+          "from": "c_mser0o3u_j",
+          "to": "c_msg819g8_z",
+          "label": ""
         }
       ],
       "trash": [
+        {
+          "card": {
+            "id": "c_mser0o3v_10",
+            "type": "header",
+            "x": 0,
+            "y": 1120,
+            "w": 320,
+            "h": 60,
+            "color": "#c9d9ff",
+            "z": 266,
+            "text": "💰 GDP 资金循环 - Circular Flow of Income Diagram",
+            "comments": []
+          },
+          "deletedAt": 1785942484130
+        },
         {
           "card": {
             "id": "c_mser0o3u_i",
@@ -847,10 +868,10 @@
           "deletedAt": 1785933528679
         }
       ],
-      "vx": 222.444843412541,
-      "vy": -170.9899986973524,
+      "vx": 284.5790980385649,
+      "vy": -828.4899978628873,
       "vzoom": 0.6957038226740835,
-      "maxZ": 255,
+      "maxZ": 271,
       "updatedAt": 1785853422858
     }
   },
@@ -858,5 +879,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1785942418331
+  "syncedAt": 1785942540070
 }
