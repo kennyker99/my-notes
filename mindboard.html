@@ -514,16 +514,16 @@
 
   /* ---------- 左侧元素工具栏 (Milanote 风格竖排图标) ---------- */
   .elrail{
-    width:64px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);
-    display:flex;flex-direction:column;align-items:stretch;padding:10px 0;overflow-y:auto;
+    width:84px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);
+    display:flex;flex-direction:column;align-items:stretch;padding:14px 0;overflow-y:auto;
   }
   .el-btn{
-    display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 4px;
-    background:none;border:none;color:var(--text-dim);cursor:pointer;border-radius:8px;margin:0 6px 1px;
+    display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;
+    background:none;border:none;color:var(--text-dim);cursor:pointer;border-radius:10px;margin:0 8px 3px;
   }
   .el-btn:hover{background:var(--bg3);color:var(--text);}
-  .el-icon{font-size:17px;line-height:1;}
-  .el-label{font-size:9px;letter-spacing:.01em;}
+  .el-icon{font-size:26px;line-height:1;}
+  .el-label{font-size:10.5px;letter-spacing:.01em;}
   .el-sep{height:1px;background:var(--border);margin:8px 10px;}
   .el-spacer{flex:1;}
   .more-tool-pop{
@@ -539,11 +539,18 @@
   /* ---------- 顶部栏（两行，仿 Milanote 布局） ---------- */
   .topbar-row1{
     height:38px;flex-shrink:0;background:var(--bg2);border-bottom:1px solid var(--border);
-    display:flex;align-items:center;padding:0 16px;gap:8px;
+    display:flex;align-items:center;padding:0 56px 0 16px;gap:8px;
   }
   .topbar-row1-right{margin-left:auto;display:flex;align-items:center;gap:2px;flex-shrink:0;}
   .topbar-divider{width:1px;height:18px;background:var(--border);margin:0 4px;flex-shrink:0;}
   .icon-btn.sm{width:26px;height:26px;font-size:12.5px;}
+  .theme-toggle-fab{
+    position:fixed;top:12px;right:16px;z-index:3000;width:36px;height:36px;border-radius:50%;
+    background:var(--bg2);border:1px solid var(--border2);color:var(--text);font-size:16px;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.25);
+    transition:.15s;
+  }
+  .theme-toggle-fab:hover{border-color:var(--orange);color:var(--orange);transform:scale(1.06);}
   .topbar-row2{
     height:56px;flex-shrink:0;background:var(--bg2);border-bottom:1px solid var(--border);
     display:flex;align-items:center;padding:6px 20px;gap:8px;
@@ -608,6 +615,8 @@
 
   <div class="toast" id="toast"></div>
 
+  <button class="theme-toggle-fab" id="themeToggleBtn" title="切换深色/浅色模式">☀</button>
+
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
       <div class="sidebar-logo-title">MindBoard</div>
@@ -659,7 +668,6 @@
         <button class="icon-btn sm" id="redoBtn" title="重做 Ctrl+Shift+Z">↷</button>
         <div class="topbar-divider"></div>
         <button class="icon-btn sm" id="fitBtn" title="适应画布">⤢</button>
-        <button class="icon-btn sm" id="themeToggleBtn" title="切换深色/浅色模式">☀</button>
         <button class="icon-btn sm" id="cloudBtn" title="GitHub 同步">☁<span class="cloud-badge-dot" id="cloudBadgeDot"></span></button>
         <button class="icon-btn sm" id="helpBtn" title="使用说明">?</button>
       </div>
