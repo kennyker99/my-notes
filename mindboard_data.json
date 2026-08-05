@@ -68,12 +68,12 @@
         {
           "id": "c_mser0o3u_j",
           "type": "note",
-          "x": 859.6741600750968,
-          "y": 1008.2985197587013,
+          "x": 915.7324980185269,
+          "y": 1088.7925434723447,
           "w": 360.49402371364334,
           "h": 137.55748418823637,
           "color": "#ffc9d6",
-          "z": 217,
+          "z": 241,
           "text": "<h2>国内生产总值 GDP</h2><b>= 消费 Consumer + 投资 Investment + 政府支出 Government Spending + 净出口 Export (X-M</b>)",
           "comments": []
         },
@@ -248,24 +248,24 @@
         {
           "id": "c_mser0o3v_12",
           "type": "note",
-          "x": 1543.975812264322,
-          "y": 1393.7925434723447,
+          "x": 1890.3875928891084,
+          "y": 1494.410073114399,
           "w": 265.50256126558145,
           "h": 264.06516798498063,
           "color": "#fff6b3",
-          "z": 226,
+          "z": 238,
           "text": "<h3>• GDP GROWTH<br>• INFLATION RATE<br>• UNEMPLOYMENT RATE<br>• WAGE GROWTH<br>• CONSUMER CONFIDENCE<br>• PURCHASING MANAGER INDEX<br>• RETAIL SALES<br>• BUSINESS CONFIDENCE<br>• POPULATION</h3>",
           "comments": []
         },
         {
           "id": "c_mser0o3v_13",
           "type": "note",
-          "x": 1883.975812264322,
-          "y": 1402.4169031559495,
+          "x": 1885.413205544923,
+          "y": 1212.6809901166473,
           "w": 268.37734782678297,
           "h": 252.56602174017445,
           "color": "#ffc9d6",
-          "z": 229,
+          "z": 236,
           "text": "<b>• 10YR BOND YIELD%<br>• DEBT TO GDP<br>• CURRENT ACCOUNT<br>• BALANCE OF TRADE<br>• EXPORT (PARTNERS &amp; PRODUCTS)<br>• IMPORT (PARTNERS &amp; PRODUCTS)<br>• TAX RATE<br>• INTEREST RATE<br>• CENTRAL BANK BALANCE SHEET</b>",
           "comments": []
         },
@@ -356,12 +356,12 @@
         {
           "id": "c_msg7scfa_s",
           "type": "note",
-          "x": 1374.890078038819,
-          "y": 1166.2879217841485,
+          "x": 1416.5744831762413,
+          "y": 1417.8317458892839,
           "w": 244.43568577021315,
           "h": 100,
           "color": "#e6d9ff",
-          "z": 221,
+          "z": 240,
           "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">📋 经济体的体检报告</span></div>",
           "comments": []
         }
@@ -575,6 +575,18 @@
           "id": "n_msg7sshh_t",
           "from": "c_mser0o3u_j",
           "to": "c_msg7scfa_s",
+          "label": ""
+        },
+        {
+          "id": "n_msg7wnq8_u",
+          "from": "c_msg7scfa_s",
+          "to": "c_mser0o3v_12",
+          "label": ""
+        },
+        {
+          "id": "n_msg7wp9n_v",
+          "from": "c_msg7scfa_s",
+          "to": "c_mser0o3v_13",
           "label": ""
         }
       ],
@@ -823,7 +835,7 @@
       "vx": -125.50698249319271,
       "vy": -467.6566647282362,
       "vzoom": 0.6957038226740835,
-      "maxZ": 229,
+      "maxZ": 241,
       "updatedAt": 1785853422858
     }
   },
@@ -831,5 +843,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1785942178287
+  "syncedAt": 1785942311756
 }
