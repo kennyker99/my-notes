@@ -8,8 +8,8 @@
         {
           "id": "c_mser0o3u_9",
           "type": "note",
-          "x": 1343.728511791975,
-          "y": -162.037645249641,
+          "x": 1387.1191470133745,
+          "y": -267.8023186018021,
           "w": 289.4917014546811,
           "h": 150.00148368945514,
           "color": "#c9d9ff",
@@ -20,8 +20,8 @@
         {
           "id": "c_mser0o3u_a",
           "type": "note",
-          "x": 1342.3725544413064,
-          "y": 56.09958254382656,
+          "x": 1385.7631896627058,
+          "y": -49.6650908083345,
           "w": 331.52637932541177,
           "h": 121.5263793254118,
           "color": "#c9d9ff",
@@ -32,37 +32,25 @@
         {
           "id": "c_mser0o3u_d",
           "type": "note",
-          "x": 681.3845526272459,
-          "y": 215.5422897380044,
+          "x": 663.7571070685524,
+          "y": 62.31910911243776,
           "w": 160,
           "h": 151.80298611381235,
           "color": "#f2f2f2",
-          "z": 79,
-          "text": "<h1><b>2. 外在因素</b></h1><b>• 国债/信用</b><br><b>• 贸易/联盟</b><br><b>• 国际货币流</b>",
+          "z": 151,
+          "text": "<h1>2. 外在因素</h1><b>• 国债/信用</b><br><b>• 贸易/联盟</b><br><b>• 国际货币流</b>",
           "comments": []
         },
         {
           "id": "c_mser0o3u_e",
           "type": "note",
-          "x": 680,
-          "y": 430,
-          "w": 320.15202619012905,
-          "h": 107.3829209356374,
+          "x": 665.0844691426439,
+          "y": 307.96383843981414,
+          "w": 172.2036161560186,
+          "h": 154.841428209043,
           "color": "#ffc9d6",
-          "z": 1,
-          "text": "3. 突发性因素<br>• 天灾<br>• 战争/恐怖主义<br>• 疫情",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3u_h",
-          "type": "header",
-          "x": 370.46015779940825,
-          "y": 560,
-          "w": 280,
-          "h": 70,
-          "color": "#e3c9ff",
-          "z": 34,
-          "text": "全球经济运行模式",
+          "z": 160,
+          "text": "<h1>3. 突发性因素</h1><b>• 天灾<br>• 战争/恐怖主义<br>• 疫情</b>",
           "comments": []
         },
         {
@@ -90,111 +78,75 @@
           "comments": []
         },
         {
-          "id": "c_mser0o3v_k",
-          "type": "header",
-          "x": 340,
-          "y": 820,
-          "w": 280,
-          "h": 70,
-          "color": "#e3c9ff",
-          "z": 1,
-          "text": "GDP资金循环",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3v_l",
-          "type": "header",
-          "x": 0,
-          "y": 543.75,
-          "w": 320,
-          "h": 70,
-          "color": "#f2f2f2",
-          "z": 1,
-          "text": "基本面框架",
-          "comments": []
-        },
-        {
           "id": "c_mser0o3v_m",
           "type": "note",
-          "x": 2060,
-          "y": 195,
-          "w": 260,
-          "h": 130,
+          "x": 1432.1917466403775,
+          "y": 521.7857215111643,
+          "w": 271.4991462448062,
+          "h": 134.31217984180233,
           "color": "#fff6b3",
-          "z": 1,
-          "text": "国际贸易 International Trade\n• 产品，服务，资源 & 技术\n• \"齿轮的输入端\" (the gear's input end)",
+          "z": 196,
+          "text": "<h3><b>国际贸易 International Trade</b></h3>• 产品，服务，资源 &amp; 技术<br>• \"齿轮的输入端\" (the gear's input end)",
           "comments": []
         },
         {
           "id": "c_mser0o3v_n",
           "type": "note",
-          "x": 2337.12812921102,
-          "y": 355,
-          "w": 260,
-          "h": 130,
+          "x": 1767.7911909308882,
+          "y": 284.49021776522596,
+          "w": 271.4991462448062,
+          "h": 167.37222529562013,
           "color": "#ffd9b3",
-          "z": 1,
-          "text": "劳动力与消费力 Labor & Consumption Power\n• 就业机会多、发展项目多。内需引擎 (many jobs and projects; the engine of domestic demand)",
+          "z": 211,
+          "text": "<h3>劳动力与消费力 Labor &amp; Consumption Power</h3>• 就业机会多、发展项目多。内需引擎 (many jobs and projects; the engine of domestic demand)",
           "comments": []
         },
         {
           "id": "c_mser0o3v_o",
           "type": "note",
-          "x": 2337.12812921102,
-          "y": 675,
-          "w": 260,
-          "h": 130,
+          "x": 2099.8355928439923,
+          "y": 521.7768193744333,
+          "w": 281.5608992090116,
+          "h": 145.81132608660852,
           "color": "#ffc9d6",
-          "z": 1,
-          "text": "资产货币化 Asset Monetization<br>• 资产 → 可流通的钱。整台机器的放大器 (assets become liquid money; the amplifier of the whole machine)",
+          "z": 209,
+          "text": "<h3>资产货币化 Asset Monetization</h3>• 资产 → 可流通的钱。整台机器的放大器 (assets become liquid money; the amplifier of the whole machine)",
           "comments": []
         },
         {
           "id": "c_mser0o3v_p",
           "type": "note",
-          "x": 2060,
-          "y": 835,
-          "w": 260,
-          "h": 130,
+          "x": 2100.6787205200617,
+          "y": 771.9524342622694,
+          "w": 291.62265217321703,
+          "h": 144.37393280600773,
           "color": "#e3c9ff",
-          "z": 1,
-          "text": "固定资产投资 Investment in Fixed Assets\n• 稳定、低收益，慢齿轮 (stable, low yield, the slow gear)",
+          "z": 208,
+          "text": "<h3>固定资产投资 Investment in Fixed Assets</h3>• 稳定、低收益，慢齿轮 (stable, low yield, the slow gear)",
           "comments": []
         },
         {
           "id": "c_mser0o3v_q",
           "type": "note",
-          "x": 1782.8718707889798,
-          "y": 675.0000000000001,
+          "x": 1767.7911909308882,
+          "y": 985.5142333031397,
           "w": 260,
           "h": 130,
           "color": "#c9d9ff",
-          "z": 1,
+          "z": 212,
           "text": "金融资产投资 Financial Asset Investment\n• 高收益，快齿轮 (high yield, the fast gear)\n• \"快齿轮先转、慢齿轮后转\" (the fast gear turns first, the slow gear follows)",
           "comments": []
         },
         {
           "id": "c_mser0o3v_r",
           "type": "note",
-          "x": 1782.8718707889798,
-          "y": 355,
-          "w": 260,
-          "h": 130,
+          "x": 1428.967002264441,
+          "y": 771.9524342622694,
+          "w": 326.1200909076356,
+          "h": 160.18525889261628,
           "color": "#c6f0d4",
-          "z": 1,
-          "text": "国际货币流 International Currency Flow\n• 追求安全、高收益率 (pursuing safety and high yield)\n• \"齿轮的输出/输入闸门\" (the gear's output/input gate)",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3v_s",
-          "type": "header",
-          "x": 1121.2664406627082,
-          "y": 574.9177671866764,
-          "w": 300,
-          "h": 60,
-          "color": "#e3c9ff",
-          "z": 62,
-          "text": "🔁 六大齿轮 (Six Major Gears)",
+          "z": 214,
+          "text": "<h3>国际货币流 International Currency Flow</h3>• 追求安全、高收益率 (pursuing safety and high yield)<br>• \"齿轮的输出/输入闸门\" (the gear's output/input gate)",
           "comments": []
         },
         {
@@ -296,12 +248,12 @@
         {
           "id": "c_mser0o3v_11",
           "type": "header",
-          "x": 2060,
-          "y": 1035,
+          "x": 2367.802318601802,
+          "y": 964.4902177652259,
           "w": 340,
           "h": 60,
           "color": "#f2f2f2",
-          "z": 1,
+          "z": 206,
           "text": "📋 经济体的体检报告",
           "comments": []
         },
@@ -332,8 +284,8 @@
         {
           "id": "c_msg4sgyj_1",
           "type": "note",
-          "x": 688.0261663182374,
-          "y": -62.496040105992876,
+          "x": 660.9070193048628,
+          "y": -173.68454286082886,
           "w": 160,
           "h": 171.6953176106997,
           "color": "#fff6b3",
@@ -344,8 +296,8 @@
         {
           "id": "c_msg6t3z1_4",
           "type": "note",
-          "x": 988.9765945446321,
-          "y": -31.864220595022957,
+          "x": 1032.3672297660314,
+          "y": -137.628893947184,
           "w": 209.15234119465015,
           "h": 100,
           "color": "#fff6b3",
@@ -356,41 +308,65 @@
         {
           "id": "c_msg76nwn_8",
           "type": "note",
-          "x": 277.9991055050424,
-          "y": 243.64944008799455,
+          "x": 222.4048541276244,
+          "y": 82.2905153584155,
           "w": 214.57617059732507,
           "h": 100,
           "color": "#ffffff",
-          "z": 139,
+          "z": 159,
           "text": "<span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">经济齿轮转动的关键</span>",
+          "comments": []
+        },
+        {
+          "id": "c_msg77rlw_9",
+          "type": "note",
+          "x": 19.44280401936453,
+          "y": 534.5194481862864,
+          "w": 160,
+          "h": 100,
+          "color": "#ffffff",
+          "z": 143,
+          "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">基本面框架</span></div>",
+          "comments": []
+        },
+        {
+          "id": "c_msg78dyy_b",
+          "type": "note",
+          "x": 345.5654906070034,
+          "y": 820.9491916925249,
+          "w": 179.32127947993806,
+          "h": 100,
+          "color": "#ffffff",
+          "z": 150,
+          "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">GDP资金循环</span></div>",
+          "comments": []
+        },
+        {
+          "id": "c_msg7bo0c_k",
+          "type": "note",
+          "x": 364.86964131830086,
+          "y": 531.7272282193687,
+          "w": 211.8642558959876,
+          "h": 100,
+          "color": "#ffffff",
+          "z": 177,
+          "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">全球经济运行模式</span></div>",
+          "comments": []
+        },
+        {
+          "id": "c_msg7c4bg_l",
+          "type": "note",
+          "x": 784.8091877135705,
+          "y": 529.9640385566628,
+          "w": 342.03616156018586,
+          "h": 100,
+          "color": "#fff6b3",
+          "z": 195,
+          "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; text-align: start;\">🔁 六大齿轮 (Six Major Gears)</span></div>",
           "comments": []
         }
       ],
       "connectors": [
-        {
-          "id": "n_mser0o3v_1b",
-          "from": "c_mser0o3v_k",
-          "to": "c_mser0o3u_j",
-          "label": ""
-        },
-        {
-          "id": "n_mser0o3v_1d",
-          "from": "c_mser0o3v_l",
-          "to": "c_mser0o3u_h",
-          "label": ""
-        },
-        {
-          "id": "n_mser0o3v_1e",
-          "from": "c_mser0o3v_l",
-          "to": "c_mser0o3u_i",
-          "label": ""
-        },
-        {
-          "id": "n_mser0o3v_1f",
-          "from": "c_mser0o3v_l",
-          "to": "c_mser0o3v_k",
-          "label": ""
-        },
         {
           "id": "n_mser0o3v_1g",
           "from": "c_mser0o3v_m",
@@ -424,12 +400,6 @@
         {
           "id": "n_mser0o3v_1l",
           "from": "c_mser0o3v_r",
-          "to": "c_mser0o3v_m",
-          "label": ""
-        },
-        {
-          "id": "n_mser0o3v_1m",
-          "from": "c_mser0o3v_s",
           "to": "c_mser0o3v_m",
           "label": ""
         },
@@ -548,12 +518,6 @@
           "label": ""
         },
         {
-          "id": "n_mser4fhy_29",
-          "from": "c_mser0o3u_h",
-          "to": "c_mser0o3v_s",
-          "label": ""
-        },
-        {
           "id": "n_msg6tv8k_5",
           "from": "c_msg4sgyj_1",
           "to": "c_msg6t3z1_4",
@@ -570,9 +534,198 @@
           "from": "c_msg6t3z1_4",
           "to": "c_mser0o3u_a",
           "label": ""
+        },
+        {
+          "id": "n_msg78vfb_c",
+          "from": "c_msg77rlw_9",
+          "to": "c_msg78dyy_b",
+          "label": ""
+        },
+        {
+          "id": "n_msg78wqm_d",
+          "from": "c_msg78dyy_b",
+          "to": "c_mser0o3u_j",
+          "label": ""
+        },
+        {
+          "id": "n_msg78ylp_e",
+          "from": "c_msg77rlw_9",
+          "to": "c_msg76nwn_8",
+          "label": ""
+        },
+        {
+          "id": "n_msg790zb_f",
+          "from": "c_msg76nwn_8",
+          "to": "c_msg4sgyj_1",
+          "label": ""
+        },
+        {
+          "id": "n_msg7927a_g",
+          "from": "c_msg76nwn_8",
+          "to": "c_mser0o3u_d",
+          "label": ""
+        },
+        {
+          "id": "n_msg793hq_h",
+          "from": "c_msg76nwn_8",
+          "to": "c_mser0o3u_e",
+          "label": ""
+        },
+        {
+          "id": "n_msg7cbqs_m",
+          "from": "c_msg77rlw_9",
+          "to": "c_msg7bo0c_k",
+          "label": ""
+        },
+        {
+          "id": "n_msg7ci29_n",
+          "from": "c_msg7bo0c_k",
+          "to": "c_msg7c4bg_l",
+          "label": ""
+        },
+        {
+          "id": "n_msg7ctaw_o",
+          "from": "c_msg7c4bg_l",
+          "to": "c_mser0o3v_m",
+          "label": ""
         }
       ],
       "trash": [
+        {
+          "card": {
+            "id": "c_msg7cw4d_q",
+            "type": "header",
+            "x": 1032.3147482451664,
+            "y": 622.9177671866764,
+            "w": 436.9516924175419,
+            "h": 57.28808529866254,
+            "color": "#e3c9ff",
+            "z": 191,
+            "text": "🔁 六大齿轮 (Six Major Gears)",
+            "comments": []
+          },
+          "deletedAt": 1785941338467
+        },
+        {
+          "card": {
+            "id": "c_msg7cxca_r",
+            "type": "header",
+            "x": 1056.3147482451664,
+            "y": 646.9177671866764,
+            "w": 436.9516924175419,
+            "h": 57.28808529866254,
+            "color": "#e3c9ff",
+            "z": 190,
+            "text": "🔁 六大齿轮 (Six Major Gears)",
+            "comments": []
+          },
+          "deletedAt": 1785941336599
+        },
+        {
+          "card": {
+            "id": "c_msg7ctz2_p",
+            "type": "header",
+            "x": 1008.3147482451664,
+            "y": 598.9177671866764,
+            "w": 436.9516924175419,
+            "h": 57.28808529866254,
+            "color": "#e3c9ff",
+            "z": 187,
+            "text": "🔁 六大齿轮 (Six Major Gears)",
+            "comments": []
+          },
+          "deletedAt": 1785941334250
+        },
+        {
+          "card": {
+            "id": "c_mser0o3v_s",
+            "type": "header",
+            "x": 984.3147482451664,
+            "y": 574.9177671866764,
+            "w": 436.9516924175419,
+            "h": 57.28808529866254,
+            "color": "#e3c9ff",
+            "z": 183,
+            "text": "🔁 六大齿轮 (Six Major Gears)",
+            "comments": []
+          },
+          "deletedAt": 1785941332563
+        },
+        {
+          "card": {
+            "id": "c_mser0o3u_h",
+            "type": "header",
+            "x": 370.46015779940825,
+            "y": 560,
+            "w": 280,
+            "h": 70,
+            "color": "#e3c9ff",
+            "z": 172,
+            "text": "全球经济运行模式",
+            "comments": []
+          },
+          "deletedAt": 1785941291692
+        },
+        {
+          "card": {
+            "id": "c_msg7b3r4_j",
+            "type": "note",
+            "x": 473.4421532686239,
+            "y": 237.28092052528058,
+            "w": 220,
+            "h": 150,
+            "color": "#ffffff",
+            "z": 167,
+            "text": "",
+            "comments": []
+          },
+          "deletedAt": 1785941252893
+        },
+        {
+          "card": {
+            "id": "c_msg7asfl_i",
+            "type": "note",
+            "x": 466.66236651528015,
+            "y": -10.859274647097322,
+            "w": 220,
+            "h": 150,
+            "color": "#ffffff",
+            "z": 164,
+            "text": "",
+            "comments": []
+          },
+          "deletedAt": 1785941243968
+        },
+        {
+          "card": {
+            "id": "c_mser0o3v_k",
+            "type": "header",
+            "x": 340,
+            "y": 820,
+            "w": 280,
+            "h": 70,
+            "color": "#e3c9ff",
+            "z": 149,
+            "text": "GDP资金循环",
+            "comments": []
+          },
+          "deletedAt": 1785941139896
+        },
+        {
+          "card": {
+            "id": "c_mser0o3v_l",
+            "type": "header",
+            "x": 0,
+            "y": 543.75,
+            "w": 320,
+            "h": 70,
+            "color": "#f2f2f2",
+            "z": 142,
+            "text": "基本面框",
+            "comments": []
+          },
+          "deletedAt": 1785941103450
+        },
         {
           "card": {
             "id": "c_mser0o3u_f",
@@ -664,10 +817,10 @@
           "deletedAt": 1785933528679
         }
       ],
-      "vx": 20.827501065423462,
-      "vy": -48.46957667356554,
-      "vzoom": 0.7374863224914999,
-      "maxZ": 139,
+      "vx": -125.50698249319271,
+      "vy": -175.1566636553526,
+      "vzoom": 0.6957038226740835,
+      "maxZ": 214,
       "updatedAt": 1785853422858
     }
   },
@@ -675,5 +828,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1785941084326
+  "syncedAt": 1785941536813
 }
