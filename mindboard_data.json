@@ -54,18 +54,6 @@
           "comments": []
         },
         {
-          "id": "c_mser0o3u_i",
-          "type": "note",
-          "x": 340,
-          "y": 690,
-          "w": 280,
-          "h": 70,
-          "color": "#ffd9b3",
-          "z": 1,
-          "text": "资金撤离和流入方向",
-          "comments": []
-        },
-        {
           "id": "c_mser0o3u_j",
           "type": "note",
           "x": 915.7324980185269,
@@ -320,12 +308,12 @@
         {
           "id": "c_msg78dyy_b",
           "type": "note",
-          "x": 345.5654906070034,
-          "y": 820.9491916925249,
+          "x": 799.781767276848,
+          "y": 854.0092371463427,
           "w": 179.32127947993806,
           "h": 100,
           "color": "#ffffff",
-          "z": 150,
+          "z": 255,
           "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">GDP资金循环</span></div>",
           "comments": []
         },
@@ -363,6 +351,18 @@
           "color": "#e6d9ff",
           "z": 240,
           "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">📋 经济体的体检报告</span></div>",
+          "comments": []
+        },
+        {
+          "id": "c_msg7z9kc_x",
+          "type": "note",
+          "x": 80.64944120624784,
+          "y": 810.4517529581063,
+          "w": 216.69350477555818,
+          "h": 100,
+          "color": "#ffffff",
+          "z": 254,
+          "text": "<h1 style=\"text-align: center; \"><span style=\"text-align: start;\">资金撤离和流入方向</span></h1>",
           "comments": []
         }
       ],
@@ -518,12 +518,6 @@
           "label": ""
         },
         {
-          "id": "n_msg78vfb_c",
-          "from": "c_msg77rlw_9",
-          "to": "c_msg78dyy_b",
-          "label": ""
-        },
-        {
           "id": "n_msg78wqm_d",
           "from": "c_msg78dyy_b",
           "to": "c_mser0o3u_j",
@@ -588,9 +582,30 @@
           "from": "c_msg7scfa_s",
           "to": "c_mser0o3v_13",
           "label": ""
+        },
+        {
+          "id": "n_msg7z34v_w",
+          "from": "c_msg7bo0c_k",
+          "to": "c_msg78dyy_b",
+          "label": ""
         }
       ],
       "trash": [
+        {
+          "card": {
+            "id": "c_mser0o3u_i",
+            "type": "note",
+            "x": -72.53187153242214,
+            "y": 720.1852588926163,
+            "w": 280,
+            "h": 70,
+            "color": "#ffd9b3",
+            "z": 253,
+            "text": "资金撤离和流入方向",
+            "comments": []
+          },
+          "deletedAt": 1785942410714
+        },
         {
           "card": {
             "id": "c_mser0o3v_11",
@@ -832,10 +847,10 @@
           "deletedAt": 1785933528679
         }
       ],
-      "vx": -125.50698249319271,
-      "vy": -467.6566647282362,
+      "vx": 222.444843412541,
+      "vy": -170.9899986973524,
       "vzoom": 0.6957038226740835,
-      "maxZ": 241,
+      "maxZ": 255,
       "updatedAt": 1785853422858
     }
   },
@@ -843,5 +858,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1785942311756
+  "syncedAt": 1785942418331
 }
