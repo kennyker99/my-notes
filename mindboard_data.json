@@ -37,19 +37,19 @@
           "w": 280,
           "h": 70,
           "color": "#c9d9ff",
-          "z": 1,
+          "z": 86,
           "text": "货币政策 vs 财政政策",
           "comments": []
         },
         {
           "id": "c_mser0o3u_c",
           "type": "header",
-          "x": 659.2317105913125,
-          "y": -77.76094679644956,
+          "x": 675.5031987993373,
+          "y": -91.32052030313687,
           "w": 295.23007889970415,
           "h": 176.6105522979289,
           "color": "#fff6b3",
-          "z": 42,
+          "z": 87,
           "text": "1. 内在因素<br>• 政策<br>• 经济结构<br>• 人口结构",
           "comments": []
         },
@@ -58,11 +58,11 @@
           "type": "note",
           "x": 681.3845526272459,
           "y": 215.5422897380044,
-          "w": 335.3821050898332,
-          "h": 157.22681551648728,
+          "w": 160,
+          "h": 151.80298611381235,
           "color": "#f2f2f2",
-          "z": 60,
-          "text": "<b>2. 外在因素<br>• 国债/信用<br>• 贸易/联盟<br>• 国际货币流</b>",
+          "z": 79,
+          "text": "<b>2. 外在因素</b><br><b>• 国债/信用</b><br><b>• 贸易/联盟</b><br><b>• 国际货币流</b>",
           "comments": []
         },
         {
@@ -364,6 +364,18 @@
           "z": 1,
           "text": "右列<br>• 10YR BOND YIELD%<br>• DEBT TO GDP<br>• CURRENT ACCOUNT<br>• BALANCE OF TRADE<br>• EXPORT (PARTNERS &amp; PRODUCTS)<br>• IMPORT (PARTNERS &amp; PRODUCTS)<br>• TAX RATE<br>• INTEREST RATE<br>• CENTRAL BANK BALANCE SHEET",
           "comments": []
+        },
+        {
+          "id": "c_msg4sgyj_1",
+          "type": "note",
+          "x": 917.182958581253,
+          "y": -179.10837226350378,
+          "w": 160,
+          "h": 201.5263793254118,
+          "color": "#fff6b3",
+          "z": 95,
+          "text": "<span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; background-color: rgb(255, 255, 255);\">1. 内在因素</span><br style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; background-color: rgb(255, 255, 255);\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; background-color: rgb(255, 255, 255);\">• 政策</span><br style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; background-color: rgb(255, 255, 255);\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; background-color: rgb(255, 255, 255);\">• 经济结构</span><br style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; background-color: rgb(255, 255, 255);\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; background-color: rgb(255, 255, 255);\">• 人口结构</span>",
+          "comments": []
         }
       ],
       "connectors": [
@@ -599,6 +611,21 @@
       "trash": [
         {
           "card": {
+            "id": "c_msg4sn5n_2",
+            "type": "note",
+            "x": 947.8806347199322,
+            "y": 62.81441200587642,
+            "w": 220,
+            "h": 150,
+            "color": "#ffffff",
+            "z": 94,
+            "text": "",
+            "comments": []
+          },
+          "deletedAt": 1785937034692
+        },
+        {
+          "card": {
             "id": "c_msg2pk3d_2",
             "type": "note",
             "x": 1482.599595741238,
@@ -613,10 +640,10 @@
           "deletedAt": 1785933528679
         }
       ],
-      "vx": 159.53076699678587,
-      "vy": 166.6618038649841,
-      "vzoom": 0.5902912574721221,
-      "maxZ": 78,
+      "vx": 20.827501065423462,
+      "vy": 251.53042380327162,
+      "vzoom": 0.7374863224914999,
+      "maxZ": 95,
       "updatedAt": 1785853422858
     }
   },
@@ -624,5 +651,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1785936836594
+  "syncedAt": 1785937071270
 }
