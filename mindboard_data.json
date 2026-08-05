@@ -248,25 +248,25 @@
         {
           "id": "c_mser0o3v_12",
           "type": "note",
-          "x": 1604.3463300495546,
-          "y": 1380.8560039469378,
-          "w": 300,
-          "h": 300,
+          "x": 1543.975812264322,
+          "y": 1393.7925434723447,
+          "w": 265.50256126558145,
+          "h": 264.06516798498063,
           "color": "#fff6b3",
-          "z": 225,
+          "z": 226,
           "text": "<h3>• GDP GROWTH<br>• INFLATION RATE<br>• UNEMPLOYMENT RATE<br>• WAGE GROWTH<br>• CONSUMER CONFIDENCE<br>• PURCHASING MANAGER INDEX<br>• RETAIL SALES<br>• BUSINESS CONFIDENCE<br>• POPULATION</h3>",
           "comments": []
         },
         {
           "id": "c_mser0o3v_13",
           "type": "note",
-          "x": 2400,
-          "y": 1125,
-          "w": 300,
-          "h": 300,
+          "x": 1883.975812264322,
+          "y": 1402.4169031559495,
+          "w": 268.37734782678297,
+          "h": 252.56602174017445,
           "color": "#ffc9d6",
-          "z": 1,
-          "text": "右列<br>• 10YR BOND YIELD%<br>• DEBT TO GDP<br>• CURRENT ACCOUNT<br>• BALANCE OF TRADE<br>• EXPORT (PARTNERS &amp; PRODUCTS)<br>• IMPORT (PARTNERS &amp; PRODUCTS)<br>• TAX RATE<br>• INTEREST RATE<br>• CENTRAL BANK BALANCE SHEET",
+          "z": 229,
+          "text": "<b>• 10YR BOND YIELD%<br>• DEBT TO GDP<br>• CURRENT ACCOUNT<br>• BALANCE OF TRADE<br>• EXPORT (PARTNERS &amp; PRODUCTS)<br>• IMPORT (PARTNERS &amp; PRODUCTS)<br>• TAX RATE<br>• INTEREST RATE<br>• CENTRAL BANK BALANCE SHEET</b>",
           "comments": []
         },
         {
@@ -823,7 +823,7 @@
       "vx": -125.50698249319271,
       "vy": -467.6566647282362,
       "vzoom": 0.6957038226740835,
-      "maxZ": 225,
+      "maxZ": 229,
       "updatedAt": 1785853422858
     }
   },
@@ -831,5 +831,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1785942119627
+  "syncedAt": 1785942178287
 }
