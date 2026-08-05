@@ -413,13 +413,38 @@
 
   /* ---------- Rich text toolbar ---------- */
   .rt-toolbar{
-    display:none;position:fixed;z-index:1500;background:var(--rt-toolbar-bg);border-radius:7px;padding:4px;gap:2px;
-    box-shadow:0 6px 18px rgba(0,0,0,.45);
+    display:none;position:fixed;z-index:1500;background:var(--rt-toolbar-bg);border-radius:8px;padding:4px;gap:1px;
+    box-shadow:0 6px 18px rgba(0,0,0,.45);align-items:center;flex-wrap:wrap;max-width:460px;
   }
-  .rt-toolbar button{width:26px;height:26px;background:transparent;border:none;color:#eee;border-radius:4px;font-size:13px;}
+  .rt-toolbar button{
+    min-width:26px;height:26px;padding:0 5px;background:transparent;border:none;color:#eee;border-radius:4px;
+    font-size:12.5px;white-space:nowrap;
+  }
   .rt-toolbar button:hover{background:var(--rt-toolbar-hover);color:var(--orange);}
-  .card-body ul{padding-left:18px;margin:2px 0;}
+  .rt-toolbar button.active{background:var(--rt-toolbar-hover);color:var(--orange);}
+  .rt-sep{width:1px;height:16px;background:rgba(255,255,255,.15);margin:0 3px;flex-shrink:0;}
+  .rt-textstyle-pop{
+    display:none;position:fixed;z-index:1600;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
+    padding:4px;min-width:130px;box-shadow:0 10px 30px rgba(0,0,0,.4);
+  }
+  .rt-textstyle-pop.active{display:block;}
+  .rt-ts-item{padding:7px 10px;font-size:12.5px;color:var(--text);border-radius:5px;cursor:pointer;white-space:nowrap;}
+  .rt-ts-item:hover{background:var(--bg3);color:var(--orange);}
+  .rt-ts-sep{height:1px;background:var(--border);margin:4px 2px;}
+  .card-body ul, .card-body ol{padding-left:18px;margin:2px 0;}
   .card-body li{margin:2px 0;}
+  .card-body h1{font-size:19px;font-weight:700;margin:4px 0;}
+  .card-body h2{font-size:16px;font-weight:700;margin:4px 0;}
+  .card-body h3{font-size:14px;font-weight:700;margin:4px 0;}
+  .card-body blockquote{
+    border-left:3px solid color-mix(in srgb, var(--ctext) 35%, transparent);margin:4px 0;padding:2px 0 2px 10px;
+    color:color-mix(in srgb, var(--ctext) 80%, transparent);
+  }
+  .card-body code{
+    font-family:'IBM Plex Mono',monospace;font-size:.92em;background:color-mix(in srgb, var(--ctext) 14%, transparent);
+    padding:1px 5px;border-radius:4px;
+  }
+  .card-body a{color:var(--link-color);text-decoration:underline;}
 
   /* ---------- File card ---------- */
   .card.type-file .card-body{padding:0;}
@@ -760,10 +785,29 @@
       </div>
       <div class="context-menu" id="contextMenu"></div>
       <div class="rt-toolbar" id="richToolbar">
-        <button data-cmd="bold" title="加粗"><b>B</b></button>
-        <button data-cmd="italic" title="斜体"><i>I</i></button>
-        <button data-cmd="insertUnorderedList" title="项目符号列表">≡</button>
-        <button data-cmd="removeFormat" title="清除格式">✕</button>
+        <button id="rtTextStyleBtn" title="文字样式">T ▾</button>
+        <div class="rt-sep"></div>
+        <button data-cmd="bold" title="加粗 (Ctrl+B)"><b>B</b></button>
+        <button data-cmd="italic" title="斜体 (Ctrl+I)"><i>I</i></button>
+        <button data-cmd="strikeThrough" title="删除线"><s>S</s></button>
+        <button data-cmd="underline" title="下划线"><u>U</u></button>
+        <div class="rt-sep"></div>
+        <button data-cmd="insertUnorderedList" title="项目符号列表">•≡</button>
+        <button data-cmd="insertOrderedList" title="编号列表">1≡</button>
+        <button id="rtQuoteBtn" title="引用">"</button>
+        <div class="rt-sep"></div>
+        <button id="rtCodeBtn" title="代码">&lt;/&gt;</button>
+        <button id="rtLinkBtn" title="插入链接">🔗</button>
+        <div class="rt-sep"></div>
+        <button id="rtCommentBtn" title="评论">💬</button>
+      </div>
+      <div class="rt-textstyle-pop" id="rtTextStylePop">
+        <div class="rt-ts-item" data-block="p">正文</div>
+        <div class="rt-ts-item" data-block="h1" style="font-size:19px;font-weight:700;">标题 1</div>
+        <div class="rt-ts-item" data-block="h2" style="font-size:16px;font-weight:700;">标题 2</div>
+        <div class="rt-ts-item" data-block="h3" style="font-size:14px;font-weight:700;">标题 3</div>
+        <div class="rt-ts-sep"></div>
+        <div class="rt-ts-item" data-clear="1">清除格式</div>
       </div>
       <div class="canvas-hscroll" id="hScroll"><div class="canvas-hscroll-thumb" id="hScrollThumb"></div></div>
       <div class="canvas-vscroll" id="vScroll"><div class="canvas-vscroll-thumb" id="vScrollThumb"></div></div>
@@ -3205,14 +3249,78 @@ function maybeShowRichToolbar(targetEl){
   var rect = range.getBoundingClientRect();
   if(rect.width===0 && rect.height===0){ hideRichToolbar(); return; }
   var tb = document.getElementById('richToolbar');
+  var cardEl = targetEl.closest('.card');
+  tb.dataset.cardId = cardEl ? cardEl.dataset.id : '';
   tb.style.display='flex';
   var tw = tb.offsetWidth || 120;
+  var th = tb.offsetHeight || 34;
   tb.style.left = Math.max(4, rect.left + rect.width/2 - tw/2)+'px';
-  tb.style.top = Math.max(4, rect.top - 38)+'px';
+  tb.style.top = Math.max(4, rect.top - th - 6)+'px';
 }
 function hideRichToolbar(){
   var tb = document.getElementById('richToolbar');
   if(tb) tb.style.display='none';
+  closeTextStylePop();
+}
+function closeTextStylePop(){
+  var pop = document.getElementById('rtTextStylePop');
+  if(pop) pop.classList.remove('active');
+}
+function toggleTextStylePop(){
+  var pop = document.getElementById('rtTextStylePop');
+  var btn = document.getElementById('rtTextStyleBtn');
+  if(pop.classList.contains('active')){ pop.classList.remove('active'); return; }
+  var r = btn.getBoundingClientRect();
+  pop.style.left = r.left+'px';
+  pop.style.top = (r.bottom+4)+'px';
+  pop.classList.add('active');
+}
+function elOrParent(node){ return node.nodeType===1 ? node : node.parentElement; }
+function findCodeAncestor(range){
+  var host = elOrParent(range.commonAncestorContainer);
+  if(!host) return null;
+  var direct = host.closest('code');
+  if(direct) return direct;
+  // selection may resolve to a block whose entire (sole) content is the <code> we just wrapped
+  if(host.children && host.children.length===1 && host.children[0].tagName==='CODE') return host.children[0];
+  return null;
+}
+function toggleInlineCode(){
+  var sel = window.getSelection();
+  if(!sel || sel.rangeCount===0 || sel.isCollapsed) return;
+  var range = sel.getRangeAt(0);
+  var codeAncestor = findCodeAncestor(range);
+  if(codeAncestor){
+    var parent = codeAncestor.parentNode;
+    while(codeAncestor.firstChild) parent.insertBefore(codeAncestor.firstChild, codeAncestor);
+    parent.removeChild(codeAncestor);
+  } else {
+    var codeEl = document.createElement('code');
+    try{ range.surroundContents(codeEl); }
+    catch(e){ var frag = range.extractContents(); codeEl.appendChild(frag); range.insertNode(codeEl); }
+  }
+}
+function toggleLinkOnSelection(){
+  var sel = window.getSelection();
+  if(!sel || sel.rangeCount===0 || sel.isCollapsed) return;
+  var range = sel.getRangeAt(0);
+  var host = elOrParent(range.commonAncestorContainer);
+  var aAncestor = host && host.closest('a');
+  if(aAncestor){
+    document.execCommand('unlink');
+  } else {
+    var url = prompt('链接地址', 'https://');
+    if(url) document.execCommand('createLink', false, url);
+  }
+}
+function commentOnCurrentEdit(){
+  var tb = document.getElementById('richToolbar');
+  var cardId = tb.dataset.cardId;
+  if(!cardId) return;
+  var b = activeBoard();
+  var card = b.cards.find(function(c){return c.id===cardId;});
+  var cardEl = document.querySelector('.card[data-id="'+cardId+'"]');
+  if(card && cardEl) toggleCommentPicker(cardEl, card);
 }
 
 /* ---- 回收站 ---- */
@@ -3833,11 +3941,30 @@ function wireGlobalEvents(){
     updateSyncStatusUI('unconfigured');
   });
 
-  document.querySelectorAll('#richToolbar button').forEach(function(btn){
+  document.querySelectorAll('#richToolbar button[data-cmd]').forEach(function(btn){
     btn.addEventListener('mousedown', function(e){
       e.preventDefault();
       document.execCommand(btn.dataset.cmd, false, null);
     });
+  });
+  document.getElementById('rtTextStyleBtn').addEventListener('mousedown', function(e){ e.preventDefault(); toggleTextStylePop(); });
+  document.getElementById('rtQuoteBtn').addEventListener('mousedown', function(e){ e.preventDefault(); document.execCommand('formatBlock', false, 'blockquote'); });
+  document.getElementById('rtCodeBtn').addEventListener('mousedown', function(e){ e.preventDefault(); toggleInlineCode(); });
+  document.getElementById('rtLinkBtn').addEventListener('mousedown', function(e){ e.preventDefault(); toggleLinkOnSelection(); });
+  document.getElementById('rtCommentBtn').addEventListener('mousedown', function(e){ e.preventDefault(); commentOnCurrentEdit(); });
+  document.querySelectorAll('.rt-ts-item').forEach(function(item){
+    item.addEventListener('mousedown', function(e){
+      e.preventDefault();
+      if(item.dataset.clear){ document.execCommand('formatBlock', false, 'p'); document.execCommand('removeFormat'); }
+      else{ document.execCommand('formatBlock', false, item.dataset.block); }
+      closeTextStylePop();
+    });
+  });
+  document.addEventListener('mousedown', function(e){
+    var pop = document.getElementById('rtTextStylePop');
+    if(pop.classList.contains('active') && !pop.contains(e.target) && e.target.id!=='rtTextStyleBtn'){
+      pop.classList.remove('active');
+    }
   });
 
   document.getElementById('hScrollThumb').addEventListener('mousedown', function(e){
