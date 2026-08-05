@@ -246,27 +246,15 @@
           "comments": []
         },
         {
-          "id": "c_mser0o3v_11",
-          "type": "header",
-          "x": 2367.802318601802,
-          "y": 964.4902177652259,
-          "w": 340,
-          "h": 60,
-          "color": "#f2f2f2",
-          "z": 206,
-          "text": "📋 经济体的体检报告",
-          "comments": []
-        },
-        {
           "id": "c_mser0o3v_12",
           "type": "note",
-          "x": 2060,
-          "y": 1125,
+          "x": 1604.3463300495546,
+          "y": 1380.8560039469378,
           "w": 300,
           "h": 300,
           "color": "#fff6b3",
-          "z": 1,
-          "text": "左列\n• GDP GROWTH\n• INFLATION RATE\n• UNEMPLOYMENT RATE\n• WAGE GROWTH\n• CONSUMER CONFIDENCE\n• PURCHASING MANAGER INDEX\n• RETAIL SALES\n• BUSINESS CONFIDENCE\n• POPULATION",
+          "z": 225,
+          "text": "<h3>• GDP GROWTH<br>• INFLATION RATE<br>• UNEMPLOYMENT RATE<br>• WAGE GROWTH<br>• CONSUMER CONFIDENCE<br>• PURCHASING MANAGER INDEX<br>• RETAIL SALES<br>• BUSINESS CONFIDENCE<br>• POPULATION</h3>",
           "comments": []
         },
         {
@@ -363,6 +351,18 @@
           "color": "#fff6b3",
           "z": 195,
           "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; text-align: start;\">🔁 六大齿轮 (Six Major Gears)</span></div>",
+          "comments": []
+        },
+        {
+          "id": "c_msg7scfa_s",
+          "type": "note",
+          "x": 1374.890078038819,
+          "y": 1166.2879217841485,
+          "w": 244.43568577021315,
+          "h": 100,
+          "color": "#e6d9ff",
+          "z": 221,
+          "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">📋 经济体的体检报告</span></div>",
           "comments": []
         }
       ],
@@ -500,24 +500,6 @@
           "label": ""
         },
         {
-          "id": "n_mser0o3v_24",
-          "from": "c_mser0o3u_j",
-          "to": "c_mser0o3v_10",
-          "label": "参见资金循环图"
-        },
-        {
-          "id": "n_mser0o3v_25",
-          "from": "c_mser0o3v_11",
-          "to": "c_mser0o3v_12",
-          "label": ""
-        },
-        {
-          "id": "n_mser0o3v_26",
-          "from": "c_mser0o3v_11",
-          "to": "c_mser0o3v_13",
-          "label": ""
-        },
-        {
           "id": "n_msg6tv8k_5",
           "from": "c_msg4sgyj_1",
           "to": "c_msg6t3z1_4",
@@ -588,9 +570,30 @@
           "from": "c_msg7c4bg_l",
           "to": "c_mser0o3v_m",
           "label": ""
+        },
+        {
+          "id": "n_msg7sshh_t",
+          "from": "c_mser0o3u_j",
+          "to": "c_msg7scfa_s",
+          "label": ""
         }
       ],
       "trash": [
+        {
+          "card": {
+            "id": "c_mser0o3v_11",
+            "type": "header",
+            "x": 2367.802318601802,
+            "y": 964.4902177652259,
+            "w": 340,
+            "h": 60,
+            "color": "#f2f2f2",
+            "z": 224,
+            "text": "📋 经济体的体检报告",
+            "comments": []
+          },
+          "deletedAt": 1785942079561
+        },
         {
           "card": {
             "id": "c_msg7cw4d_q",
@@ -818,9 +821,9 @@
         }
       ],
       "vx": -125.50698249319271,
-      "vy": -470.9900008431196,
+      "vy": -467.6566647282362,
       "vzoom": 0.6957038226740835,
-      "maxZ": 217,
+      "maxZ": 225,
       "updatedAt": 1785853422858
     }
   },
@@ -828,5 +831,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1785942038366
+  "syncedAt": 1785942119627
 }
