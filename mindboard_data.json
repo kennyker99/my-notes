@@ -14,7 +14,8 @@
           "h": 70,
           "color": "#c9d9ff",
           "z": 1,
-          "text": "财政政策\n• 调节税收，津贴 & 开支\n• 宽松（带动经济有效增长） vs 紧缩（避免贫富差距扩大）"
+          "text": "财政政策\n• 调节税收，津贴 & 开支\n• 宽松（带动经济有效增长） vs 紧缩（避免贫富差距扩大）",
+          "comments": []
         },
         {
           "id": "c_mser0o3u_a",
@@ -25,7 +26,8 @@
           "h": 70,
           "color": "#c9d9ff",
           "z": 1,
-          "text": "货币政策\n• 调节汇率，利率 & 流动性\n• 宽松（刺激经济增长） vs 紧缩（预防经济过热）"
+          "text": "货币政策\n• 调节汇率，利率 & 流动性\n• 宽松（刺激经济增长） vs 紧缩（预防经济过热）",
+          "comments": []
         },
         {
           "id": "c_mser0o3u_b",
@@ -36,7 +38,8 @@
           "h": 70,
           "color": "#c9d9ff",
           "z": 1,
-          "text": "货币政策 vs 财政政策"
+          "text": "货币政策 vs 财政政策",
+          "comments": []
         },
         {
           "id": "c_mser0o3u_c",
@@ -47,7 +50,8 @@
           "h": 176.6105522979289,
           "color": "#fff6b3",
           "z": 42,
-          "text": "1. 内在因素<br>• 政策<br>• 经济结构<br>• 人口结构"
+          "text": "1. 内在因素<br>• 政策<br>• 经济结构<br>• 人口结构",
+          "comments": []
         },
         {
           "id": "c_mser0o3u_d",
@@ -58,7 +62,8 @@
           "h": 157.22681551648728,
           "color": "#f2f2f2",
           "z": 60,
-          "text": "<b>2. 外在因素<br>• 国债/信用<br>• 贸易/联盟<br>• 国际货币流</b>"
+          "text": "<b>2. 外在因素<br>• 国债/信用<br>• 贸易/联盟<br>• 国际货币流</b>",
+          "comments": []
         },
         {
           "id": "c_mser0o3u_e",
@@ -69,7 +74,8 @@
           "h": 107.3829209356374,
           "color": "#ffc9d6",
           "z": 1,
-          "text": "3. 突发性因素<br>• 天灾<br>• 战争/恐怖主义<br>• 疫情"
+          "text": "3. 突发性因素<br>• 天灾<br>• 战争/恐怖主义<br>• 疫情",
+          "comments": []
         },
         {
           "id": "c_mser0o3u_f",
@@ -80,7 +86,8 @@
           "h": 70,
           "color": "#e3c9ff",
           "z": 53,
-          "text": "经济齿轮转动的关键"
+          "text": "经济齿轮转动的关键",
+          "comments": []
         },
         {
           "id": "c_mser0o3u_h",
@@ -91,7 +98,8 @@
           "h": 70,
           "color": "#e3c9ff",
           "z": 34,
-          "text": "全球经济运行模式"
+          "text": "全球经济运行模式",
+          "comments": []
         },
         {
           "id": "c_mser0o3u_i",
@@ -102,7 +110,8 @@
           "h": 70,
           "color": "#ffd9b3",
           "z": 1,
-          "text": "资金撤离和流入方向"
+          "text": "资金撤离和流入方向",
+          "comments": []
         },
         {
           "id": "c_mser0o3u_j",
@@ -113,7 +122,8 @@
           "h": 70,
           "color": "#ffc9d6",
           "z": 1,
-          "text": "国内生产总值 GDP<br><br>= 消费 Consumer + 投资 Investment + 政府支出 Government Spending + 净出口 Export (X-M)"
+          "text": "国内生产总值 GDP<br><br>= 消费 Consumer + 投资 Investment + 政府支出 Government Spending + 净出口 Export (X-M)",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_k",
@@ -124,7 +134,8 @@
           "h": 70,
           "color": "#e3c9ff",
           "z": 1,
-          "text": "GDP资金循环"
+          "text": "GDP资金循环",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_l",
@@ -135,7 +146,8 @@
           "h": 70,
           "color": "#f2f2f2",
           "z": 1,
-          "text": "基本面框架"
+          "text": "基本面框架",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_m",
@@ -146,7 +158,8 @@
           "h": 130,
           "color": "#fff6b3",
           "z": 1,
-          "text": "国际贸易 International Trade\n• 产品，服务，资源 & 技术\n• \"齿轮的输入端\" (the gear's input end)"
+          "text": "国际贸易 International Trade\n• 产品，服务，资源 & 技术\n• \"齿轮的输入端\" (the gear's input end)",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_n",
@@ -157,7 +170,8 @@
           "h": 130,
           "color": "#ffd9b3",
           "z": 1,
-          "text": "劳动力与消费力 Labor & Consumption Power\n• 就业机会多、发展项目多。内需引擎 (many jobs and projects; the engine of domestic demand)"
+          "text": "劳动力与消费力 Labor & Consumption Power\n• 就业机会多、发展项目多。内需引擎 (many jobs and projects; the engine of domestic demand)",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_o",
@@ -168,7 +182,8 @@
           "h": 130,
           "color": "#ffc9d6",
           "z": 1,
-          "text": "资产货币化 Asset Monetization<br>• 资产 → 可流通的钱。整台机器的放大器 (assets become liquid money; the amplifier of the whole machine)"
+          "text": "资产货币化 Asset Monetization<br>• 资产 → 可流通的钱。整台机器的放大器 (assets become liquid money; the amplifier of the whole machine)",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_p",
@@ -179,7 +194,8 @@
           "h": 130,
           "color": "#e3c9ff",
           "z": 1,
-          "text": "固定资产投资 Investment in Fixed Assets\n• 稳定、低收益，慢齿轮 (stable, low yield, the slow gear)"
+          "text": "固定资产投资 Investment in Fixed Assets\n• 稳定、低收益，慢齿轮 (stable, low yield, the slow gear)",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_q",
@@ -190,7 +206,8 @@
           "h": 130,
           "color": "#c9d9ff",
           "z": 1,
-          "text": "金融资产投资 Financial Asset Investment\n• 高收益，快齿轮 (high yield, the fast gear)\n• \"快齿轮先转、慢齿轮后转\" (the fast gear turns first, the slow gear follows)"
+          "text": "金融资产投资 Financial Asset Investment\n• 高收益，快齿轮 (high yield, the fast gear)\n• \"快齿轮先转、慢齿轮后转\" (the fast gear turns first, the slow gear follows)",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_r",
@@ -201,7 +218,8 @@
           "h": 130,
           "color": "#c6f0d4",
           "z": 1,
-          "text": "国际货币流 International Currency Flow\n• 追求安全、高收益率 (pursuing safety and high yield)\n• \"齿轮的输出/输入闸门\" (the gear's output/input gate)"
+          "text": "国际货币流 International Currency Flow\n• 追求安全、高收益率 (pursuing safety and high yield)\n• \"齿轮的输出/输入闸门\" (the gear's output/input gate)",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_s",
@@ -212,7 +230,8 @@
           "h": 60,
           "color": "#e3c9ff",
           "z": 62,
-          "text": "🔁 六大齿轮 (Six Major Gears)"
+          "text": "🔁 六大齿轮 (Six Major Gears)",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_t",
@@ -223,7 +242,8 @@
           "h": 70,
           "color": "#c6f0d4",
           "z": 1,
-          "text": "Central Bank"
+          "text": "Central Bank",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_u",
@@ -234,7 +254,8 @@
           "h": 70,
           "color": "#c6f0d4",
           "z": 1,
-          "text": "Financial Institution"
+          "text": "Financial Institution",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_v",
@@ -245,7 +266,8 @@
           "h": 70,
           "color": "#c6f0d4",
           "z": 1,
-          "text": "Government"
+          "text": "Government",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_w",
@@ -256,7 +278,8 @@
           "h": 70,
           "color": "#c6f0d4",
           "z": 1,
-          "text": "Business / Firm (1)"
+          "text": "Business / Firm (1)",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_x",
@@ -267,7 +290,8 @@
           "h": 70,
           "color": "#c6f0d4",
           "z": 1,
-          "text": "Business / Firm (2)"
+          "text": "Business / Firm (2)",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_y",
@@ -278,7 +302,8 @@
           "h": 70,
           "color": "#c6f0d4",
           "z": 1,
-          "text": "Households"
+          "text": "Households",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_z",
@@ -289,7 +314,8 @@
           "h": 70,
           "color": "#c6f0d4",
           "z": 1,
-          "text": "Rest of World / Environment"
+          "text": "Rest of World / Environment",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_10",
@@ -300,7 +326,8 @@
           "h": 60,
           "color": "#c9d9ff",
           "z": 1,
-          "text": "💰 GDP 资金循环 - Circular Flow of Income Diagram"
+          "text": "💰 GDP 资金循环 - Circular Flow of Income Diagram",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_11",
@@ -311,7 +338,8 @@
           "h": 60,
           "color": "#f2f2f2",
           "z": 1,
-          "text": "📋 经济体的体检报告"
+          "text": "📋 经济体的体检报告",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_12",
@@ -322,7 +350,8 @@
           "h": 300,
           "color": "#fff6b3",
           "z": 1,
-          "text": "左列\n• GDP GROWTH\n• INFLATION RATE\n• UNEMPLOYMENT RATE\n• WAGE GROWTH\n• CONSUMER CONFIDENCE\n• PURCHASING MANAGER INDEX\n• RETAIL SALES\n• BUSINESS CONFIDENCE\n• POPULATION"
+          "text": "左列\n• GDP GROWTH\n• INFLATION RATE\n• UNEMPLOYMENT RATE\n• WAGE GROWTH\n• CONSUMER CONFIDENCE\n• PURCHASING MANAGER INDEX\n• RETAIL SALES\n• BUSINESS CONFIDENCE\n• POPULATION",
+          "comments": []
         },
         {
           "id": "c_mser0o3v_13",
@@ -333,7 +362,8 @@
           "h": 300,
           "color": "#ffc9d6",
           "z": 1,
-          "text": "右列<br>• 10YR BOND YIELD%<br>• DEBT TO GDP<br>• CURRENT ACCOUNT<br>• BALANCE OF TRADE<br>• EXPORT (PARTNERS &amp; PRODUCTS)<br>• IMPORT (PARTNERS &amp; PRODUCTS)<br>• TAX RATE<br>• INTEREST RATE<br>• CENTRAL BANK BALANCE SHEET"
+          "text": "右列<br>• 10YR BOND YIELD%<br>• DEBT TO GDP<br>• CURRENT ACCOUNT<br>• BALANCE OF TRADE<br>• EXPORT (PARTNERS &amp; PRODUCTS)<br>• IMPORT (PARTNERS &amp; PRODUCTS)<br>• TAX RATE<br>• INTEREST RATE<br>• CENTRAL BANK BALANCE SHEET",
+          "comments": []
         }
       ],
       "connectors": [
@@ -566,11 +596,27 @@
           "label": ""
         }
       ],
-      "trash": [],
+      "trash": [
+        {
+          "card": {
+            "id": "c_msg2pk3d_2",
+            "type": "note",
+            "x": 1482.599595741238,
+            "y": 151.02437144736237,
+            "w": 220,
+            "h": 150,
+            "color": "#2b2b30",
+            "z": 78,
+            "text": "",
+            "comments": []
+          },
+          "deletedAt": 1785933528679
+        }
+      ],
       "vx": -21.83622556490201,
       "vy": 284.0841450980636,
       "vzoom": 0.5902912574721221,
-      "maxZ": 72,
+      "maxZ": 78,
       "updatedAt": 1785853422858
     }
   },
@@ -578,5 +624,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1785887095727
+  "syncedAt": 1785933548685
 }
