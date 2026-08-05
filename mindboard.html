@@ -152,6 +152,11 @@
   .connectors-svg .conn-label-bg{fill:var(--canvas-bg);stroke:var(--border2);stroke-width:1;}
   .connectors-svg .conn-label{font-family:'IBM Plex Mono',monospace;font-size:11px;fill:var(--text-dim);pointer-events:none;}
   .conn-temp{fill:none;stroke:var(--orange);stroke-width:2;stroke-dasharray:5 4;pointer-events:none;}
+  .connectors-svg .conn-bend-handle{
+    fill:var(--bg2);stroke:var(--orange);stroke-width:2;cursor:grab;pointer-events:all;
+  }
+  .connectors-svg .conn-bend-handle:hover{fill:var(--orange);}
+  .connectors-svg .conn-bend-handle:active{cursor:grabbing;}
 
   .empty-hint{
     position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:var(--text-dim);
@@ -803,6 +808,7 @@
         <div><b>缩放</b> — Ctrl/⌘ + 滚轮，或右上角按钮</div>
         <div><b>移动卡片</b> — 拖动卡片顶部色条（多选可整体拖动）</div>
         <div><b>连线</b> — 拖动卡片边缘的橙色圆点到另一张卡片</div>
+        <div><b>调整连线弧度</b> — 选中连线后拖动中间的小圆点，双击圆点恢复自动弧度</div>
         <div><b>加选</b> — Shift/Ctrl 点击卡片可加入多选</div>
         <div><b>右键菜单</b> — 卡片或空白处右键可快捷操作</div>
         <div><b>富文本</b> — 便签/标题内选中文字可加粗/斜体/列表</div>
@@ -1756,11 +1762,16 @@ function renderConnectors(){
     var c2 = b.cards.find(function(c){return c.id===conn.to;});
     if(!c1||!c2||c1.unsorted||c2.unsorted) return;
     var p1 = edgePoint(c1,c2), p2 = edgePoint(c2,c1);
-    var mx=(p1.x+p2.x)/2, my=(p1.y+p2.y)/2;
     var dx=p2.x-p1.x, dy=p2.y-p1.y;
-    var c1x=p1.x+dx*0.35, c1y=p1.y+dy*0.15;
-    var c2x=p1.x+dx*0.65, c2y=p1.y+dy*0.85;
+    var len = Math.hypot(dx,dy) || 1;
+    var nx = -dy/len, ny = dx/len; // 垂直于连线方向的单位法向量，用于手动弯曲
+    var bend = conn.bend || 0;
+    var c1x=p1.x+dx*0.35+nx*bend, c1y=p1.y+dy*0.15+ny*bend;
+    var c2x=p1.x+dx*0.65+nx*bend, c2y=p1.y+dy*0.85+ny*bend;
     var d = 'M'+p1.x+','+p1.y+' C'+c1x+','+c1y+' '+c2x+','+c2y+' '+p2.x+','+p2.y;
+    // 三次贝塞尔曲线 t=0.5 处的点，用来放标签和拖拽手柄，跟着弯曲走
+    var mx = 0.125*p1.x+0.375*c1x+0.375*c2x+0.125*p2.x;
+    var my = 0.125*p1.y+0.375*c1y+0.375*c2y+0.125*p2.y;
     var color = conn.color || '#8a8570';
     var markerId = ensureMarker(color);
     var isSelected = state.selectedConnectorId===conn.id;
@@ -1794,6 +1805,38 @@ function renderConnectors(){
         editConnectorLabel(conn, mx, my);
       });
     });
+
+    if(isSelected){
+      var handle = document.createElementNS(ns,'circle');
+      handle.setAttribute('class','conn-bend-handle');
+      handle.setAttribute('cx', mx); handle.setAttribute('cy', my); handle.setAttribute('r', 6);
+      handle.setAttribute('data-id', conn.id);
+      svg.appendChild(handle);
+      handle.addEventListener('mousedown', function(e){
+        e.stopPropagation(); e.preventDefault();
+        pushHistory();
+        function onMove(ev){
+          var local = screenToLocal(ev.clientX, ev.clientY);
+          var vx = local.x-p1.x, vy = local.y-p1.y;
+          conn.bend = vx*nx + vy*ny;
+          renderConnectors();
+        }
+        function onUp(){
+          window.removeEventListener('mousemove', onMove);
+          window.removeEventListener('mouseup', onUp);
+          scheduleSave();
+        }
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onUp);
+      });
+      handle.addEventListener('dblclick', function(e){
+        e.stopPropagation();
+        pushHistory();
+        conn.bend = 0;
+        scheduleSave();
+        renderConnectors();
+      });
+    }
 
     if(conn.label){
       var bg = document.createElementNS(ns,'rect');
