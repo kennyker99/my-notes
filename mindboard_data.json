@@ -449,7 +449,8 @@
           "id": "n_mser0o3v_1v",
           "from": "c_mser0o3v_x",
           "to": "c_mser0o3v_v",
-          "label": "Taxes"
+          "label": "Taxes",
+          "startArrow": false
         },
         {
           "id": "n_mser0o3v_1w",
@@ -924,5 +925,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1785943771546
+  "syncedAt": 1785943873015
 }
