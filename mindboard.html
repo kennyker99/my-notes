@@ -1452,16 +1452,45 @@ function getBoard(id){ return store.boards[id]; }
 function activeBoard(){ return store.boards[state.activeId]; }
 
 /* ============================== 初始化 ============================== */
-function init(){
+// 全新设备第一次打开(本地没有任何数据)时，尝试从跟 mindboard.html 同源的
+// mindboard_data.json 拉取云端最新数据 —— 这样换手机/换电脑打开同一个链接，
+// 只要之前在别的设备上开启过 GitHub 自动同步，资料就能自动找回来，不需要
+// 手动配置同步/输入 Token（Token 只有"写回 GitHub"才需要，单纯查看不需要）。
+function tryLoadRemoteSnapshot(){
+  return new Promise(function(resolve){
+    var done = false;
+    var timer = setTimeout(function(){ if(!done){ done=true; resolve(null); } }, 6000);
+    fetch('mindboard_data.json', { cache:'no-store' })
+      .then(function(resp){ return resp.ok ? resp.json() : null; })
+      .then(function(data){
+        if(done) return;
+        done = true; clearTimeout(timer);
+        resolve((data && data.boards && data.order) ? data : null);
+      })
+      .catch(function(){
+        if(done) return;
+        done = true; clearTimeout(timer);
+        resolve(null);
+      });
+  });
+}
+
+async function init(){
   applyTheme();
   store = loadStore();
   if(!store){
-    store = defaultStore();
-    var wb = newBoard('欢迎看板','👋');
-    applyTemplate(wb, 'welcome');
-    store.boards[wb.id] = wb;
-    store.order.push(wb.id);
-    store.activeId = wb.id;
+    var remote = await tryLoadRemoteSnapshot();
+    if(remote){
+      store = remote;
+      showToast('已从 GitHub 找回你的资料');
+    } else {
+      store = defaultStore();
+      var wb = newBoard('欢迎看板','👋');
+      applyTemplate(wb, 'welcome');
+      store.boards[wb.id] = wb;
+      store.order.push(wb.id);
+      store.activeId = wb.id;
+    }
     saveNow();
   }
   if(!store.activeId || !store.boards[store.activeId]){
