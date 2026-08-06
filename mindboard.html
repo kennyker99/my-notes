@@ -436,6 +436,23 @@
   .rt-ts-item{padding:7px 10px;font-size:12.5px;color:var(--text);border-radius:5px;cursor:pointer;white-space:nowrap;}
   .rt-ts-item:hover{background:var(--bg3);color:var(--orange);}
   .rt-ts-sep{height:1px;background:var(--border);margin:4px 2px;}
+  .conn-label-editor{
+    position:fixed;z-index:2200;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
+    padding:10px;width:240px;box-shadow:0 10px 30px rgba(0,0,0,.4);display:flex;flex-direction:column;gap:8px;
+  }
+  .conn-label-editor textarea{
+    width:100%;min-height:64px;background:var(--bg3);border:1px solid var(--border);color:var(--text);
+    padding:7px 9px;border-radius:6px;font-size:12.5px;outline:none;resize:vertical;font-family:inherit;
+  }
+  .conn-label-editor textarea:focus{border-color:var(--orange);}
+  .conn-label-editor-actions{display:flex;justify-content:flex-end;gap:6px;}
+  .conn-label-editor-actions button{
+    background:transparent;border:1px solid var(--border2);color:var(--text-dim);padding:6px 14px;
+    border-radius:6px;font-size:12px;transition:.15s;
+  }
+  .conn-label-editor-actions button.cle-ok{border-color:var(--orange);color:var(--orange);}
+  .conn-label-editor-actions button.cle-ok:hover{background:rgba(255,149,0,.1);}
+  .conn-label-editor-actions button:hover{border-color:var(--text-dim);color:var(--text);}
   .card-body ul, .card-body ol{padding-left:18px;margin:2px 0;}
   .card-body li{margin:2px 0;}
   .card-body h1{font-size:19px;font-weight:700;margin:4px 0;}
@@ -808,7 +825,8 @@
         <div><b>缩放</b> — Ctrl/⌘ + 滚轮，或右上角按钮</div>
         <div><b>移动卡片</b> — 拖动卡片顶部色条（多选可整体拖动）</div>
         <div><b>连线</b> — 拖动卡片边缘的橙色圆点到另一张卡片</div>
-        <div><b>调整连线弧度</b> — 选中连线后拖动中间的小圆点，双击圆点恢复自动弧度</div>
+        <div><b>调整连线弧度</b> — 选中连线后拖动中间的小圆点，右键连线选"恢复自动弧度"</div>
+        <div><b>编辑连线标签</b> — 双击连线（或右键选"编辑标签"），支持多行文字</div>
         <div><b>加选</b> — Shift/Ctrl 点击卡片可加入多选</div>
         <div><b>右键菜单</b> — 卡片或空白处右键可快捷操作</div>
         <div><b>富文本</b> — 便签/标题内选中文字可加粗/斜体/列表</div>
@@ -1802,7 +1820,7 @@ function renderConnectors(){
       });
       el.addEventListener('dblclick', function(e){
         e.stopPropagation();
-        editConnectorLabel(conn, mx, my);
+        editConnectorLabel(conn, e.clientX, e.clientY);
       });
     });
 
@@ -1831,38 +1849,86 @@ function renderConnectors(){
       });
       handle.addEventListener('dblclick', function(e){
         e.stopPropagation();
-        pushHistory();
-        conn.bend = 0;
-        scheduleSave();
-        renderConnectors();
+        editConnectorLabel(conn, e.clientX, e.clientY);
       });
     }
 
     if(conn.label){
+      var lines = conn.label.split('\n');
+      var lineH = 15;
+      var longest = lines.reduce(function(a,l){ return Math.max(a,l.length); }, 0);
+      var w = Math.max(24, longest*7+10);
+      var h = 18 + (lines.length-1)*lineH;
       var bg = document.createElementNS(ns,'rect');
-      var w = Math.max(24, conn.label.length*7+10), h=18;
       bg.setAttribute('class','conn-label-bg');
       bg.setAttribute('x', mx-w/2); bg.setAttribute('y', my-h/2);
       bg.setAttribute('width', w); bg.setAttribute('height', h); bg.setAttribute('rx', 4);
       svg.appendChild(bg);
       var txt = document.createElementNS(ns,'text');
       txt.setAttribute('class','conn-label');
-      txt.setAttribute('x', mx); txt.setAttribute('y', my+4);
+      txt.setAttribute('x', mx);
       txt.setAttribute('text-anchor','middle');
-      txt.textContent = conn.label;
+      var startY = my - (lines.length-1)*lineH/2 + 4;
+      lines.forEach(function(line, i){
+        var tspan = document.createElementNS(ns,'tspan');
+        tspan.setAttribute('x', mx);
+        tspan.setAttribute('y', startY + i*lineH);
+        tspan.textContent = line;
+        txt.appendChild(tspan);
+      });
       svg.appendChild(txt);
     }
   });
   updateScrollbars();
 }
 
-function editConnectorLabel(conn, x, y){
-  var v = prompt('连线标签', conn.label||'');
-  if(v===null) return;
-  pushHistory();
-  conn.label = v.trim();
-  scheduleSave();
-  renderConnectors();
+var connLabelEditorCloser = null;
+function editConnectorLabel(conn, clientX, clientY){
+  var existing = document.getElementById('connLabelEditor');
+  if(existing){
+    existing.remove();
+    if(connLabelEditorCloser){ document.removeEventListener('mousedown', connLabelEditorCloser); connLabelEditorCloser=null; }
+  }
+  var pop = document.createElement('div');
+  pop.id = 'connLabelEditor';
+  pop.className = 'conn-label-editor';
+  pop.innerHTML =
+    '<textarea placeholder="连线标签，回车换行">'+esc(conn.label||'')+'</textarea>'+
+    '<div class="conn-label-editor-actions"><button class="cle-cancel">取消</button><button class="cle-ok">确定</button></div>';
+  var vpW = window.innerWidth, vpH = window.innerHeight, popW = 240, popH = 130;
+  var left = clientX!=null ? Math.min(clientX, vpW-popW-8) : vpW/2-popW/2;
+  var top = clientY!=null ? Math.min(clientY, vpH-popH-8) : vpH/2-popH/2;
+  pop.style.left = Math.max(8,left)+'px';
+  pop.style.top = Math.max(8,top)+'px';
+  document.body.appendChild(pop);
+  var ta = pop.querySelector('textarea');
+  ta.focus();
+  ta.select();
+  function closeEditor(){
+    pop.remove();
+    if(connLabelEditorCloser){ document.removeEventListener('mousedown', connLabelEditorCloser); connLabelEditorCloser=null; }
+  }
+  function commit(){
+    pushHistory();
+    conn.label = ta.value.replace(/^\s+|\s+$/g,'');
+    scheduleSave();
+    renderConnectors();
+    closeEditor();
+  }
+  function cancel(){ closeEditor(); }
+  pop.querySelector('.cle-ok').addEventListener('click', commit);
+  pop.querySelector('.cle-cancel').addEventListener('click', cancel);
+  pop.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+  ta.addEventListener('keydown', function(e){
+    e.stopPropagation();
+    if(e.key==='Escape'){ e.preventDefault(); cancel(); }
+    else if(e.key==='Enter' && (e.ctrlKey||e.metaKey)){ e.preventDefault(); commit(); }
+    // 普通回车 = 换行 (textarea 默认行为，不拦截)
+  });
+  setTimeout(function(){
+    connLabelEditorCloser = function(e){ if(!pop.contains(e.target)) commit(); };
+    document.addEventListener('mousedown', connLabelEditorCloser);
+  },0);
 }
 
 /* ---- 连线设置 (左侧工具栏在选中一条连线时切换为这一组) ----
@@ -3484,21 +3550,34 @@ function openCardContextMenu(card, x, y){
   openContextMenu(items, x, y);
 }
 function openConnectorContextMenu(connId, x, y){
+  var b0 = activeBoard();
+  var conn0 = b0.connectors.find(function(c){return c.id===connId;});
   var items = [
     {label:'编辑标签', action:function(){
       var b = activeBoard();
       var conn = b.connectors.find(function(c){return c.id===connId;});
-      if(conn) editConnectorLabel(conn, 0, 0);
-    }},
-    {label:'删除连线', danger:true, action:function(){
-      pushHistory();
-      var b = activeBoard();
-      b.connectors = b.connectors.filter(function(c){return c.id!==connId;});
-      state.selectedConnectorId = null;
-      renderConnectors();
-      scheduleSave();
+      if(conn) editConnectorLabel(conn, x, y);
     }}
   ];
+  if(conn0 && conn0.bend){
+    items.push({label:'恢复自动弧度', action:function(){
+      pushHistory();
+      var b = activeBoard();
+      var conn = b.connectors.find(function(c){return c.id===connId;});
+      if(conn) conn.bend = 0;
+      scheduleSave();
+      renderConnectors();
+    }});
+  }
+  items.push({separator:true});
+  items.push({label:'删除连线', danger:true, action:function(){
+    pushHistory();
+    var b = activeBoard();
+    b.connectors = b.connectors.filter(function(c){return c.id!==connId;});
+    state.selectedConnectorId = null;
+    renderConnectors();
+    scheduleSave();
+  }});
   openContextMenu(items, x, y);
 }
 function openCanvasContextMenu(localX, localY, clientX, clientY){
@@ -3891,7 +3970,7 @@ function wireGlobalEvents(){
   viewport.addEventListener('contextmenu', function(e){
     if(e.target.closest('.card')) return;
     e.preventDefault();
-    var connEl = e.target.closest('.conn-line,.conn-hit');
+    var connEl = e.target.closest('.conn-line,.conn-hit,.conn-bend-handle');
     if(connEl){
       selectConnector(connEl.dataset.id);
       openConnectorContextMenu(connEl.dataset.id, e.clientX, e.clientY);
@@ -4113,7 +4192,10 @@ function wireGlobalEvents(){
   document.getElementById('connLabelBtn').addEventListener('click', function(e){
     e.stopPropagation();
     var conn = currentSelectedConnector();
-    if(conn) editConnectorLabel(conn, 0, 0);
+    if(conn){
+      var r = e.currentTarget.getBoundingClientRect();
+      editConnectorLabel(conn, r.right+8, r.top);
+    }
   });
 
   // ---- Line / Comment / Draw：目前的行为提示（尚未做成独立工具） ----
