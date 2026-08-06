@@ -440,19 +440,6 @@
           "label": "G - Government Spending"
         },
         {
-          "id": "n_mser0o3v_1u",
-          "from": "c_mser0o3v_v",
-          "to": "c_mser0o3v_x",
-          "label": "G - Government Spending"
-        },
-        {
-          "id": "n_mser0o3v_1v",
-          "from": "c_mser0o3v_x",
-          "to": "c_mser0o3v_v",
-          "label": "Taxes",
-          "startArrow": false
-        },
-        {
           "id": "n_mser0o3v_1w",
           "from": "c_mser0o3v_w",
           "to": "c_mser0o3v_x",
@@ -570,7 +557,8 @@
           "id": "n_msg7wnq8_u",
           "from": "c_msg7scfa_s",
           "to": "c_mser0o3v_12",
-          "label": ""
+          "label": "",
+          "bend": -61.43518171761904
         },
         {
           "id": "n_msg7wp9n_v",
@@ -595,6 +583,13 @@
           "from": "c_mser0o3u_j",
           "to": "c_msg819g8_z",
           "label": ""
+        },
+        {
+          "id": "n_mshe3arn_1",
+          "from": "c_mser0o3v_v",
+          "to": "c_mser0o3v_x",
+          "label": "",
+          "bend": -37.84122671211579
         }
       ],
       "trash": [
@@ -914,7 +909,7 @@
           "deletedAt": 1785933528679
         }
       ],
-      "vx": 284.5790980385649,
+      "vx": 185.70235869313876,
       "vy": -927.6566683045148,
       "vzoom": 0.6957038226740835,
       "maxZ": 315,
@@ -925,5 +920,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1785944300115
+  "syncedAt": 1786013137301
 }
