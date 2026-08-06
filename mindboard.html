@@ -303,11 +303,22 @@
     position:absolute;width:13px;height:13px;border-radius:50%;background:var(--bg2);border:2px solid var(--orange);
     z-index:6;opacity:0;transition:opacity .1s;cursor:crosshair;
   }
-  .card:hover .connect-handle{opacity:1;}
+  /* 触屏没有 :hover，只在 hover 时才显示的话手指根本碰不到——选中卡片时也要
+     露出来，不然手机上永远画不了连线 */
+  .card:hover .connect-handle, .card.selected .connect-handle{opacity:1;}
   .connect-handle.ch-top{top:-7px;left:50%;margin-left:-7px;}
   .connect-handle.ch-bottom{bottom:-7px;left:50%;margin-left:-7px;}
   .connect-handle.ch-left{left:-7px;top:50%;margin-top:-7px;}
   .connect-handle.ch-right{right:-7px;top:50%;margin-top:-7px;}
+  /* 触屏手指比鼠标指针粗得多，原本给鼠标用的小圆点很难精确点中——粗指针设备
+     下把拖拽手柄的可点击范围放大一圈，视觉上的小圆点本身大小不变(圆点用
+     right/bottom等负值锚定在手柄容器的角上，容器变大不会让圆点跟着挪位置)。
+     连线手柄故意不跟着放大：它们贴着卡片标题栏的正中间，放大一点点就会侵占
+     标题栏中间"长按拖动卡片"要用到的区域，两者冲突时优先保住拖动卡片这个
+     更常用的手势，连线手柄维持原尺寸，靠上面新加的"选中就显示"来改善可发现性。 */
+  @media (pointer: coarse){
+    .resize-handle{width:28px;height:28px;}
+  }
 
   /* header card */
   .card.type-header{background:transparent;border:none;box-shadow:none;}
@@ -4060,11 +4071,14 @@ function wireGlobalEvents(){
     }
   }, {passive:false});
 
-  /* ---- 手机/平板触摸：双指缩放 + 单指平移画布/长按拖动卡片 ----
+  /* ---- 手机/平板触摸：双指缩放/双指点按粘贴 + 单指平移画布/长按拖动卡片 ----
      跟真实 Milanote 手机版一致（官方帮助文档："Tap and hold an item, then
-     drag it to a new position on the board"）：
+     drag it to a new position on the board"；"tap on the board background
+     with two fingers and you'll see an option to paste"）：
      - 双指开合 = 缩放（缩放中心跟着两指中点走），不管两根手指压在空白画布还是
        卡片上都当缩放意图，卡片摆得比较满的看板也不会被"抢走"手势。
+     - 双指几乎没有张合、按住又很快松开 = 当作"双指点按"，尝试粘贴（先粘贴
+       MindBoard 自己的内部剪贴板，没有的话再试着读取系统剪贴板里的文字）。
      - 单指触摸空白画布 = 立刻平移；单指触摸在卡片上先进入"待定"状态——
        手指没怎么移动就抬起 = 当作一次点按，交给原生触摸->点击兼容事件去处理
        选中/进入编辑；手指没怎么移动、按住不放超过长按阈值 = "拿起"这张卡片进入
@@ -4073,8 +4087,27 @@ function wireGlobalEvents(){
      - 卡片里真正可编辑的文字区域（.card-body）、按钮、输入框、缩放/连线手柄、
        菜单、工具条、滚动条依然完全交给原生触摸处理，不被上面这套手势拦截。 */
   var touchGesture = { mode:null, startDist:0, startZoom:1, localX:0, localY:0, moved:0,
-    startTouch:null, startTouchX:0, startTouchY:0, pendingCard:null, longPressTimer:null };
+    startTouch:null, startTouchX:0, startTouchY:0, pendingCard:null, longPressTimer:null,
+    pinchStartTime:0, pinchMoved:0, startMidX:0, startMidY:0, lastTouchAt:0 };
   var TOUCH_LONGPRESS_MS = 450, TOUCH_MOVE_THRESHOLD = 10;
+  var TWO_FINGER_TAP_MAX_MOVE = 14, TWO_FINGER_TAP_MAX_MS = 400;
+  function tryTwoFingerPaste(localX, localY){
+    if(state.clipboard && state.clipboard.cards.length){
+      pasteClipboardAt(localX, localY);
+      showToast('已粘贴');
+      return;
+    }
+    if(navigator.clipboard && navigator.clipboard.readText){
+      navigator.clipboard.readText().then(function(text){
+        text = (text||'').trim();
+        if(!text) return;
+        var card = addCardAt('note', localX, localY);
+        card.text = text;
+        renderBoard();
+        showToast('已粘贴文本');
+      }).catch(function(){ /* 没有权限或系统不支持读取剪贴板时静默忽略，不打扰用户 */ });
+    }
+  }
   function touchDist(t1,t2){ return Math.hypot(t1.clientX-t2.clientX, t1.clientY-t2.clientY); }
   function touchMid(t1,t2){ return { clientX:(t1.clientX+t2.clientX)/2, clientY:(t1.clientY+t2.clientY)/2 }; }
   function clearTouchLongPress(){
@@ -4097,6 +4130,7 @@ function wireGlobalEvents(){
     }
   }
   viewport.addEventListener('touchstart', function(e){
+    touchGesture.lastTouchAt = Date.now();
     var b = activeBoard();
     // 双指手势永远当画布缩放处理——不管两根手指下面具体压着的是空白画布还是
     // 某张卡片，两指同时触摸在这个 app 里没有别的含义，直接当缩放意图，
@@ -4110,8 +4144,12 @@ function wireGlobalEvents(){
       touchGesture.mode = 'pinch';
       touchGesture.startDist = touchDist(e.touches[0], e.touches[1]) || 1;
       touchGesture.startZoom = b.vzoom;
+      touchGesture.pinchStartTime = Date.now();
+      touchGesture.pinchMoved = 0;
       var mid = touchMid(e.touches[0], e.touches[1]);
       var vp = viewport.getBoundingClientRect();
+      touchGesture.startMidX = mid.clientX;
+      touchGesture.startMidY = mid.clientY;
       touchGesture.localX = (mid.clientX - vp.left - b.vx)/b.vzoom;
       touchGesture.localY = (mid.clientY - vp.top - b.vy)/b.vzoom;
       return;
@@ -4149,6 +4187,11 @@ function wireGlobalEvents(){
       b.vy = cy - newZoom*touchGesture.localY;
       b.vzoom = newZoom;
       applyViewportTransform();
+      // 记录这次双指手势里指头到底动了多少(张合幅度 + 中点位移)，用来在
+      // touchend 时区分"真的在缩放"还是"几乎没动，只是点了一下想粘贴"
+      var distDelta = Math.abs(dist - touchGesture.startDist);
+      var midDelta = Math.hypot(mid.clientX-touchGesture.startMidX, mid.clientY-touchGesture.startMidY);
+      touchGesture.pinchMoved = Math.max(touchGesture.pinchMoved, distDelta, midDelta);
     } else if(touchGesture.mode==='pending' && e.touches.length===1){
       var t = e.touches[0];
       var dx0 = t.clientX-touchGesture.startTouchX, dy0 = t.clientY-touchGesture.startTouchY;
@@ -4182,6 +4225,11 @@ function wireGlobalEvents(){
     } else if(touchGesture.mode==='dragcard'){
       endCardDrag();
     } else if(touchGesture.mode==='pinch'){
+      // 双指几乎没有张合、按住时间也很短 = 双指点按，跟真实 Milanote 手机版
+      // 一样触发粘贴；否则就是正常的双指缩放手势，只需要落盘保存缩放结果
+      if(touchGesture.pinchMoved < TWO_FINGER_TAP_MAX_MOVE && (Date.now()-touchGesture.pinchStartTime) < TWO_FINGER_TAP_MAX_MS){
+        tryTwoFingerPaste(touchGesture.localX, touchGesture.localY);
+      }
       scheduleSave();
     }
     if(touchGesture.pendingCard){ touchGesture.pendingCard.el.classList.remove('touch-lifted'); touchGesture.pendingCard=null; }
@@ -4211,6 +4259,15 @@ function wireGlobalEvents(){
   ['gesturestart','gesturechange','gestureend'].forEach(function(evt){
     viewport.addEventListener(evt, function(e){ e.preventDefault(); });
   });
+
+  /* 长按拿起卡片这套手势本身就是这个 app 里的"长按"含义了，不需要浏览器自己
+     再额外弹一个原生/自定义右键菜单出来（真实 Milanote 最近的更新里也专门修了
+     一个"手机上长按误触发右键菜单"的 bug）。用 capture 阶段在卡片自己的
+     contextmenu 监听器跑之前拦下来：只要最近发生过触摸操作，就当这次
+     contextmenu 是长按触摸触发的，直接吞掉；鼠标右键点击不受影响。 */
+  viewport.addEventListener('contextmenu', function(e){
+    if(Date.now() - touchGesture.lastTouchAt < 700){ e.preventDefault(); e.stopPropagation(); }
+  }, true);
 
   viewport.addEventListener('dragover', function(e){ e.preventDefault(); viewport.classList.add('drag-over'); });
   viewport.addEventListener('dragleave', function(e){ if(e.target===viewport) viewport.classList.remove('drag-over'); });
