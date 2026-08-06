@@ -1,669 +1,130 @@
 {
   "boards": {
-    "b_mser0o3u_8": {
-      "id": "b_mser0o3u_8",
-      "name": "基本面框架",
-      "icon": "📊",
+    "b_mshjl5pq_1": {
+      "id": "b_mshjl5pq_1",
+      "name": "欢迎看板",
+      "icon": "👋",
       "cards": [
         {
-          "id": "c_mser0o3u_9",
-          "type": "note",
-          "x": 1387.1191470133745,
-          "y": -267.8023186018021,
-          "w": 289.4917014546811,
-          "h": 150.00148368945514,
-          "color": "#c9d9ff",
-          "z": 128,
-          "text": "<h2>财政政策</h2>• 调节税收，津贴 &amp; 开支<br>• 宽松（带动经济有效增长） vs 紧缩（避免贫富差距扩大）",
+          "id": "c_mshjl5ps_2",
+          "type": "header",
+          "x": 40,
+          "y": 40,
+          "w": 320,
+          "h": 56,
+          "color": "#3a3a3f",
+          "z": 1,
+          "text": "👋 欢迎使用 MindBoard",
           "comments": []
         },
         {
-          "id": "c_mser0o3u_a",
+          "id": "c_mshjl5ps_3",
           "type": "note",
-          "x": 1385.7631896627058,
-          "y": -49.6650908083345,
-          "w": 331.52637932541177,
-          "h": 121.5263793254118,
-          "color": "#c9d9ff",
-          "z": 133,
-          "text": "<h2>货币政策</h2>• 调节汇率，利率 &amp; 流动性<br>• 宽松（刺激经济增长） vs 紧缩（预防经济过热）",
+          "x": 40,
+          "y": 130,
+          "w": 220,
+          "h": 150,
+          "color": "#2b2b30",
+          "z": 2,
+          "text": "这是一张便签卡片。\n拖动顶部色条移动位置，点击色点可换颜色。",
           "comments": []
         },
         {
-          "id": "c_mser0o3u_d",
+          "id": "c_mshjl5ps_4",
           "type": "note",
-          "x": 663.7571070685524,
-          "y": 62.31910911243776,
-          "w": 160,
-          "h": 151.80298611381235,
-          "color": "#f2f2f2",
-          "z": 151,
-          "text": "<h1>2. 外在因素</h1><b>• 国债/信用</b><br><b>• 贸易/联盟</b><br><b>• 国际货币流</b>",
+          "x": 380,
+          "y": 130,
+          "w": 220,
+          "h": 150,
+          "color": "#1f2d40",
+          "z": 3,
+          "text": "拖动卡片边缘的橙色圆点，可以把便签连成思维导图。",
           "comments": []
         },
         {
-          "id": "c_mser0o3u_e",
-          "type": "note",
-          "x": 665.0844691426439,
-          "y": 307.96383843981414,
-          "w": 172.2036161560186,
-          "h": 154.841428209043,
-          "color": "#ffc9d6",
-          "z": 160,
-          "text": "<h1>3. 突发性因素</h1><b>• 天灾<br>• 战争/恐怖主义<br>• 疫情</b>",
+          "id": "c_mshjl5ps_8",
+          "type": "todo",
+          "x": 40,
+          "y": 330,
+          "w": 240,
+          "h": 220,
+          "color": "#3d2530",
+          "z": 4,
+          "title": "试试待办清单",
+          "items": [
+            {
+              "id": "t_mshjl5ps_6",
+              "text": "勾选我试试",
+              "done": false
+            },
+            {
+              "id": "t_mshjl5ps_7",
+              "text": "在下方输入框添加新事项",
+              "done": false
+            }
+          ],
           "comments": []
         },
         {
-          "id": "c_mser0o3u_j",
-          "type": "note",
-          "x": 1068.096185762209,
-          "y": 1078.7307905081393,
-          "w": 360.49402371364334,
-          "h": 137.55748418823637,
-          "color": "#ffc9d6",
-          "z": 260,
-          "text": "<h2>国内生产总值 GDP</h2><b>= 消费 Consumer + 投资 Investment + 政府支出 Government Spending + 净出口 Export (X-M</b>)",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3v_m",
-          "type": "note",
-          "x": 1432.1917466403775,
-          "y": 521.7857215111643,
-          "w": 271.4991462448062,
-          "h": 134.31217984180233,
-          "color": "#fff6b3",
-          "z": 196,
-          "text": "<h3><b>国际贸易 International Trade</b></h3>• 产品，服务，资源 &amp; 技术<br>• \"齿轮的输入端\" (the gear's input end)",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3v_n",
-          "type": "note",
-          "x": 1767.7911909308882,
-          "y": 284.49021776522596,
-          "w": 271.4991462448062,
-          "h": 167.37222529562013,
-          "color": "#ffd9b3",
-          "z": 336,
-          "text": "<h3>劳动力与消费力 Labor &amp; Consumption Power</h3>• 就业机会多、发展项目多。内需引擎 (many jobs and projects; the engine of domestic demand)",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3v_o",
-          "type": "note",
-          "x": 2099.8355928439923,
-          "y": 521.7768193744333,
-          "w": 281.5608992090116,
-          "h": 145.81132608660852,
-          "color": "#ffc9d6",
-          "z": 209,
-          "text": "<h3>资产货币化 Asset Monetization</h3>• 资产 → 可流通的钱。整台机器的放大器 (assets become liquid money; the amplifier of the whole machine)",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3v_p",
-          "type": "note",
-          "x": 2100.6787205200617,
-          "y": 771.9524342622694,
-          "w": 291.62265217321703,
-          "h": 144.37393280600773,
-          "color": "#e3c9ff",
-          "z": 208,
-          "text": "<h3>固定资产投资 Investment in Fixed Assets</h3>• 稳定、低收益，慢齿轮 (stable, low yield, the slow gear)",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3v_q",
-          "type": "note",
-          "x": 1767.7911909308882,
-          "y": 985.5142333031397,
-          "w": 278.6861126478101,
-          "h": 183.18355138222864,
-          "color": "#c9d9ff",
-          "z": 212,
-          "text": "<h3>金融资产投资 Financial Asset Investment</h3>• 高收益，快齿轮 (high yield, the fast gear)<br>• \"快齿轮先转、慢齿轮后转\" (the fast gear turns first, the slow gear follows)",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3v_r",
-          "type": "note",
-          "x": 1428.967002264441,
-          "y": 771.9524342622694,
-          "w": 326.1200909076356,
-          "h": 160.18525889261628,
-          "color": "#c6f0d4",
-          "z": 214,
-          "text": "<h3>国际货币流 International Currency Flow</h3>• 追求安全、高收益率 (pursuing safety and high yield)<br>• \"齿轮的输出/输入闸门\" (the gear's output/input gate)",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3v_t",
-          "type": "note",
-          "x": 1045.76010077498,
-          "y": 1592.346612639806,
-          "w": 160,
+          "id": "c_mshjl5ps_9",
+          "type": "boardlink",
+          "x": 380,
+          "y": 330,
+          "w": 220,
           "h": 100,
-          "color": "#ffd9d9",
-          "z": 269,
-          "text": "<h1 style=\"text-align: center;\">Central Bank</h1>",
+          "color": "#2b2b30",
+          "z": 5,
+          "targetBoardId": null,
           "comments": []
         },
         {
-          "id": "c_mser0o3v_u",
+          "id": "c_mshjl5pt_a",
           "type": "note",
-          "x": 785.7601007749801,
-          "y": 1752.346612639806,
-          "w": 185.62606719399227,
-          "h": 100,
-          "color": "#ffd9d9",
-          "z": 271,
-          "text": "<h2 style=\"text-align: center;\">Financial Institution</h2>",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3v_v",
-          "type": "note",
-          "x": 1433.688102748449,
-          "y": 1730.7857134307944,
-          "w": 160,
-          "h": 100,
-          "color": "#fff6b3",
-          "z": 309,
-          "text": "<h2 style=\"text-align: center;\">Government</h2>",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3v_w",
-          "type": "note",
-          "x": 651.1391561121505,
-          "y": 1969.4718260786044,
-          "w": 172.6895276685853,
-          "h": 100,
-          "color": "#d6ecff",
-          "z": 305,
-          "text": "<h2 style=\"text-align: center;\">Business / Firm (1)</h2>",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3v_x",
-          "type": "note",
-          "x": 936.1476936640885,
-          "y": 1975.2213992010077,
-          "w": 182.7512806327907,
-          "h": 100,
-          "color": "#d6ecff",
-          "z": 316,
-          "text": "<h2 style=\"text-align: center;\">Business / Firm (2)</h2>",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3v_y",
-          "type": "note",
-          "x": 1162.3571402923828,
-          "y": 2198.0961857622087,
-          "w": 160,
-          "h": 100,
-          "color": "#f0f0f0",
-          "z": 298,
-          "text": "<h2 style=\"text-align: center;\">Households</h2>",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3v_z",
-          "type": "note",
-          "x": 737.9897549376743,
-          "y": 2203.8457588846118,
-          "w": 169.81474110738375,
-          "h": 100,
-          "color": "#c6f0d4",
-          "z": 300,
-          "text": "<h2 style=\"text-align: center;\">Rest of World / Environment</h2>",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3v_12",
-          "type": "note",
-          "x": 1890.3875928891084,
-          "y": 1494.410073114399,
-          "w": 265.50256126558145,
-          "h": 264.06516798498063,
-          "color": "#fff6b3",
-          "z": 238,
-          "text": "<h3>• GDP GROWTH<br>• INFLATION RATE<br>• UNEMPLOYMENT RATE<br>• WAGE GROWTH<br>• CONSUMER CONFIDENCE<br>• PURCHASING MANAGER INDEX<br>• RETAIL SALES<br>• BUSINESS CONFIDENCE<br>• POPULATION</h3>",
-          "comments": []
-        },
-        {
-          "id": "c_mser0o3v_13",
-          "type": "note",
-          "x": 1885.413205544923,
-          "y": 1212.6809901166473,
-          "w": 268.37734782678297,
-          "h": 252.56602174017445,
-          "color": "#ffc9d6",
-          "z": 236,
-          "text": "<b>• 10YR BOND YIELD%<br>• DEBT TO GDP<br>• CURRENT ACCOUNT<br>• BALANCE OF TRADE<br>• EXPORT (PARTNERS &amp; PRODUCTS)<br>• IMPORT (PARTNERS &amp; PRODUCTS)<br>• TAX RATE<br>• INTEREST RATE<br>• CENTRAL BANK BALANCE SHEET</b>",
-          "comments": []
-        },
-        {
-          "id": "c_msg4sgyj_1",
-          "type": "note",
-          "x": 660.9070193048628,
-          "y": -173.68454286082886,
-          "w": 160,
-          "h": 171.6953176106997,
-          "color": "#fff6b3",
-          "z": 109,
-          "text": "<p style=\"text-align: left;\"><h1>1. 内在因素</h1><b>• 政策<br>• 经济结构<br>• 人口结构</b></p>",
-          "comments": []
-        },
-        {
-          "id": "c_msg6t3z1_4",
-          "type": "note",
-          "x": 1032.3672297660314,
-          "y": -137.628893947184,
-          "w": 209.15234119465015,
-          "h": 100,
-          "color": "#fff6b3",
-          "z": 123,
-          "text": "<h2 style=\"text-align: center;\">货币政策 vs 财政政策</h2>",
-          "comments": []
-        },
-        {
-          "id": "c_msg76nwn_8",
-          "type": "note",
-          "x": 222.4048541276244,
-          "y": 82.2905153584155,
-          "w": 214.57617059732507,
-          "h": 100,
-          "color": "#ffffff",
-          "z": 159,
-          "text": "<span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">经济齿轮转动的关键</span>",
-          "comments": []
-        },
-        {
-          "id": "c_msg77rlw_9",
-          "type": "note",
-          "x": 19.44280401936453,
-          "y": 534.5194481862864,
-          "w": 160,
-          "h": 100,
-          "color": "#ffffff",
-          "z": 143,
-          "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">基本面框架</span></div>",
-          "comments": []
-        },
-        {
-          "id": "c_msg78dyy_b",
-          "type": "note",
-          "x": 812.7183068022549,
-          "y": 780.7021798357032,
-          "w": 179.32127947993806,
-          "h": 100,
-          "color": "#e6d9ff",
-          "z": 259,
-          "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">GDP资金循环</span></div>",
-          "comments": []
-        },
-        {
-          "id": "c_msg7bo0c_k",
-          "type": "note",
-          "x": 364.86964131830086,
-          "y": 531.7272282193687,
-          "w": 211.8642558959876,
-          "h": 100,
-          "color": "#ffffff",
-          "z": 177,
-          "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">全球经济运行模式</span></div>",
-          "comments": []
-        },
-        {
-          "id": "c_msg7c4bg_l",
-          "type": "note",
-          "x": 784.8091877135705,
-          "y": 529.9640385566628,
-          "w": 342.03616156018586,
-          "h": 100,
-          "color": "#fff6b3",
-          "z": 195,
-          "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; text-align: start;\">🔁 六大齿轮 (Six Major Gears)</span></div>",
-          "comments": []
-        },
-        {
-          "id": "c_msg7scfa_s",
-          "type": "note",
-          "x": 1416.5744831762413,
-          "y": 1417.8317458892839,
-          "w": 244.43568577021315,
-          "h": 100,
-          "color": "#e6d9ff",
-          "z": 240,
-          "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">📋 经济体的体检报告</span></div>",
-          "comments": []
-        },
-        {
-          "id": "c_msg7z9kc_x",
-          "type": "note",
-          "x": 80.64944120624784,
-          "y": 810.4517529581063,
-          "w": 216.69350477555818,
-          "h": 100,
-          "color": "#ffffff",
-          "z": 254,
-          "text": "<h1 style=\"text-align: center; \"><span style=\"text-align: start;\">资金撤离和流入方向</span></h1>",
-          "comments": []
-        },
-        {
-          "id": "c_msg819g8_z",
-          "type": "note",
-          "x": 917.5261527649665,
-          "y": 1415.2252484768721,
-          "w": 365.17672134067817,
-          "h": 100,
-          "color": "#ffffff",
-          "z": 267,
-          "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">💰 GDP 资金循环 - Circular Flow</span></div>",
+          "x": 620,
+          "y": 330,
+          "w": 220,
+          "h": 150,
+          "color": "#2e2540",
+          "z": 6,
+          "text": "左侧「+ 新建看板」可选择：\n思维导图 / 创作企划 / 视觉记忆 / 旅行计划",
           "comments": []
         }
       ],
       "connectors": [
         {
-          "id": "n_mser0o3v_1g",
-          "from": "c_mser0o3v_m",
-          "to": "c_mser0o3v_n",
-          "label": ""
-        },
-        {
-          "id": "n_mser0o3v_1h",
-          "from": "c_mser0o3v_n",
-          "to": "c_mser0o3v_o",
-          "label": ""
-        },
-        {
-          "id": "n_mser0o3v_1i",
-          "from": "c_mser0o3v_o",
-          "to": "c_mser0o3v_p",
-          "label": ""
-        },
-        {
-          "id": "n_mser0o3v_1j",
-          "from": "c_mser0o3v_p",
-          "to": "c_mser0o3v_q",
-          "label": ""
-        },
-        {
-          "id": "n_mser0o3v_1k",
-          "from": "c_mser0o3v_q",
-          "to": "c_mser0o3v_r",
-          "label": ""
-        },
-        {
-          "id": "n_mser0o3v_1l",
-          "from": "c_mser0o3v_r",
-          "to": "c_mser0o3v_m",
-          "label": ""
-        },
-        {
-          "id": "n_mser0o3v_1o",
-          "from": "c_mser0o3v_t",
-          "to": "c_mser0o3v_u",
-          "label": ""
-        },
-        {
-          "id": "n_mser0o3v_1p",
-          "from": "c_mser0o3v_t",
-          "to": "c_mser0o3v_v",
-          "label": ""
-        },
-        {
-          "id": "n_mser0o3v_1q",
-          "from": "c_mser0o3v_u",
-          "to": "c_mser0o3v_w",
-          "label": "I - Investment"
-        },
-        {
-          "id": "n_mser0o3v_1r",
-          "from": "c_mser0o3v_u",
-          "to": "c_mser0o3v_x",
-          "label": "I - Investment"
-        },
-        {
-          "id": "n_mser0o3v_1s",
-          "from": "c_mser0o3v_u",
-          "to": "c_mser0o3v_v",
-          "label": "Taxes"
-        },
-        {
-          "id": "n_mser0o3v_1t",
-          "from": "c_mser0o3v_v",
-          "to": "c_mser0o3v_w",
-          "label": "G - Government Spending"
-        },
-        {
-          "id": "n_mser0o3v_1w",
-          "from": "c_mser0o3v_w",
-          "to": "c_mser0o3v_x",
-          "label": ""
-        },
-        {
-          "id": "n_mser0o3v_1x",
-          "from": "c_mser0o3v_x",
-          "to": "c_mser0o3v_y",
-          "label": "Income"
-        },
-        {
-          "id": "n_mser0o3v_1y",
-          "from": "c_mser0o3v_y",
-          "to": "c_mser0o3v_v",
-          "label": "Taxes"
-        },
-        {
-          "id": "n_mser0o3v_1z",
-          "from": "c_mser0o3v_y",
-          "to": "c_mser0o3v_x",
-          "label": "C = Consumer Spending"
-        },
-        {
-          "id": "n_mser0o3v_20",
-          "from": "c_mser0o3v_y",
-          "to": "c_mser0o3v_z",
-          "label": ""
-        },
-        {
-          "id": "n_mser0o3v_21",
-          "from": "c_mser0o3v_z",
-          "to": "c_mser0o3v_w",
-          "label": "S = Savings"
-        },
-        {
-          "id": "n_mser0o3v_22",
-          "from": "c_mser0o3v_y",
-          "to": "c_mser0o3v_w",
-          "label": "S = Savings"
-        },
-        {
-          "id": "n_msg6tv8k_5",
-          "from": "c_msg4sgyj_1",
-          "to": "c_msg6t3z1_4",
-          "label": ""
-        },
-        {
-          "id": "n_msg6twhl_6",
-          "from": "c_msg6t3z1_4",
-          "to": "c_mser0o3u_9",
-          "label": ""
-        },
-        {
-          "id": "n_msg6txr0_7",
-          "from": "c_msg6t3z1_4",
-          "to": "c_mser0o3u_a",
-          "label": ""
-        },
-        {
-          "id": "n_msg78wqm_d",
-          "from": "c_msg78dyy_b",
-          "to": "c_mser0o3u_j",
-          "label": ""
-        },
-        {
-          "id": "n_msg78ylp_e",
-          "from": "c_msg77rlw_9",
-          "to": "c_msg76nwn_8",
-          "label": ""
-        },
-        {
-          "id": "n_msg790zb_f",
-          "from": "c_msg76nwn_8",
-          "to": "c_msg4sgyj_1",
-          "label": ""
-        },
-        {
-          "id": "n_msg7927a_g",
-          "from": "c_msg76nwn_8",
-          "to": "c_mser0o3u_d",
-          "label": ""
-        },
-        {
-          "id": "n_msg793hq_h",
-          "from": "c_msg76nwn_8",
-          "to": "c_mser0o3u_e",
-          "label": ""
-        },
-        {
-          "id": "n_msg7cbqs_m",
-          "from": "c_msg77rlw_9",
-          "to": "c_msg7bo0c_k",
-          "label": ""
-        },
-        {
-          "id": "n_msg7ci29_n",
-          "from": "c_msg7bo0c_k",
-          "to": "c_msg7c4bg_l",
-          "label": ""
-        },
-        {
-          "id": "n_msg7ctaw_o",
-          "from": "c_msg7c4bg_l",
-          "to": "c_mser0o3v_m",
-          "label": ""
-        },
-        {
-          "id": "n_msg7sshh_t",
-          "from": "c_mser0o3u_j",
-          "to": "c_msg7scfa_s",
-          "label": ""
-        },
-        {
-          "id": "n_msg7wp9n_v",
-          "from": "c_msg7scfa_s",
-          "to": "c_mser0o3v_13",
-          "label": ""
-        },
-        {
-          "id": "n_msg7z34v_w",
-          "from": "c_msg7bo0c_k",
-          "to": "c_msg78dyy_b",
-          "label": ""
-        },
-        {
-          "id": "n_msg80syu_y",
-          "from": "c_msg77rlw_9",
-          "to": "c_msg7z9kc_x",
-          "label": ""
-        },
-        {
-          "id": "n_msg81ql5_10",
-          "from": "c_mser0o3u_j",
-          "to": "c_msg819g8_z",
-          "label": ""
-        },
-        {
-          "id": "n_mshe3arn_1",
-          "from": "c_mser0o3v_v",
-          "to": "c_mser0o3v_x",
-          "label": "G - Government Spending \nTaxes",
-          "bend": -41.65096119897781,
-          "startArrow": true
-        },
-        {
-          "id": "n_mshf31x5_2",
-          "from": "c_msg7scfa_s",
-          "to": "c_mser0o3v_12",
-          "label": ""
+          "id": "n_mshjl5ps_5",
+          "from": "c_mshjl5ps_3",
+          "to": "c_mshjl5ps_4",
+          "label": "像这样"
         }
       ],
       "trash": [
         {
           "card": {
-            "id": "c_mshg7rab_1",
+            "id": "c_mshjlcox_b",
             "type": "note",
-            "x": 1192.7061398388128,
-            "y": 1862.1126395777355,
+            "x": 145.34868205076273,
+            "y": 324.7984470529653,
             "w": 220,
             "h": 150,
             "color": "#ffffff",
-            "z": 335,
+            "z": 10,
             "text": "",
             "comments": []
           },
-          "deletedAt": 1786016678582
-        },
-        {
-          "card": {
-            "id": "c_mshg0qsp_1",
-            "type": "note",
-            "x": 1240.1401180986384,
-            "y": 1859.2378530165342,
-            "w": 220,
-            "h": 150,
-            "color": "#ffffff",
-            "z": 332,
-            "text": "",
-            "comments": []
-          },
-          "deletedAt": 1786016352574
-        },
-        {
-          "card": {
-            "id": "c_mshg09tr_4",
-            "type": "note",
-            "x": 1146.709554859588,
-            "y": 1859.2378530165342,
-            "w": 220,
-            "h": 150,
-            "color": "#ffffff",
-            "z": 329,
-            "text": "",
-            "comments": []
-          },
-          "deletedAt": 1786016329495
-        },
-        {
-          "card": {
-            "id": "c_mshg07fk_3",
-            "type": "note",
-            "x": 1179.7696003134058,
-            "y": 1827.615200843317,
-            "w": 220,
-            "h": 150,
-            "color": "#ffffff",
-            "z": 326,
-            "text": "",
-            "comments": []
-          },
-          "deletedAt": 1786016325363
+          "deletedAt": 1786022352341
         }
       ],
-      "vx": 31.638688576310642,
-      "vy": -40.1993626843925,
-      "vzoom": 0.7643439729915774,
-      "maxZ": 337,
-      "updatedAt": 1785853422858
+      "vx": 0,
+      "vy": 0,
+      "vzoom": 1,
+      "maxZ": 10,
+      "updatedAt": 1786022340399
     }
   },
   "order": [
-    "b_mser0o3u_8"
+    "b_mshjl5pq_1"
   ],
-  "activeId": "b_mser0o3u_8",
-  "syncedAt": 1786022830382
+  "activeId": "b_mshjl5pq_1",
+  "syncedAt": 1786022901666
 }
