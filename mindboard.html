@@ -143,9 +143,12 @@
     background-image:radial-gradient(var(--canvas-dot) 1.3px, transparent 1.3px);
     cursor:default;touch-action:none;
   }
-  /* 卡片内部保留系统默认触摸行为(文字选择/光标定位等)，只有空白画布区域接管手势 */
-  .canvas-viewport .card{touch-action:auto;}
+  /* 单指触摸在卡片上也交给 JS 手势逻辑接管(平移画布/长按拖动卡片，跟 Milanote
+     手机版一致)，只有卡片里真正可编辑的文字区域保留系统原生的光标定位/选字/滚动。 */
+  .canvas-viewport .card{touch-action:none;}
+  .canvas-viewport .card .card-body{touch-action:auto;}
   .canvas-viewport.panning{cursor:grabbing;}
+  .card.touch-lifted{box-shadow:0 10px 26px rgba(0,0,0,.35),0 2px 8px rgba(0,0,0,.2);transform:scale(1.02);transition:box-shadow .15s,transform .15s;}
   .canvas-content{position:absolute;top:0;left:0;width:1px;height:1px;transform-origin:0 0;}
   .connectors-svg{position:absolute;top:0;left:0;width:1px;height:1px;overflow:visible;pointer-events:none;z-index:0;}
   .connectors-svg path.conn-line{fill:none;stroke-width:2.2;cursor:pointer;pointer-events:stroke;}
@@ -4057,20 +4060,52 @@ function wireGlobalEvents(){
     }
   }, {passive:false});
 
-  /* ---- 手机/平板触摸：双指缩放 + 单指平移画布 ----
-     单点触摸落在卡片/菜单/工具条/滚动条上时完全不拦截，交给浏览器自带的
-     触摸转鼠标事件兼容层去处理（拖动卡片、点按钮等原有交互不受影响）。
-     只在"空白画布"上接管：单指拖动 = 平移，双指开合 = 缩放（缩放中心跟着
-     两指中点走），逻辑跟已有的 Ctrl+滚轮缩放 / 中键平移完全对应。 */
-  var touchGesture = { mode:null, startDist:0, startZoom:1, localX:0, localY:0, moved:0 };
+  /* ---- 手机/平板触摸：双指缩放 + 单指平移画布/长按拖动卡片 ----
+     跟真实 Milanote 手机版一致（官方帮助文档："Tap and hold an item, then
+     drag it to a new position on the board"）：
+     - 双指开合 = 缩放（缩放中心跟着两指中点走），不管两根手指压在空白画布还是
+       卡片上都当缩放意图，卡片摆得比较满的看板也不会被"抢走"手势。
+     - 单指触摸空白画布 = 立刻平移；单指触摸在卡片上先进入"待定"状态——
+       手指没怎么移动就抬起 = 当作一次点按，交给原生触摸->点击兼容事件去处理
+       选中/进入编辑；手指没怎么移动、按住不放超过长按阈值 = "拿起"这张卡片进入
+       拖动；手指在长按阈值触发前就已经明显移动 = 当作要平移画布（不是想搬卡片），
+       跟空白画布单指拖动完全一样。
+     - 卡片里真正可编辑的文字区域（.card-body）、按钮、输入框、缩放/连线手柄、
+       菜单、工具条、滚动条依然完全交给原生触摸处理，不被上面这套手势拦截。 */
+  var touchGesture = { mode:null, startDist:0, startZoom:1, localX:0, localY:0, moved:0,
+    startTouch:null, startTouchX:0, startTouchY:0, pendingCard:null, longPressTimer:null };
+  var TOUCH_LONGPRESS_MS = 450, TOUCH_MOVE_THRESHOLD = 10;
   function touchDist(t1,t2){ return Math.hypot(t1.clientX-t2.clientX, t1.clientY-t2.clientY); }
   function touchMid(t1,t2){ return { clientX:(t1.clientX+t2.clientX)/2, clientY:(t1.clientY+t2.clientY)/2 }; }
+  function clearTouchLongPress(){
+    if(touchGesture.longPressTimer){ clearTimeout(touchGesture.longPressTimer); touchGesture.longPressTimer=null; }
+  }
+  function touchLongPressFire(){
+    var pc = touchGesture.pendingCard;
+    if(!pc || touchGesture.mode!=='pending') return;
+    if(!(state.selectedCards.has(pc.card.id) && state.selectedCards.size>1)) selectCardOnly(pc.card.id);
+    startCardDrag(pc.card, pc.el, touchGesture.startTouch);
+    if(state.drag){
+      touchGesture.mode = 'dragcard';
+      pc.el.classList.add('touch-lifted');
+      if(navigator.vibrate) navigator.vibrate(10);
+    } else {
+      // 卡片被锁定等原因拖不动，退化成平移画布
+      touchGesture.mode = 'pan';
+      touchGesture.moved = 0;
+      startPan(touchGesture.startTouch);
+    }
+  }
   viewport.addEventListener('touchstart', function(e){
     var b = activeBoard();
     // 双指手势永远当画布缩放处理——不管两根手指下面具体压着的是空白画布还是
     // 某张卡片，两指同时触摸在这个 app 里没有别的含义，直接当缩放意图，
     // 这样卡片摆得比较满的看板也能正常双指缩放，不会被卡片"抢走"手势。
     if(e.touches.length>=2){
+      clearTouchLongPress();
+      if(touchGesture.mode==='dragcard' && state.drag){ endCardDrag(); }
+      if(touchGesture.pendingCard){ touchGesture.pendingCard.el.classList.remove('touch-lifted'); touchGesture.pendingCard=null; }
+      if(touchGesture.mode==='pan' && state.pan){ endPan(); }
       e.preventDefault();
       touchGesture.mode = 'pinch';
       touchGesture.startDist = touchDist(e.touches[0], e.touches[1]) || 1;
@@ -4081,14 +4116,25 @@ function wireGlobalEvents(){
       touchGesture.localY = (mid.clientY - vp.top - b.vy)/b.vzoom;
       return;
     }
-    // 单指触摸：落在卡片/菜单/工具条/滚动条上时不拦截，交给原生触摸->鼠标兼容
-    // 事件去处理拖动卡片、点按钮、编辑文字等已有交互
-    if(e.target.closest('.card, #contextMenu, #richToolbar, #hScroll, #vScroll')) return;
-    if(e.touches.length===1){
-      touchGesture.mode = 'pan';
-      touchGesture.moved = 0;
-      startPan(e.touches[0]);
+    if(e.touches.length!==1) return;
+    // 单指触摸：卡片里真正可编辑/可交互的部分（文字内容、按钮、输入框、缩放和
+    // 连线手柄、菜单、工具条、滚动条）不拦截，交给原生触摸事件处理
+    if(e.target.closest('#contextMenu, #richToolbar, #hScroll, #vScroll, .resize-handle, .connect-handle, .card-body, input, textarea, [contenteditable="true"], .palette-pop, .comment-btn, .dup-btn, .del-btn, .card-color-dot')) return;
+    touchGesture.startTouch = e.touches[0];
+    touchGesture.startTouchX = e.touches[0].clientX;
+    touchGesture.startTouchY = e.touches[0].clientY;
+    var cardEl = e.target.closest('.card');
+    var cardData = cardEl && b.cards.find(function(c){ return c.id===cardEl.dataset.id; });
+    if(cardData){
+      // 落在卡片上：先不 preventDefault，等分出是点按/长按拖动/平移三者之一再决定
+      touchGesture.mode = 'pending';
+      touchGesture.pendingCard = { card:cardData, el:cardEl };
+      touchGesture.longPressTimer = setTimeout(touchLongPressFire, TOUCH_LONGPRESS_MS);
+      return;
     }
+    touchGesture.mode = 'pan';
+    touchGesture.moved = 0;
+    startPan(e.touches[0]);
   }, {passive:false});
   viewport.addEventListener('touchmove', function(e){
     if(touchGesture.mode==='pinch' && e.touches.length>=2){
@@ -4103,26 +4149,57 @@ function wireGlobalEvents(){
       b.vy = cy - newZoom*touchGesture.localY;
       b.vzoom = newZoom;
       applyViewportTransform();
+    } else if(touchGesture.mode==='pending' && e.touches.length===1){
+      var t = e.touches[0];
+      var dx0 = t.clientX-touchGesture.startTouchX, dy0 = t.clientY-touchGesture.startTouchY;
+      if(Math.hypot(dx0,dy0) > TOUCH_MOVE_THRESHOLD){
+        // 长按阈值触发前手指就已经明显移动了 = 想平移画布，不是想搬这张卡片
+        clearTouchLongPress();
+        touchGesture.pendingCard = null;
+        touchGesture.mode = 'pan';
+        touchGesture.moved = 0;
+        startPan(touchGesture.startTouch);
+        e.preventDefault();
+        onPanMove(t);
+        touchGesture.moved = Math.hypot(t.clientX-touchGesture.startTouchX, t.clientY-touchGesture.startTouchY);
+      }
     } else if(touchGesture.mode==='pan' && e.touches.length===1 && state.pan){
       e.preventDefault();
       var dx = e.touches[0].clientX - state.pan.startX, dy = e.touches[0].clientY - state.pan.startY;
       touchGesture.moved = Math.hypot(dx, dy);
       onPanMove(e.touches[0]);
+    } else if(touchGesture.mode==='dragcard' && e.touches.length===1 && state.drag){
+      e.preventDefault();
+      onCardDragMove(e.touches[0]);
     }
   }, {passive:false});
   viewport.addEventListener('touchend', function(e){
-    if(touchGesture.mode==='pan'){
+    if(touchGesture.mode==='pending'){
+      clearTouchLongPress(); // 长按触发前就抬起手指 = 一次点按，交给原生兼容点击去处理
+    } else if(touchGesture.mode==='pan'){
       if(state.pan && touchGesture.moved<6) clearSelection(); // 基本没动 = 当作点击空白处，取消选中
       endPan();
+    } else if(touchGesture.mode==='dragcard'){
+      endCardDrag();
     } else if(touchGesture.mode==='pinch'){
       scheduleSave();
     }
+    if(touchGesture.pendingCard){ touchGesture.pendingCard.el.classList.remove('touch-lifted'); touchGesture.pendingCard=null; }
     if(e.touches.length===0) touchGesture.mode = null;
     else if(e.touches.length===1){
       touchGesture.mode = 'pan';
       touchGesture.moved = 0;
       startPan(e.touches[0]);
     }
+  });
+  // 手势被系统中断（来电、通知栏下拉等）时也要把 pending/拖动/长按计时器清干净，
+  // 不然会卡在一个既没有手指也退不出的状态
+  viewport.addEventListener('touchcancel', function(e){
+    clearTouchLongPress();
+    if(touchGesture.mode==='dragcard' && state.drag) endCardDrag();
+    if(touchGesture.mode==='pan' && state.pan) endPan();
+    if(touchGesture.pendingCard){ touchGesture.pendingCard.el.classList.remove('touch-lifted'); touchGesture.pendingCard=null; }
+    touchGesture.mode = null;
   });
 
   /* iOS Safari 对双指捏合还会额外触发一套 gesturestart/change/end 事件，走的是
