@@ -141,8 +141,10 @@
   .canvas-viewport{
     flex:1;position:relative;overflow:hidden;background-color:var(--canvas-bg);
     background-image:radial-gradient(var(--canvas-dot) 1.3px, transparent 1.3px);
-    cursor:default;
+    cursor:default;touch-action:none;
   }
+  /* 卡片内部保留系统默认触摸行为(文字选择/光标定位等)，只有空白画布区域接管手势 */
+  .canvas-viewport .card{touch-action:auto;}
   .canvas-viewport.panning{cursor:grabbing;}
   .canvas-content{position:absolute;top:0;left:0;width:1px;height:1px;transform-origin:0 0;}
   .connectors-svg{position:absolute;top:0;left:0;width:1px;height:1px;overflow:visible;pointer-events:none;z-index:0;}
@@ -684,6 +686,15 @@
   .unsorted-item-icon{font-size:14px;flex-shrink:0;}
   .unsorted-item-text{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .unsorted-item-back{flex-shrink:0;font-size:10px;color:var(--text-faint);}
+
+  /* ---------- 窄屏(手机)适配：把画布空间尽量让出来 ---------- */
+  @media (max-width: 680px){
+    .elrail{ width:52px; }
+    .el-icon{ font-size:19px; }
+    .el-label{ font-size:8px; }
+    .el-btn{ padding:8px 2px; margin:0 4px 1px; }
+    .sidebar{ width:200px; }
+  }
 </style>
 </head>
 <body>
@@ -4046,6 +4057,74 @@ function wireGlobalEvents(){
     }
   }, {passive:false});
 
+  /* ---- 手机/平板触摸：双指缩放 + 单指平移画布 ----
+     单点触摸落在卡片/菜单/工具条/滚动条上时完全不拦截，交给浏览器自带的
+     触摸转鼠标事件兼容层去处理（拖动卡片、点按钮等原有交互不受影响）。
+     只在"空白画布"上接管：单指拖动 = 平移，双指开合 = 缩放（缩放中心跟着
+     两指中点走），逻辑跟已有的 Ctrl+滚轮缩放 / 中键平移完全对应。 */
+  var touchGesture = { mode:null, startDist:0, startZoom:1, localX:0, localY:0, moved:0 };
+  function touchDist(t1,t2){ return Math.hypot(t1.clientX-t2.clientX, t1.clientY-t2.clientY); }
+  function touchMid(t1,t2){ return { clientX:(t1.clientX+t2.clientX)/2, clientY:(t1.clientY+t2.clientY)/2 }; }
+  viewport.addEventListener('touchstart', function(e){
+    var b = activeBoard();
+    // 双指手势永远当画布缩放处理——不管两根手指下面具体压着的是空白画布还是
+    // 某张卡片，两指同时触摸在这个 app 里没有别的含义，直接当缩放意图，
+    // 这样卡片摆得比较满的看板也能正常双指缩放，不会被卡片"抢走"手势。
+    if(e.touches.length>=2){
+      e.preventDefault();
+      touchGesture.mode = 'pinch';
+      touchGesture.startDist = touchDist(e.touches[0], e.touches[1]) || 1;
+      touchGesture.startZoom = b.vzoom;
+      var mid = touchMid(e.touches[0], e.touches[1]);
+      var vp = viewport.getBoundingClientRect();
+      touchGesture.localX = (mid.clientX - vp.left - b.vx)/b.vzoom;
+      touchGesture.localY = (mid.clientY - vp.top - b.vy)/b.vzoom;
+      return;
+    }
+    // 单指触摸：落在卡片/菜单/工具条/滚动条上时不拦截，交给原生触摸->鼠标兼容
+    // 事件去处理拖动卡片、点按钮、编辑文字等已有交互
+    if(e.target.closest('.card, #contextMenu, #richToolbar, #hScroll, #vScroll')) return;
+    if(e.touches.length===1){
+      touchGesture.mode = 'pan';
+      touchGesture.moved = 0;
+      startPan(e.touches[0]);
+    }
+  }, {passive:false});
+  viewport.addEventListener('touchmove', function(e){
+    if(touchGesture.mode==='pinch' && e.touches.length>=2){
+      e.preventDefault();
+      var b = activeBoard();
+      var dist = touchDist(e.touches[0], e.touches[1]) || 1;
+      var newZoom = clamp(touchGesture.startZoom * (dist/touchGesture.startDist), 0.2, 3);
+      var mid = touchMid(e.touches[0], e.touches[1]);
+      var vp = viewport.getBoundingClientRect();
+      var cx = mid.clientX - vp.left, cy = mid.clientY - vp.top;
+      b.vx = cx - newZoom*touchGesture.localX;
+      b.vy = cy - newZoom*touchGesture.localY;
+      b.vzoom = newZoom;
+      applyViewportTransform();
+    } else if(touchGesture.mode==='pan' && e.touches.length===1 && state.pan){
+      e.preventDefault();
+      var dx = e.touches[0].clientX - state.pan.startX, dy = e.touches[0].clientY - state.pan.startY;
+      touchGesture.moved = Math.hypot(dx, dy);
+      onPanMove(e.touches[0]);
+    }
+  }, {passive:false});
+  viewport.addEventListener('touchend', function(e){
+    if(touchGesture.mode==='pan'){
+      if(state.pan && touchGesture.moved<6) clearSelection(); // 基本没动 = 当作点击空白处，取消选中
+      endPan();
+    } else if(touchGesture.mode==='pinch'){
+      scheduleSave();
+    }
+    if(e.touches.length===0) touchGesture.mode = null;
+    else if(e.touches.length===1){
+      touchGesture.mode = 'pan';
+      touchGesture.moved = 0;
+      startPan(e.touches[0]);
+    }
+  });
+
   viewport.addEventListener('dragover', function(e){ e.preventDefault(); viewport.classList.add('drag-over'); });
   viewport.addEventListener('dragleave', function(e){ if(e.target===viewport) viewport.classList.remove('drag-over'); });
   viewport.addEventListener('drop', function(e){
@@ -4337,7 +4416,11 @@ function wireGlobalEvents(){
   });
 
   document.getElementById('sidebarToggle').addEventListener('click', toggleSidebar);
-  if(localStorage.getItem('mindboard_sidebar_collapsed')==='1'){
+  var sidebarPref = localStorage.getItem('mindboard_sidebar_collapsed');
+  // 手机等窄屏第一次打开(还没手动切换过)时，默认收起侧边栏，把画布空间让出来，
+  // 不然侧边栏+左侧工具栏加起来能占满大半个手机屏幕，画布挤成一条缝，双指缩放/
+  // 拖动都很难点准。用户手动展开过之后，就一直尊重那次选择，不再自动收起。
+  if(sidebarPref==='1' || (sidebarPref===null && window.innerWidth<680)){
     document.getElementById('sidebar').classList.add('collapsed');
     document.getElementById('sidebarToggleArrow').textContent = '›';
   }
