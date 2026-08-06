@@ -581,7 +581,7 @@
           "id": "n_mshe3arn_1",
           "from": "c_mser0o3v_v",
           "to": "c_mser0o3v_x",
-          "label": "G - Government Spending Taxes",
+          "label": "G - Government Spending \nTaxes",
           "bend": -41.65096119897781,
           "startArrow": true
         },
@@ -593,6 +593,21 @@
         }
       ],
       "trash": [
+        {
+          "card": {
+            "id": "c_mshg7rab_1",
+            "type": "note",
+            "x": 1192.7061398388128,
+            "y": 1862.1126395777355,
+            "w": 220,
+            "h": 150,
+            "color": "#ffffff",
+            "z": 335,
+            "text": "",
+            "comments": []
+          },
+          "deletedAt": 1786016678582
+        },
         {
           "card": {
             "id": "c_mshg0qsp_1",
@@ -642,7 +657,7 @@
       "vx": 185.70235869313876,
       "vy": -927.6566683045148,
       "vzoom": 0.6957038226740835,
-      "maxZ": 332,
+      "maxZ": 335,
       "updatedAt": 1785853422858
     }
   },
@@ -650,5 +665,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1786016596176
+  "syncedAt": 1786016703955
 }
