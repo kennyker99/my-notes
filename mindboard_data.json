@@ -193,7 +193,7 @@
           "w": 182.7512806327907,
           "h": 100,
           "color": "#d6ecff",
-          "z": 304,
+          "z": 316,
           "text": "<h2 style=\"text-align: center;\">Business / Firm (2)</h2>",
           "comments": []
         },
@@ -554,13 +554,6 @@
           "label": ""
         },
         {
-          "id": "n_msg7wnq8_u",
-          "from": "c_msg7scfa_s",
-          "to": "c_mser0o3v_12",
-          "label": "",
-          "bend": -61.43518171761904
-        },
-        {
           "id": "n_msg7wp9n_v",
           "from": "c_msg7scfa_s",
           "to": "c_mser0o3v_13",
@@ -588,11 +581,33 @@
           "id": "n_mshe3arn_1",
           "from": "c_mser0o3v_v",
           "to": "c_mser0o3v_x",
-          "label": "",
-          "bend": -37.84122671211579
+          "label": "G - Government Spending , Taxes",
+          "bend": -23.700611627600694,
+          "startArrow": true
+        },
+        {
+          "id": "n_mshf31x5_2",
+          "from": "c_msg7scfa_s",
+          "to": "c_mser0o3v_12",
+          "label": ""
         }
       ],
       "trash": [
+        {
+          "card": {
+            "id": "c_mshf1u90_1",
+            "type": "note",
+            "x": 1222.891398731429,
+            "y": 1839.1143470881234,
+            "w": 220,
+            "h": 150,
+            "color": "#ffffff",
+            "z": 319,
+            "text": "",
+            "comments": []
+          },
+          "deletedAt": 1786014723412
+        },
         {
           "card": {
             "id": "c_msg8ds8s_13",
@@ -912,7 +927,7 @@
       "vx": 185.70235869313876,
       "vy": -927.6566683045148,
       "vzoom": 0.6957038226740835,
-      "maxZ": 315,
+      "maxZ": 317,
       "updatedAt": 1785853422858
     }
   },
@@ -920,5 +935,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1786013137301
+  "syncedAt": 1786014780275
 }
