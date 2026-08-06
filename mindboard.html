@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#151517">
+<!-- 长期在手机上用的话，把它加到主屏幕能更像一个独立 App(没有浏览器地址栏/工具条) -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MindBoard">
 <title>MindBoard · 知识看板 / 思维导图 / 创作企划 / 旅行计划</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,7 +53,11 @@
     }
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  html,body{height:100%;overflow:hidden;}
+  /* overflow:hidden 挡住的是页面自己的滚动条，挡不住手机浏览器"下拉刷新/
+     橡皮筋回弹"这种系统级手势——那个是在 viewport 层面触发的，跟内容有没有
+     溢出没关系。长期在手机上刷看板的话，手滑往下一拉页面被刷新掉是很烦的事，
+     所以显式关掉 */
+  html,body{height:100%;overflow:hidden;overscroll-behavior:none;}
   body{
     background:var(--bg); color:var(--text);
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
@@ -2973,6 +2983,20 @@ function renderBoardLinkBody(card, body, cardEl){
     wrap.addEventListener('dblclick', function(e){
       e.stopPropagation();
       switchBoard(card.targetBoardId, false);
+    });
+    // 触屏浏览器的双击手势很不可靠——两次快速点按经常根本不会合成出原生的
+    // dblclick 事件，手机上就再也进不去子看板了。手动记一下上次点按的时间，
+    // 自己判断"双击"，不依赖浏览器帮忙合成
+    var blLastTapAt = 0;
+    wrap.addEventListener('touchend', function(e){
+      var now = Date.now();
+      if(now - blLastTapAt < 350){
+        e.preventDefault(); e.stopPropagation();
+        blLastTapAt = 0;
+        switchBoard(card.targetBoardId, false);
+      } else {
+        blLastTapAt = now;
+      }
     });
     wrap.addEventListener('click', function(e){
       if(e.altKey || e.shiftKey){
