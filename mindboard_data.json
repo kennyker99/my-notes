@@ -581,8 +581,8 @@
           "id": "n_mshe3arn_1",
           "from": "c_mser0o3v_v",
           "to": "c_mser0o3v_x",
-          "label": "G - Government Spending , Taxes",
-          "bend": -23.700611627600694,
+          "label": "G - Government Spending Taxes",
+          "bend": -41.65096119897781,
           "startArrow": true
         },
         {
@@ -595,339 +595,54 @@
       "trash": [
         {
           "card": {
-            "id": "c_mshf1u90_1",
+            "id": "c_mshg0qsp_1",
             "type": "note",
-            "x": 1222.891398731429,
-            "y": 1839.1143470881234,
+            "x": 1240.1401180986384,
+            "y": 1859.2378530165342,
             "w": 220,
             "h": 150,
             "color": "#ffffff",
-            "z": 319,
+            "z": 332,
             "text": "",
             "comments": []
           },
-          "deletedAt": 1786014723412
+          "deletedAt": 1786016352574
         },
         {
           "card": {
-            "id": "c_msg8ds8s_13",
+            "id": "c_mshg09tr_4",
             "type": "note",
-            "x": 1215.8816063650722,
-            "y": 1826.1778075627165,
+            "x": 1146.709554859588,
+            "y": 1859.2378530165342,
             "w": 220,
             "h": 150,
             "color": "#ffffff",
-            "z": 315,
+            "z": 329,
             "text": "",
             "comments": []
           },
-          "deletedAt": 1785943056980
+          "deletedAt": 1786016329495
         },
         {
           "card": {
-            "id": "c_msg8dp82_12",
+            "id": "c_mshg07fk_3",
             "type": "note",
-            "x": 1131.0754028096264,
-            "y": 1818.9908411597125,
+            "x": 1179.7696003134058,
+            "y": 1827.615200843317,
             "w": 220,
             "h": 150,
             "color": "#ffffff",
-            "z": 312,
+            "z": 326,
             "text": "",
             "comments": []
           },
-          "deletedAt": 1785943052855
-        },
-        {
-          "card": {
-            "id": "c_msg83t6h_11",
-            "type": "note",
-            "x": 1371.1200806699555,
-            "y": 1672.3767265384336,
-            "w": 220,
-            "h": 150,
-            "color": "#ffffff",
-            "z": 275,
-            "text": "",
-            "comments": []
-          },
-          "deletedAt": 1785942591241
-        },
-        {
-          "card": {
-            "id": "c_mser0o3v_10",
-            "type": "header",
-            "x": 0,
-            "y": 1120,
-            "w": 320,
-            "h": 60,
-            "color": "#c9d9ff",
-            "z": 266,
-            "text": "💰 GDP 资金循环 - Circular Flow of Income Diagram",
-            "comments": []
-          },
-          "deletedAt": 1785942484130
-        },
-        {
-          "card": {
-            "id": "c_mser0o3u_i",
-            "type": "note",
-            "x": -72.53187153242214,
-            "y": 720.1852588926163,
-            "w": 280,
-            "h": 70,
-            "color": "#ffd9b3",
-            "z": 253,
-            "text": "资金撤离和流入方向",
-            "comments": []
-          },
-          "deletedAt": 1785942410714
-        },
-        {
-          "card": {
-            "id": "c_mser0o3v_11",
-            "type": "header",
-            "x": 2367.802318601802,
-            "y": 964.4902177652259,
-            "w": 340,
-            "h": 60,
-            "color": "#f2f2f2",
-            "z": 224,
-            "text": "📋 经济体的体检报告",
-            "comments": []
-          },
-          "deletedAt": 1785942079561
-        },
-        {
-          "card": {
-            "id": "c_msg7cw4d_q",
-            "type": "header",
-            "x": 1032.3147482451664,
-            "y": 622.9177671866764,
-            "w": 436.9516924175419,
-            "h": 57.28808529866254,
-            "color": "#e3c9ff",
-            "z": 191,
-            "text": "🔁 六大齿轮 (Six Major Gears)",
-            "comments": []
-          },
-          "deletedAt": 1785941338467
-        },
-        {
-          "card": {
-            "id": "c_msg7cxca_r",
-            "type": "header",
-            "x": 1056.3147482451664,
-            "y": 646.9177671866764,
-            "w": 436.9516924175419,
-            "h": 57.28808529866254,
-            "color": "#e3c9ff",
-            "z": 190,
-            "text": "🔁 六大齿轮 (Six Major Gears)",
-            "comments": []
-          },
-          "deletedAt": 1785941336599
-        },
-        {
-          "card": {
-            "id": "c_msg7ctz2_p",
-            "type": "header",
-            "x": 1008.3147482451664,
-            "y": 598.9177671866764,
-            "w": 436.9516924175419,
-            "h": 57.28808529866254,
-            "color": "#e3c9ff",
-            "z": 187,
-            "text": "🔁 六大齿轮 (Six Major Gears)",
-            "comments": []
-          },
-          "deletedAt": 1785941334250
-        },
-        {
-          "card": {
-            "id": "c_mser0o3v_s",
-            "type": "header",
-            "x": 984.3147482451664,
-            "y": 574.9177671866764,
-            "w": 436.9516924175419,
-            "h": 57.28808529866254,
-            "color": "#e3c9ff",
-            "z": 183,
-            "text": "🔁 六大齿轮 (Six Major Gears)",
-            "comments": []
-          },
-          "deletedAt": 1785941332563
-        },
-        {
-          "card": {
-            "id": "c_mser0o3u_h",
-            "type": "header",
-            "x": 370.46015779940825,
-            "y": 560,
-            "w": 280,
-            "h": 70,
-            "color": "#e3c9ff",
-            "z": 172,
-            "text": "全球经济运行模式",
-            "comments": []
-          },
-          "deletedAt": 1785941291692
-        },
-        {
-          "card": {
-            "id": "c_msg7b3r4_j",
-            "type": "note",
-            "x": 473.4421532686239,
-            "y": 237.28092052528058,
-            "w": 220,
-            "h": 150,
-            "color": "#ffffff",
-            "z": 167,
-            "text": "",
-            "comments": []
-          },
-          "deletedAt": 1785941252893
-        },
-        {
-          "card": {
-            "id": "c_msg7asfl_i",
-            "type": "note",
-            "x": 466.66236651528015,
-            "y": -10.859274647097322,
-            "w": 220,
-            "h": 150,
-            "color": "#ffffff",
-            "z": 164,
-            "text": "",
-            "comments": []
-          },
-          "deletedAt": 1785941243968
-        },
-        {
-          "card": {
-            "id": "c_mser0o3v_k",
-            "type": "header",
-            "x": 340,
-            "y": 820,
-            "w": 280,
-            "h": 70,
-            "color": "#e3c9ff",
-            "z": 149,
-            "text": "GDP资金循环",
-            "comments": []
-          },
-          "deletedAt": 1785941139896
-        },
-        {
-          "card": {
-            "id": "c_mser0o3v_l",
-            "type": "header",
-            "x": 0,
-            "y": 543.75,
-            "w": 320,
-            "h": 70,
-            "color": "#f2f2f2",
-            "z": 142,
-            "text": "基本面框",
-            "comments": []
-          },
-          "deletedAt": 1785941103450
-        },
-        {
-          "card": {
-            "id": "c_mser0o3u_f",
-            "type": "header",
-            "x": 270.8461751158947,
-            "y": 252.58446914264397,
-            "w": 280,
-            "h": 70,
-            "color": "#e3c9ff",
-            "z": 138,
-            "text": "经济齿轮转动的关键",
-            "comments": []
-          },
-          "deletedAt": 1785941053663
-        },
-        {
-          "card": {
-            "id": "c_mser0o3u_b",
-            "type": "header",
-            "x": 1020,
-            "y": 105,
-            "w": 280,
-            "h": 70,
-            "color": "#c9d9ff",
-            "z": 116,
-            "text": "货币政策 vs 财政政策",
-            "comments": []
-          },
-          "deletedAt": 1785940437018
-        },
-        {
-          "card": {
-            "id": "c_mser0o3u_c",
-            "type": "header",
-            "x": 675.5031987993373,
-            "y": -91.32052030313687,
-            "w": 295.23007889970415,
-            "h": 176.6105522979289,
-            "color": "#fff6b3",
-            "z": 105,
-            "text": "1. 内在因素<br>• 政策<br>• 经济结构<br>• 人口结构",
-            "comments": []
-          },
-          "deletedAt": 1785940345186
-        },
-        {
-          "card": {
-            "id": "c_msg6rdt8_1",
-            "type": "note",
-            "x": 942.4568053172572,
-            "y": -249.28177294061345,
-            "w": 220,
-            "h": 150,
-            "color": "#ffffff",
-            "z": 99,
-            "text": "",
-            "comments": []
-          },
-          "deletedAt": 1785940334375
-        },
-        {
-          "card": {
-            "id": "c_msg4sn5n_2",
-            "type": "note",
-            "x": 947.8806347199322,
-            "y": 62.81441200587642,
-            "w": 220,
-            "h": 150,
-            "color": "#ffffff",
-            "z": 94,
-            "text": "",
-            "comments": []
-          },
-          "deletedAt": 1785937034692
-        },
-        {
-          "card": {
-            "id": "c_msg2pk3d_2",
-            "type": "note",
-            "x": 1482.599595741238,
-            "y": 151.02437144736237,
-            "w": 220,
-            "h": 150,
-            "color": "#2b2b30",
-            "z": 78,
-            "text": "",
-            "comments": []
-          },
-          "deletedAt": 1785933528679
+          "deletedAt": 1786016325363
         }
       ],
       "vx": 185.70235869313876,
       "vy": -927.6566683045148,
       "vzoom": 0.6957038226740835,
-      "maxZ": 317,
+      "maxZ": 332,
       "updatedAt": 1785853422858
     }
   },
@@ -935,5 +650,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1786014780275
+  "syncedAt": 1786016596176
 }
