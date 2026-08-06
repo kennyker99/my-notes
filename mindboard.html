@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>MindBoard · 知识看板 / 思维导图 / 创作企划 / 旅行计划</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -4123,6 +4123,16 @@ function wireGlobalEvents(){
       touchGesture.moved = 0;
       startPan(e.touches[0]);
     }
+  });
+
+  /* iOS Safari 对双指捏合还会额外触发一套 gesturestart/change/end 事件，走的是
+     跟 touch 事件平行的另一套系统级缩放逻辑——只挡 touchmove 不一定能拦住它，
+     Safari 有时还是会把整个页面缩放糊掉。这里专门再挡一层，配合上面
+     maximum-scale=1,user-scalable=no 的 viewport meta，把浏览器原生缩放关掉，
+     缩放完全交给画布自己的双指手势逻辑处理。其他浏览器不支持这几个事件，
+     加了也没有副作用。 */
+  ['gesturestart','gesturechange','gestureend'].forEach(function(evt){
+    viewport.addEventListener(evt, function(e){ e.preventDefault(); });
   });
 
   viewport.addEventListener('dragover', function(e){ e.preventDefault(); viewport.classList.add('drag-over'); });
