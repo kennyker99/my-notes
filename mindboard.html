@@ -3389,6 +3389,7 @@ function toggleLockCards(ids){
 
 /* ---- Drag ---- */
 function startCardDrag(primaryCard, el, e){
+  cancelPanMomentum(); // 抓起卡片的时候画布要是还在惯性滑动，先停下来
   var b = activeBoard();
   var ids = state.selectedCards.has(primaryCard.id) && state.selectedCards.size>1 ? Array.from(state.selectedCards) : [primaryCard.id];
   var items = ids.map(function(id){
@@ -3522,6 +3523,7 @@ function endCardResize(){
 
 /* ---- Pan ---- */
 function startPan(e){
+  cancelPanMomentum(); // 新的平移开始了，之前还没滑完的惯性动画就不用继续了
   var b = activeBoard();
   state.pan = { startX:e.clientX, startY:e.clientY, origVx:b.vx, origVy:b.vy };
   document.getElementById('viewport').classList.add('panning');
@@ -3535,6 +3537,40 @@ function onPanMove(e){
 }
 function endPan(){
   if(state.pan){ state.pan=null; document.getElementById('viewport').classList.remove('panning'); scheduleSave(); }
+}
+
+/* ---- 单指平移的惯性滑动 ----
+   手指快速一划松开后，画布跟着当时的速度继续滑一小段、慢慢减速停下，而不是
+   手指一抬就硬生生停住——贴近原生 App 那种手感，长期刷看板体验会舒服很多。
+   只在触屏的单指平移结束时触发；鼠标中键/空格拖拽没有这个概念，不受影响。 */
+var PAN_MOMENTUM_MIN_VELOCITY = 0.02; // px/ms，低于这个速度就当滑到头了，停下来
+var PAN_MOMENTUM_FRICTION = 0.92; // 每 ~16.7ms(一帧@60fps) 衰减到原速度的这个比例
+var panMomentumRAF = null;
+function cancelPanMomentum(){
+  if(panMomentumRAF){ cancelAnimationFrame(panMomentumRAF); panMomentumRAF = null; }
+}
+function startPanMomentum(vx, vy){
+  cancelPanMomentum();
+  if(Math.hypot(vx,vy) < PAN_MOMENTUM_MIN_VELOCITY) return;
+  var lastTs = null;
+  function step(ts){
+    if(lastTs===null) lastTs = ts;
+    var dt = Math.min(ts-lastTs, 48); // 防止切后台/掉帧回来后一步跳太远
+    lastTs = ts;
+    var b = activeBoard();
+    b.vx += vx*dt;
+    b.vy += vy*dt;
+    applyViewportTransform();
+    var decay = Math.pow(PAN_MOMENTUM_FRICTION, dt/16.67);
+    vx *= decay; vy *= decay;
+    if(Math.hypot(vx,vy) > PAN_MOMENTUM_MIN_VELOCITY){
+      panMomentumRAF = requestAnimationFrame(step);
+    } else {
+      panMomentumRAF = null;
+      scheduleSave();
+    }
+  }
+  panMomentumRAF = requestAnimationFrame(step);
 }
 
 /* ---- Connector drag ---- */
@@ -4174,9 +4210,23 @@ function wireGlobalEvents(){
        菜单、工具条、滚动条依然完全交给原生触摸处理，不被上面这套手势拦截。 */
   var touchGesture = { mode:null, startDist:0, startZoom:1, localX:0, localY:0, moved:0,
     startTouch:null, startTouchX:0, startTouchY:0, pendingCard:null, longPressTimer:null,
-    pinchStartTime:0, pinchMoved:0, startMidX:0, startMidY:0, lastTouchAt:0 };
+    pinchStartTime:0, pinchMoved:0, startMidX:0, startMidY:0, lastTouchAt:0, panSamples:[] };
   var TOUCH_LONGPRESS_MS = 450, TOUCH_MOVE_THRESHOLD = 10;
   var TWO_FINGER_TAP_MAX_MOVE = 14, TWO_FINGER_TAP_MAX_MS = 400;
+  var PAN_MOMENTUM_SAMPLE_WINDOW_MS = 120; // 只看松手前这一小段时间的位移来算"甩出去"的速度，不受手指中途停顿的影响
+  function pushPanSample(t){
+    touchGesture.panSamples.push({ t:Date.now(), x:t.clientX, y:t.clientY });
+    if(touchGesture.panSamples.length > 8) touchGesture.panSamples.shift();
+  }
+  function panFlickVelocity(){
+    var now = Date.now();
+    var recent = touchGesture.panSamples.filter(function(s){ return now - s.t < PAN_MOMENTUM_SAMPLE_WINDOW_MS; });
+    if(recent.length < 2) return null;
+    var first = recent[0], last = recent[recent.length-1];
+    var dt = last.t - first.t;
+    if(dt < 8) return null; // 时间跨度太短，算出来的速度不可靠
+    return { vx:(last.x-first.x)/dt, vy:(last.y-first.y)/dt };
+  }
   function tryTwoFingerPaste(localX, localY){
     if(state.clipboard && state.clipboard.cards.length){
       pasteClipboardAt(localX, localY);
@@ -4217,6 +4267,7 @@ function wireGlobalEvents(){
   }
   viewport.addEventListener('touchstart', function(e){
     touchGesture.lastTouchAt = Date.now();
+    cancelPanMomentum(); // 新的触摸开始了(不管是缩放还是平移还是碰到卡片)，先把还在滑的惯性停下来
     var b = activeBoard();
     // 双指手势永远当画布缩放处理——不管两根手指下面具体压着的是空白画布还是
     // 某张卡片，两指同时触摸在这个 app 里没有别的含义，直接当缩放意图，
@@ -4258,6 +4309,8 @@ function wireGlobalEvents(){
     }
     touchGesture.mode = 'pan';
     touchGesture.moved = 0;
+    touchGesture.panSamples = [];
+    pushPanSample(e.touches[0]);
     startPan(e.touches[0]);
   }, {passive:false});
   viewport.addEventListener('touchmove', function(e){
@@ -4287,15 +4340,19 @@ function wireGlobalEvents(){
         touchGesture.pendingCard = null;
         touchGesture.mode = 'pan';
         touchGesture.moved = 0;
+        touchGesture.panSamples = [];
+        pushPanSample(touchGesture.startTouch);
         startPan(touchGesture.startTouch);
         e.preventDefault();
         onPanMove(t);
+        pushPanSample(t);
         touchGesture.moved = Math.hypot(t.clientX-touchGesture.startTouchX, t.clientY-touchGesture.startTouchY);
       }
     } else if(touchGesture.mode==='pan' && e.touches.length===1 && state.pan){
       e.preventDefault();
       var dx = e.touches[0].clientX - state.pan.startX, dy = e.touches[0].clientY - state.pan.startY;
       touchGesture.moved = Math.hypot(dx, dy);
+      pushPanSample(e.touches[0]);
       onPanMove(e.touches[0]);
     } else if(touchGesture.mode==='dragcard' && e.touches.length===1 && state.drag){
       e.preventDefault();
@@ -4307,6 +4364,12 @@ function wireGlobalEvents(){
       clearTouchLongPress(); // 长按触发前就抬起手指 = 一次点按，交给原生兼容点击去处理
     } else if(touchGesture.mode==='pan'){
       if(state.pan && touchGesture.moved<6) clearSelection(); // 基本没动 = 当作点击空白处，取消选中
+      else if(state.pan){
+        // 手指是带着速度松开的（不是慢慢停下来的），松手前那一小段的速度
+        // 拿来当"甩出去"的初速度，让画布带着惯性再滑一段
+        var flick = panFlickVelocity();
+        if(flick) startPanMomentum(flick.vx, flick.vy);
+      }
       endPan();
     } else if(touchGesture.mode==='dragcard'){
       endCardDrag();
