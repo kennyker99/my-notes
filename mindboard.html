@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#151517">
 <!-- 长期在手机上用的话，把它加到主屏幕能更像一个独立 App(没有浏览器地址栏/工具条) -->
 <meta name="mobile-web-app-capable" content="yes">
@@ -63,6 +63,10 @@
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     display:flex; height:100vh; width:100vw;
     transition:background-color .15s ease, color .15s ease;
+    /* iPhone 齐刘海/灵动岛、圆角、底部手势条会挡住贴边的内容——这几个 env()
+       在没有安全区的设备(大部分安卓、桌面浏览器)上就是 0，不会有任何影响 */
+    padding:env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px)
+      env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
   }
   .mono{font-family:'IBM Plex Mono',monospace;}
   button{font-family:inherit;cursor:pointer;}
@@ -380,6 +384,22 @@
     align-items:center;justify-content:center;padding:20px;
   }
   .modal-overlay.active{display:flex;}
+
+  /* ---------- 图片全屏查看 ---------- */
+  .img-lightbox{
+    position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:6000;
+    display:flex;align-items:center;justify-content:center;padding:24px;
+  }
+  .img-lightbox img{max-width:100%;max-height:100%;object-fit:contain;border-radius:4px;box-shadow:0 10px 40px rgba(0,0,0,.5);}
+  .img-lightbox-close{
+    position:absolute;top:calc(14px + env(safe-area-inset-top, 0px));right:calc(14px + env(safe-area-inset-right, 0px));
+    width:40px;height:40px;border-radius:50%;background:rgba(40,40,44,.85);color:#fff;border:none;font-size:18px;z-index:1;
+  }
+  .img-lightbox-replace{
+    position:absolute;top:0;right:0;width:26px;height:26px;border-radius:0 6px 0 6px;background:rgba(0,0,0,.55);
+    color:#fff;border:none;font-size:13px;opacity:0;transition:opacity .12s;
+  }
+  .card:hover .img-lightbox-replace, .card.selected .img-lightbox-replace{opacity:1;}
   .tmpl-modal{
     background:var(--bg2);border:1px solid var(--border);border-radius:10px;width:100%;max-width:620px;
     max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);
@@ -1088,6 +1108,31 @@ function showToast(msg){
   t.classList.add('show');
   if(toastTimer) clearTimeout(toastTimer);
   toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+}
+/* ---- 图片全屏查看 ---- */
+function openImageLightbox(dataUrl){
+  closeImageLightbox();
+  var box = document.createElement('div');
+  box.className = 'img-lightbox';
+  box.id = 'imgLightbox';
+  var img = document.createElement('img');
+  img.src = dataUrl;
+  box.appendChild(img);
+  var closeBtn = document.createElement('button');
+  closeBtn.className = 'img-lightbox-close'; closeBtn.textContent = '✕'; closeBtn.title = '关闭';
+  closeBtn.addEventListener('click', function(e){ e.stopPropagation(); closeImageLightbox(); });
+  box.appendChild(closeBtn);
+  box.addEventListener('click', function(e){ if(e.target===box) closeImageLightbox(); });
+  document.body.appendChild(box);
+  document.addEventListener('keydown', imgLightboxEscHandler);
+}
+function imgLightboxEscHandler(e){
+  if(e.key==='Escape') closeImageLightbox();
+}
+function closeImageLightbox(){
+  var box = document.getElementById('imgLightbox');
+  if(box) box.remove();
+  document.removeEventListener('keydown', imgLightboxEscHandler);
 }
 function formatBytes(n){
   if(!n) return '0 B';
@@ -2609,23 +2654,40 @@ function buildBody(card, body, cardEl){
   } else if(card.type==='image'){
     var holder = document.createElement('div');
     holder.className = 'img-holder';
+    holder.addEventListener('mousedown', function(e){e.stopPropagation();});
     if(card.dataUrl){
       var img = document.createElement('img');
       img.src = card.dataUrl;
       holder.appendChild(img);
+      // 已经有图了：点击/点按是想放大看清楚，不是想换图——换图现在挪到右上角
+      // 一个小按钮上，不然手机上"想看大图"很容易手滑变成"选了张新照片直接把
+      // 原图覆盖掉"，看图这个最基本的操作反而变成了一个坑
+      holder.addEventListener('click', function(e){
+        e.stopPropagation();
+        openImageLightbox(card.dataUrl);
+      });
+      var replaceBtn = document.createElement('button');
+      replaceBtn.className='img-lightbox-replace'; replaceBtn.title='更换图片'; replaceBtn.textContent='🔄';
+      replaceBtn.addEventListener('mousedown', function(e){e.stopPropagation();});
+      replaceBtn.addEventListener('click', function(e){
+        e.stopPropagation();
+        var input = document.getElementById('imageFileInput');
+        input.dataset.cardId = card.id;
+        input.click();
+      });
+      holder.appendChild(replaceBtn);
     } else {
       var ph = document.createElement('div');
       ph.className='img-empty';
       ph.innerHTML = '🖼<br>点击上传图片<br><span style="font-size:10px;opacity:.7">或复制图片后 Ctrl+V</span>';
       holder.appendChild(ph);
+      holder.addEventListener('click', function(e){
+        e.stopPropagation();
+        var input = document.getElementById('imageFileInput');
+        input.dataset.cardId = card.id;
+        input.click();
+      });
     }
-    holder.addEventListener('mousedown', function(e){e.stopPropagation();});
-    holder.addEventListener('click', function(e){
-      e.stopPropagation();
-      var input = document.getElementById('imageFileInput');
-      input.dataset.cardId = card.id;
-      input.click();
-    });
     body.appendChild(holder);
     var cap = document.createElement('div');
     cap.className='img-caption'; cap.contentEditable='true';
