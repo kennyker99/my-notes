@@ -49,7 +49,7 @@
           "w": 172.2036161560186,
           "h": 154.841428209043,
           "color": "#ffc9d6",
-          "z": 341,
+          "z": 160,
           "text": "<h1>3. 突发性因素</h1><b>• 天灾<br>• 战争/恐怖主义<br>• 疫情</b>",
           "comments": []
         },
@@ -214,10 +214,10 @@
           "type": "note",
           "x": 737.9897549376743,
           "y": 2203.8457588846118,
-          "w": 169.81474110738375,
-          "h": 100,
+          "w": 160,
+          "h": 106.54155743575818,
           "color": "#c6f0d4",
-          "z": 300,
+          "z": 338,
           "text": "<h2 style=\"text-align: center;\">Rest of World / Environment</h2>",
           "comments": []
         },
@@ -325,7 +325,7 @@
           "w": 342.03616156018586,
           "h": 100,
           "color": "#fff6b3",
-          "z": 339,
+          "z": 195,
           "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; text-align: start;\">🔁 六大齿轮 (Six Major Gears)</span></div>",
           "comments": []
         },
@@ -595,6 +595,21 @@
       "trash": [
         {
           "card": {
+            "id": "c_msiyhulv_3",
+            "type": "note",
+            "x": 1518.0121979026862,
+            "y": 1577.6581976159318,
+            "w": 220,
+            "h": 150,
+            "color": "#ffffff",
+            "z": 342,
+            "text": "",
+            "comments": []
+          },
+          "deletedAt": 1786107856560
+        },
+        {
+          "card": {
             "id": "c_mshg7rab_1",
             "type": "note",
             "x": 1192.7061398388128,
@@ -654,10 +669,10 @@
           "deletedAt": 1786016325363
         }
       ],
-      "vx": 8.199028016618955,
-      "vy": 211.42714011616545,
-      "vzoom": 0.20215963698608952,
-      "maxZ": 341,
+      "vx": 31.638688576310642,
+      "vy": -840.1993327628609,
+      "vzoom": 0.7643439729915774,
+      "maxZ": 342,
       "updatedAt": 1785853422858
     }
   },
@@ -665,5 +680,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1786360824822
+  "syncedAt": 1786368673562
 }
