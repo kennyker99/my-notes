@@ -525,6 +525,19 @@
   .file-dl:hover{background:color-mix(in srgb, var(--ctext) 14%, transparent);}
   .file-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:100%;color:color-mix(in srgb, var(--ctext) 60%, transparent);font-size:12px;cursor:pointer;text-align:center;}
 
+  /* ---------- 颜色板卡片 ---------- */
+  .card-body.swatch-body{position:relative;padding:0;}
+  .swatch-color-input{
+    position:absolute;inset:0;width:100%;height:100%;border:none;padding:0;margin:0;
+    opacity:0;cursor:pointer;background:none;
+  }
+  .swatch-value{
+    position:absolute;left:50%;bottom:10px;transform:translateX(-50%);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.02em;
+    padding:3px 8px;border-radius:4px;background:rgba(0,0,0,.12);cursor:pointer;
+    white-space:nowrap;pointer-events:auto;
+  }
+
   /* ---------- Map / Video / Audio 内嵌卡片 ---------- */
   .card-body.embed-body{padding:0;display:flex;flex-direction:column;}
   .embed-wrap{position:relative;flex:1;display:flex;flex-direction:column;min-height:0;}
@@ -828,6 +841,7 @@
     <div class="more-tool-item" data-add="map"><span class="el-icon">🗺</span>Map</div>
     <div class="more-tool-item" data-add="video"><span class="el-icon">🎬</span>Video</div>
     <div class="more-tool-item" data-add="audio"><span class="el-icon">🎵</span>Audio</div>
+    <div class="more-tool-item" data-add="colorswatch"><span class="el-icon">🎨</span>Color swatch</div>
   </div>
 
   <div class="main">
@@ -1010,13 +1024,13 @@ var STORAGE_KEY = 'mindboard_store_v1';
 var PALETTE = ['#2b2b30','#3d331f','#3d2530','#2e2540','#1f2d40','#1f3327','#3a3a3f'];
 var LIGHT_PALETTE = ['#ffffff','#fff6b3','#ffd9d9','#e6d9ff','#d6ecff','#d7f5df','#f0f0f0'];
 function currentPalette(){ return getTheme()==='light' ? LIGHT_PALETTE : PALETTE; }
-var MIN_W = {note:160,todo:200,image:180,link:200,header:220,boardlink:180,file:160,column:180,map:200,video:220,audio:220};
-var MIN_H = {note:100,todo:120,image:150,link:90,header:56,boardlink:70,file:70,column:140,map:150,video:150,audio:90};
+var MIN_W = {note:160,todo:200,image:180,link:200,header:220,boardlink:180,file:160,column:180,map:200,video:220,audio:220,colorswatch:100};
+var MIN_H = {note:100,todo:120,image:150,link:90,header:56,boardlink:70,file:70,column:140,map:150,video:150,audio:90,colorswatch:80};
 var DEFAULT_SIZE = {
   note:[220,150], todo:[240,220], image:[260,210], link:[260,120], header:[300,64], boardlink:[220,100],
-  file:[220,88], column:[220,240], map:[300,220], video:[320,220], audio:[300,110]
+  file:[220,88], column:[220,240], map:[300,220], video:[320,220], audio:[300,110], colorswatch:[140,110]
 };
-var CARD_ICONS = {note:'🗒',todo:'☑',image:'🖼',link:'🔗',header:'🔤',boardlink:'📁',file:'📎',column:'🗂',map:'🗺',video:'🎬',audio:'🎵'};
+var CARD_ICONS = {note:'🗒',todo:'☑',image:'🖼',link:'🔗',header:'🔤',boardlink:'📁',file:'📎',column:'🗂',map:'🗺',video:'🎬',audio:'🎵',colorswatch:'🎨'};
 var LABEL_PALETTE = ['#ff6b6b','#ffa94d','#ffd43b','#69db7c','#4dabf7','#9775fa','#f783ac','#66d9c4'];
 var CONNECTOR_PALETTE = ['#8a8570','#1c1c1f','#e05263','#ff9500','#00a86b','#2a7de1','#8b6ff0'];
 var CONNECTOR_WEIGHTS = [['细',1.5],['中',2.2],['粗',3.5]];
@@ -1066,6 +1080,37 @@ function getContrastText(hex){
   var r = parseInt(h.substr(0,2),16), g = parseInt(h.substr(2,2),16), b = parseInt(h.substr(4,2),16);
   var lum = (0.299*r + 0.587*g + 0.114*b)/255;
   return lum > 0.6 ? '#1a1a1c' : '#f0f0f2';
+}
+/* ---------- 颜色板卡片：HEX -> RGB / HSL 文本 ---------- */
+function hexToRgbParts(hex){
+  var h = (hex||'').replace('#','');
+  if(h.length===3) h = h.split('').map(function(c){return c+c;}).join('');
+  if(h.length!==6) return {r:0,g:0,b:0};
+  return { r:parseInt(h.substr(0,2),16), g:parseInt(h.substr(2,2),16), b:parseInt(h.substr(4,2),16) };
+}
+function rgbToHslParts(r,g,b){
+  r/=255; g/=255; b/=255;
+  var max=Math.max(r,g,b), min=Math.min(r,g,b);
+  var h=0, s=0, l=(max+min)/2;
+  if(max!==min){
+    var d = max-min;
+    s = l>0.5 ? d/(2-max-min) : d/(max+min);
+    if(max===r) h = (g-b)/d + (g<b?6:0);
+    else if(max===g) h = (b-r)/d + 2;
+    else h = (r-g)/d + 4;
+    h/=6;
+  }
+  return { h:Math.round(h*360), s:Math.round(s*100), l:Math.round(l*100) };
+}
+function colorSwatchValueText(card){
+  var hex = card.color || '#8a8570';
+  var format = card.swatchFormat || 'hex';
+  if(format==='off') return '';
+  if(format==='hex') return hex.toUpperCase();
+  var p = hexToRgbParts(hex);
+  if(format==='rgb') return 'rgb('+p.r+', '+p.g+', '+p.b+')';
+  var hsl = rgbToHslParts(p.r,p.g,p.b);
+  return 'hsl('+hsl.h+', '+hsl.s+'%, '+hsl.l+'%)';
 }
 /* ---------- 内嵌链接解析 (Map / Video / Audio 卡片) ---------- */
 function mapEmbedSrc(url){
@@ -2732,7 +2777,49 @@ function buildBody(card, body, cardEl){
     renderVideoBody(card, body);
   } else if(card.type==='audio'){
     renderAudioBody(card, body);
+  } else if(card.type==='colorswatch'){
+    renderColorSwatchBody(card, body, cardEl);
   }
+}
+function renderColorSwatchBody(card, body, cardEl){
+  body.innerHTML = '';
+  body.classList.add('swatch-body');
+  // 原生颜色选择器铺满整个卡身、完全透明——点哪都能唤起系统取色器，
+  // 手机上也是原生弹窗，体验跟点普通按钮一样自然
+  var input = document.createElement('input');
+  input.type = 'color';
+  input.className = 'swatch-color-input';
+  input.value = card.color || '#8a8570';
+  input.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+  input.addEventListener('input', function(){
+    card.color = input.value;
+    cardEl.style.background = card.color;
+    cardEl.style.setProperty('--ctext', getContrastText(card.color));
+    var dot = cardEl.querySelector('.card-color-dot');
+    if(dot) dot.style.background = card.color;
+    valueEl.style.color = getContrastText(card.color);
+    valueEl.textContent = colorSwatchValueText(card);
+  });
+  input.addEventListener('change', function(){ scheduleSave(); });
+  body.appendChild(input);
+
+  // 数值标签叠在取色器上面，自己再拦一层 click 用来切换 HEX/RGB/HSL/不显示，
+  // 不会被下面那层透明的颜色选择器抢走点击
+  var valueEl = document.createElement('div');
+  valueEl.className = 'swatch-value';
+  valueEl.style.color = getContrastText(card.color);
+  valueEl.textContent = colorSwatchValueText(card);
+  valueEl.title = '点击切换显示格式（HEX / RGB / HSL / 不显示）';
+  valueEl.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+  valueEl.addEventListener('click', function(e){
+    e.stopPropagation(); e.preventDefault();
+    var order = ['hex','rgb','hsl','off'];
+    var idx = order.indexOf(card.swatchFormat||'hex');
+    card.swatchFormat = order[(idx+1)%order.length];
+    scheduleSave();
+    valueEl.textContent = colorSwatchValueText(card);
+  });
+  body.appendChild(valueEl);
 }
 
 function buildEmbedEmptyState(card, body, opts){
@@ -3246,6 +3333,7 @@ function addCardAt(type, x, y){
   if(type==='map'){ card.url=''; }
   if(type==='video'){ card.url=''; card.dataUrl=''; card.caption=''; }
   if(type==='audio'){ card.url=''; card.dataUrl=''; card.caption=''; }
+  if(type==='colorswatch'){ card.color = '#ff9500'; card.swatchFormat = 'hex'; }
   b.cards.push(card);
   document.getElementById('canvasContent').appendChild(buildCardEl(card));
   document.getElementById('emptyHint').style.display='none';
@@ -3766,7 +3854,8 @@ function openCanvasContextMenu(localX, localY, clientX, clientY){
     ['note','🗒 新建便签'], ['todo','☑ 新建清单'], ['column','🗂 新建看板列'],
     ['image','🖼 新建图片'], ['file','📎 新建文件'], ['link','🔗 新建链接'],
     ['header','🔤 新建标题'], ['boardlink','📁 新建子看板'],
-    ['map','🗺 新建地图'], ['video','🎬 新建视频'], ['audio','🎵 新建音频']
+    ['map','🗺 新建地图'], ['video','🎬 新建视频'], ['audio','🎵 新建音频'],
+    ['colorswatch','🎨 新建颜色板']
   ];
   addTypes.forEach(function(t){
     items.push({ label:t[1], action:function(){ addCardAt(t[0], localX, localY); } });
@@ -3910,6 +3999,7 @@ function trashItemLabel(card){
   if(card.fileName) return card.fileName;
   if(card.caption) return card.caption;
   if(card.url) return card.url;
+  if(card.type==='colorswatch' && card.color) return CARD_ICONS[card.type]+' '+card.color.toUpperCase();
   return CARD_ICONS[card.type]+' 未命名卡片';
 }
 function relativeTime(ts){
@@ -4044,6 +4134,7 @@ function extractCardText(card, board){
   if(card.description) parts.push(card.description);
   if(card.url) parts.push(card.url);
   if(card.fileName) parts.push(card.fileName);
+  if(card.type==='colorswatch' && card.color) parts.push(card.color);
   if(card.items) card.items.forEach(function(it){ if(it.text) parts.push(it.text); });
   if(board && card.labelIds && card.labelIds.length){
     var labels = boardLabels(board);
