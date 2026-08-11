@@ -221,6 +221,10 @@
   .card-btn{background:none;border:none;color:color-mix(in srgb, var(--ctext) 60%, transparent);font-size:11px;padding:2px 5px;border-radius:4px;line-height:1;}
   .card-btn:hover{background:color-mix(in srgb, var(--ctext) 14%, transparent);color:var(--ctext);}
   .card-body{flex:1;overflow:auto;padding:12px 14px;font-size:13.5px;line-height:1.55;color:var(--ctext);min-height:0;}
+  /* .canvas-viewport 上显式设了 cursor:default，这个属性是会往下继承的，
+     结果连卡片里能编辑的文字区域也被强制成箭头指针，编辑文字时看不出光标
+     停在哪——所有可编辑文字区域统一用 I 字形指针盖掉继承下来的箭头 */
+  [contenteditable="true"]{cursor:text;}
   .card-body:focus{outline:none;}
   .card-body[contenteditable="true"]:empty:before{content:attr(data-placeholder);color:color-mix(in srgb, var(--ctext) 60%, transparent);}
 
@@ -474,6 +478,19 @@
   .rt-toolbar button:hover{background:var(--rt-toolbar-hover);color:var(--orange);}
   .rt-toolbar button.active{background:var(--rt-toolbar-hover);color:var(--orange);}
   .rt-sep{width:1px;height:16px;background:rgba(255,255,255,.15);margin:0 3px;flex-shrink:0;}
+  /* 编辑文字时 #richToolbar 会被挪进左侧 elrail 里，从悬浮横条变成竖排在
+     侧边栏里的按钮列表，视觉上跟 elrail 其它分组保持一致 */
+  .rt-toolbar.rail-mode{
+    position:static;display:flex;flex-direction:column;align-items:stretch;flex-wrap:nowrap;
+    background:none;box-shadow:none;padding:8px 6px;gap:2px;border-radius:0;max-width:none;z-index:auto;
+  }
+  .rt-toolbar.rail-mode button{
+    width:100%;min-width:0;height:auto;padding:9px 4px;font-size:15px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;color:var(--text-dim);
+  }
+  .rt-toolbar.rail-mode button:hover{background:var(--bg3);color:var(--text);}
+  .rt-toolbar.rail-mode button.active{background:var(--bg3);color:var(--orange);}
+  .rt-toolbar.rail-mode .rt-sep{width:auto;height:1px;margin:6px 10px;background:var(--border);}
   .rt-textstyle-pop{
     display:none;position:fixed;z-index:1600;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
     padding:4px;min-width:130px;box-shadow:0 10px 30px rgba(0,0,0,.4);
@@ -665,12 +682,16 @@
   .el-label{font-size:10.5px;letter-spacing:.01em;}
   .el-sep{height:1px;background:var(--border);margin:8px 10px;}
   .el-spacer{flex:1;}
-  .elrail-normal-group, .elrail-multi-group, .elrail-conn-group{display:flex;flex-direction:column;}
-  .elrail-multi-group, .elrail-conn-group{display:none;}
-  .elrail.multi-mode .elrail-normal-group, .elrail.multi-mode .elrail-conn-group{display:none;}
+  .elrail-normal-group, .elrail-multi-group, .elrail-conn-group, .elrail-text-group{display:flex;flex-direction:column;}
+  .elrail-multi-group, .elrail-conn-group, .elrail-text-group{display:none;}
+  .elrail.multi-mode .elrail-normal-group, .elrail.multi-mode .elrail-conn-group, .elrail.multi-mode .elrail-text-group{display:none;}
   .elrail.multi-mode .elrail-multi-group{display:flex;}
-  .elrail.conn-mode .elrail-normal-group, .elrail.conn-mode .elrail-multi-group{display:none;}
+  .elrail.conn-mode .elrail-normal-group, .elrail.conn-mode .elrail-multi-group, .elrail.conn-mode .elrail-text-group{display:none;}
   .elrail.conn-mode .elrail-conn-group{display:flex;}
+  /* 正在编辑文字：整条侧边栏切换成文字格式面板，其它分组全部让路——
+     跟 Milanote 点进文字里编辑时左侧面板整个变成格式工具的效果一致 */
+  .elrail.text-mode .elrail-normal-group, .elrail.text-mode .elrail-multi-group, .elrail.text-mode .elrail-conn-group{display:none;}
+  .elrail.text-mode .elrail-text-group{display:flex;overflow-y:auto;}
   .el-btn.active{background:var(--bg3);color:var(--orange);}
   .more-tool-pop{
     display:none;position:fixed;z-index:2000;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
@@ -823,6 +844,10 @@
       <button class="el-btn" id="connDashedBtn"><span class="el-icon">┄</span><span class="el-label">Dashed</span></button>
       <button class="el-btn" id="connWeightBtn"><span class="el-icon">☰</span><span class="el-label">Weight</span></button>
     </div>
+    <!-- 编辑文字时(便签/标题卡片正文获得焦点)，#richToolbar 会被 JS 挪进这里，
+         跟 Milanote 一样让左侧工具栏整个切换成文字格式面板；离开编辑状态时
+         再挪回原位、恢复成正常的新建卡片工具栏 -->
+    <div class="elrail-text-group" id="elRailText"></div>
     <div class="el-spacer"></div>
     <button class="el-btn" id="trashBtn"><span class="el-icon">🗑<span class="trash-badge" id="trashBadge" style="display:none;"></span></span><span class="el-label">Trash</span></button>
   </aside>
@@ -2638,13 +2663,12 @@ function buildBody(card, body, cardEl){
     body.innerHTML = textToHtml(card.text||'');
     forcePlainTextPaste(body);
     body.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+    body.addEventListener('focus', function(){ showRailTextToolbar(body); });
     body.addEventListener('blur', function(){
       card.text = body.innerHTML;
       scheduleSave();
-      hideRichToolbar();
+      hideRailTextToolbar();
     });
-    body.addEventListener('mouseup', function(){ maybeShowRichToolbar(body); });
-    body.addEventListener('keyup', function(){ maybeShowRichToolbar(body); });
   } else if(card.type==='todo'){
     var wrap = document.createElement('div');
     var title = document.createElement('div');
@@ -3889,27 +3913,31 @@ function openCanvasContextMenu(localX, localY, clientX, clientY){
   openContextMenu(items, clientX, clientY);
 }
 
-/* ---- 富文本工具条 ---- */
-function maybeShowRichToolbar(targetEl){
-  var sel = window.getSelection();
-  if(!sel || sel.rangeCount===0 || sel.isCollapsed){ hideRichToolbar(); return; }
-  var range = sel.getRangeAt(0);
-  if(!targetEl.contains(range.commonAncestorContainer)){ hideRichToolbar(); return; }
-  var rect = range.getBoundingClientRect();
-  if(rect.width===0 && rect.height===0){ hideRichToolbar(); return; }
+/* ---- 富文本工具条 ----
+   跟真实 Milanote 一样：只要在编辑便签/标题卡片的正文，左侧整条工具栏就
+   切换成文字格式面板(T▾ / B / I / S / U / 列表 / 对齐 / 代码 / 链接 / 评论)，
+   不需要先选中文字才出现。#richToolbar 这个元素直接从原来的位置挪进
+   elrail 里(挪动 DOM 节点本身会保留它身上已经绑好的按钮事件，不用重新接
+   一遍)，退出编辑时再挪回去、隐藏。 */
+var richToolbarHomeParent = null;
+function showRailTextToolbar(targetEl){
   var tb = document.getElementById('richToolbar');
+  if(!richToolbarHomeParent) richToolbarHomeParent = tb.parentElement;
   var cardEl = targetEl.closest('.card');
   tb.dataset.cardId = cardEl ? cardEl.dataset.id : '';
-  tb.style.display='flex';
-  var tw = tb.offsetWidth || 120;
-  var th = tb.offsetHeight || 34;
-  tb.style.left = Math.max(4, rect.left + rect.width/2 - tw/2)+'px';
-  tb.style.top = Math.max(4, rect.top - th - 6)+'px';
+  tb.style.left = ''; tb.style.top = ''; // 清掉悬浮模式留下的定位，交给 rail-mode 的样式接管
+  tb.classList.add('rail-mode');
+  tb.style.display = 'flex';
+  document.getElementById('elRailText').appendChild(tb);
+  document.getElementById('elRail').classList.add('text-mode');
 }
-function hideRichToolbar(){
+function hideRailTextToolbar(){
   var tb = document.getElementById('richToolbar');
-  if(tb) tb.style.display='none';
+  tb.style.display = 'none';
+  tb.classList.remove('rail-mode');
+  document.getElementById('elRail').classList.remove('text-mode');
   closeTextStylePop();
+  if(richToolbarHomeParent) richToolbarHomeParent.appendChild(tb);
 }
 function closeTextStylePop(){
   var pop = document.getElementById('rtTextStylePop');
