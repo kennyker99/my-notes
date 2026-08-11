@@ -1072,6 +1072,18 @@ function stripHtml(html){
   d.innerHTML = html||'';
   return d.textContent||'';
 }
+/* 从别的卡片(或别的网页)复制文字时，浏览器经常会把来源那块区域算出来的
+   背景色/字体等样式一起打包进剪贴板的 HTML 里——原生粘贴会把这些样式也
+   贴过来，导致"复制文字"变成"把源头卡片的颜色也带过来了"这种看起来很怪的
+   bug。所有可编辑文字区域统一强制"只粘贴纯文字"，不接受携带样式的富文本，
+   从根源上避免这个问题(卡片本身的富文本格式还是通过工具栏来设置，不受影响)。 */
+function forcePlainTextPaste(el){
+  el.addEventListener('paste', function(e){
+    e.preventDefault();
+    var text = (e.clipboardData || window.clipboardData).getData('text/plain');
+    document.execCommand('insertText', false, text);
+  });
+}
 function getContrastText(hex){
   if(!hex) return '#f0f0f2';
   var h = hex.replace('#','');
@@ -1645,6 +1657,7 @@ function renderSidebar(filter){
       '<span class="board-item-count mono">'+b.cards.length+'</span>'+
       '<button class="board-item-del" title="删除看板">🗑</button>';
     var nameEl = item.querySelector('.board-item-name');
+    forcePlainTextPaste(nameEl);
     var iconEl = item.querySelector('.board-item-icon');
     item.addEventListener('click', function(e){
       if(e.target===nameEl && nameEl.isContentEditable) return;
@@ -1744,6 +1757,7 @@ function renderTopbar(){
     if(isLast){
       el.contentEditable = 'false';
       el.title = '双击重命名';
+      forcePlainTextPaste(el);
       el.addEventListener('dblclick', function(){
         el.contentEditable='true'; el.focus(); document.execCommand('selectAll',false,null);
       });
@@ -2412,6 +2426,7 @@ function toggleCommentPicker(cardEl, card){
       item.querySelector('.comment-item-time').textContent = formatCommentTs(c.ts) + (c.editedTs ? '（已编辑）' : '');
       var textEl = item.querySelector('.comment-item-text');
       textEl.textContent = c.text;
+      forcePlainTextPaste(textEl);
       item.querySelector('.cm-del').addEventListener('click', function(e){
         e.stopPropagation();
         removeComment(card, c.id);
@@ -2621,6 +2636,7 @@ function buildBody(card, body, cardEl){
     body.contentEditable = 'true';
     body.dataset.placeholder = card.type==='header' ? '标题文字...' : '输入笔记内容...';
     body.innerHTML = textToHtml(card.text||'');
+    forcePlainTextPaste(body);
     body.addEventListener('mousedown', function(e){ e.stopPropagation(); });
     body.addEventListener('blur', function(){
       card.text = body.innerHTML;
@@ -2634,6 +2650,7 @@ function buildBody(card, body, cardEl){
     var title = document.createElement('div');
     title.className='todo-title'; title.contentEditable='true';
     title.innerText = card.title||'清单';
+    forcePlainTextPaste(title);
     title.addEventListener('mousedown', function(e){e.stopPropagation();});
     title.addEventListener('blur', function(){ card.title = title.innerText || '清单'; scheduleSave(); });
     wrap.appendChild(title);
@@ -2665,6 +2682,7 @@ function buildBody(card, body, cardEl){
     var ctitle = document.createElement('div');
     ctitle.className='todo-title'; ctitle.contentEditable='true';
     ctitle.innerText = card.title||'列表';
+    forcePlainTextPaste(ctitle);
     ctitle.addEventListener('mousedown', function(e){e.stopPropagation();});
     ctitle.addEventListener('blur', function(){ card.title = ctitle.innerText || '列表'; scheduleSave(); });
     cwrap.appendChild(ctitle);
@@ -2738,6 +2756,7 @@ function buildBody(card, body, cardEl){
     cap.className='img-caption'; cap.contentEditable='true';
     cap.dataset.placeholder='图片说明...';
     cap.innerText = card.caption||'';
+    forcePlainTextPaste(cap);
     cap.addEventListener('mousedown', function(e){e.stopPropagation();});
     cap.addEventListener('blur', function(){ card.caption = cap.innerText; scheduleSave(); });
     body.appendChild(cap);
@@ -2745,6 +2764,7 @@ function buildBody(card, body, cardEl){
     var t = document.createElement('div');
     t.className='link-title'; t.contentEditable='true';
     t.innerText = card.title || '链接标题';
+    forcePlainTextPaste(t);
     t.addEventListener('mousedown', function(e){e.stopPropagation();});
     t.addEventListener('blur', function(){ card.title = t.innerText || '链接标题'; scheduleSave(); });
     body.appendChild(t);
@@ -2766,6 +2786,7 @@ function buildBody(card, body, cardEl){
     d.className='link-desc'; d.contentEditable='true';
     d.dataset.placeholder='备注说明...';
     d.innerText = card.description||'';
+    forcePlainTextPaste(d);
     d.addEventListener('mousedown', function(e){e.stopPropagation();});
     d.addEventListener('blur', function(){ card.description = d.innerText; scheduleSave(); });
     body.appendChild(d);
@@ -2859,6 +2880,7 @@ function buildEmbedCaption(card, body){
   cap.contentEditable = 'true';
   cap.dataset.placeholder = '说明文字...';
   cap.innerText = card.caption||'';
+  forcePlainTextPaste(cap);
   cap.addEventListener('mousedown', function(e){ e.stopPropagation(); });
   cap.addEventListener('blur', function(){ card.caption = cap.innerText; scheduleSave(); });
   body.appendChild(cap);
@@ -3014,6 +3036,7 @@ function buildTodoItemEl(card, item){
   var txt = document.createElement('div');
   txt.className='ti-text'; txt.contentEditable='true'; txt.innerText = item.text||'';
   txt.style.marginLeft = ((item.indent||0)*18)+'px';
+  forcePlainTextPaste(txt);
   txt.addEventListener('mousedown', function(e){e.stopPropagation();});
   txt.addEventListener('blur', function(){ item.text = txt.innerText; scheduleSave(); });
   txt.addEventListener('keydown', function(e){
@@ -3046,6 +3069,7 @@ function buildColumnItemEl(card, item, idx, rerender){
   var txt = document.createElement('div');
   txt.className='ti-text'; txt.contentEditable='true'; txt.innerText = item.text||'';
   txt.style.marginLeft = ((item.indent||0)*18)+'px';
+  forcePlainTextPaste(txt);
   txt.addEventListener('mousedown', function(e){e.stopPropagation();});
   txt.addEventListener('blur', function(){ item.text = txt.innerText; scheduleSave(); });
   txt.addEventListener('keydown', function(e){
