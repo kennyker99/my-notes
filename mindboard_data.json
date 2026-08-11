@@ -370,11 +370,11 @@
           "type": "note",
           "x": 1114.4143572444086,
           "y": -282.63439376930495,
-          "w": 369.92561072725397,
-          "h": 181.96284329113135,
+          "w": 379.92561072725397,
+          "h": 232.96284329113135,
           "color": "#fff6b3",
           "z": 353,
-          "text": "<h2 style=\"text-align: left;\">经济结构</h2><h2 style=\"text-align: left;\"><ul><li><span style=\"font-size: 13.5px; font-weight: normal;\">Eg. 澳大利亚</span></li><li><span style=\"font-size: 13.5px; font-weight: 400;\">出口商品：</span><span style=\"font-weight: normal;\">矿砂/矿渣 **29%**、矿物燃料/油 **19%**、未分类商品 18%、珍珠贵金属 6.5%、肉类 4.3%</span></li><li></li></ul></h2><div><br></div>",
+          "text": "<h2 style=\"text-align: left;\">经济结构</h2><h2 style=\"text-align: left;\"><ul><li><span style=\"font-size: 13.5px; font-weight: normal;\">Eg. 澳大利亚</span></li><li><span style=\"font-size: 13.5px; font-weight: 400;\">出口商品：</span><span style=\"font-weight: normal;\">矿砂/矿渣(29%)、矿物燃料/油(19%)、未分类商品(18%)、珍珠贵金属(6.5%)、肉类(4.3%)</span></li><li><span style=\"font-weight: normal;\"><br></span></li><li></li></ul></h2><div><br></div>",
           "comments": [],
           "locked": false
         }
@@ -719,7 +719,7 @@
         }
       ],
       "vx": -2645.3138278845827,
-      "vy": 926.369217504496,
+      "vy": 727.2025469436592,
       "vzoom": 3,
       "maxZ": 356,
       "updatedAt": 1785853422858
@@ -729,5 +729,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1786460038588
+  "syncedAt": 1786460125542
 }
