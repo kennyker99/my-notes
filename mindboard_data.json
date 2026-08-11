@@ -370,8 +370,8 @@
           "type": "note",
           "x": 1114.4143572444086,
           "y": -282.63439376930495,
-          "w": 169.45969092005362,
-          "h": 123.4221014031733,
+          "w": 168.22889606737994,
+          "h": 117.26812713980488,
           "color": "#fff6b3",
           "z": 369,
           "text": "<h2 style=\"text-align: left;\">经济结构</h2><h2 style=\"text-align: left;\"><ul><li><span style=\"font-size: 13.5px; font-weight: normal;\">Eg. 澳大利亚</span></li></ul></h2>",
@@ -747,5 +747,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1786460230840
+  "syncedAt": 1786460395165
 }
