@@ -370,11 +370,11 @@
           "type": "note",
           "x": 1114.4143572444086,
           "y": -282.63439376930495,
-          "w": 209.15234119465015,
-          "h": 100,
+          "w": 369.92561072725397,
+          "h": 181.96284329113135,
           "color": "#fff6b3",
-          "z": 351,
-          "text": "<h2 style=\"text-align: left;\">经济结构</h2><div><br></div>",
+          "z": 353,
+          "text": "<h2 style=\"text-align: left;\">经济结构</h2><h2 style=\"text-align: left;\"><ul><li><span style=\"font-size: 13.5px; font-weight: normal;\">Eg. 澳大利亚</span></li><li><span style=\"font-size: 13.5px; font-weight: 400;\">出口商品：</span><span style=\"font-weight: normal;\">矿砂/矿渣 **29%**、矿物燃料/油 **19%**、未分类商品 18%、珍珠贵金属 6.5%、肉类 4.3%</span></li><li></li></ul></h2><div><br></div>",
           "comments": [],
           "locked": false
         }
@@ -614,6 +614,21 @@
       "trash": [
         {
           "card": {
+            "id": "c_msos58as_7",
+            "type": "note",
+            "x": 875.9533624708088,
+            "y": -319.01728453518604,
+            "w": 220,
+            "h": 150,
+            "color": "#ffffff",
+            "z": 356,
+            "text": "",
+            "comments": []
+          },
+          "deletedAt": 1786459983266
+        },
+        {
+          "card": {
             "id": "c_msos33bt_6",
             "type": "note",
             "x": 1191.1950674366985,
@@ -703,10 +718,10 @@
           "deletedAt": 1786016325363
         }
       ],
-      "vx": 436.4778391060332,
-      "vy": 455.8128189050284,
-      "vzoom": 0.6344338228396547,
-      "maxZ": 351,
+      "vx": -2645.3138278845827,
+      "vy": 926.369217504496,
+      "vzoom": 3,
+      "maxZ": 356,
       "updatedAt": 1785853422858
     }
   },
@@ -714,5 +729,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1786459910868
+  "syncedAt": 1786460038588
 }
