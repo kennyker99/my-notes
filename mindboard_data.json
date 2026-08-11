@@ -370,13 +370,25 @@
           "type": "note",
           "x": 1114.4143572444086,
           "y": -282.63439376930495,
-          "w": 379.92561072725397,
-          "h": 232.96284329113135,
+          "w": 169.45969092005362,
+          "h": 123.4221014031733,
           "color": "#fff6b3",
-          "z": 353,
-          "text": "<h2 style=\"text-align: left;\">经济结构</h2><h2 style=\"text-align: left;\"><ul><li><span style=\"font-size: 13.5px; font-weight: normal;\">Eg. 澳大利亚</span></li><li><span style=\"font-size: 13.5px; font-weight: 400;\">出口商品：</span><span style=\"font-weight: normal;\">矿砂/矿渣(29%)、矿物燃料/油(19%)、未分类商品(18%)、珍珠贵金属(6.5%)、肉类(4.3%)</span></li><li><span style=\"font-weight: normal;\"><br></span></li><li></li></ul></h2><div><br></div>",
+          "z": 369,
+          "text": "<h2 style=\"text-align: left;\">经济结构</h2><h2 style=\"text-align: left;\"><ul><li><span style=\"font-size: 13.5px; font-weight: normal;\">Eg. 澳大利亚</span></li></ul></h2>",
           "comments": [],
           "locked": false
+        },
+        {
+          "id": "c_msos8vf1_8",
+          "type": "note",
+          "x": 1483.9016321958966,
+          "y": -273.68380213166984,
+          "w": 654.4705829938111,
+          "h": 109.38376986176834,
+          "color": "#ffd9d9",
+          "z": 370,
+          "text": "<p><p><p><ul style=\"background-color: rgb(255, 246, 179);\"><li style=\"\">出口商品：矿砂/矿渣(29%)、矿物燃料/油(19%)、未分类商品(18%)、珍珠贵金属(6.5%)、肉类(4.3%)</li></ul><ul style=\"background-color: rgb(255, 246, 179);\"><li style=\"\">出口目的地：中国 40%、日本 15%、南韩 6.8%、英国 4.1%、美国 4.0%</li></ul></p></p></p>",
+          "comments": []
         }
       ],
       "connectors": [
@@ -609,6 +621,12 @@
           "from": "c_msg4sgyj_1",
           "to": "c_msos2lwn_4",
           "label": ""
+        },
+        {
+          "id": "n_msos9wg2_9",
+          "from": "c_msos2lwn_4",
+          "to": "c_msos8vf1_8",
+          "label": ""
         }
       ],
       "trash": [
@@ -718,10 +736,10 @@
           "deletedAt": 1786016325363
         }
       ],
-      "vx": -2645.3138278845827,
-      "vy": 727.2025469436592,
-      "vzoom": 3,
-      "maxZ": 356,
+      "vx": -37.018116734421255,
+      "vy": 474.7605562044598,
+      "vzoom": 0.8124830858917513,
+      "maxZ": 370,
       "updatedAt": 1785853422858
     }
   },
@@ -729,5 +747,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1786460125542
+  "syncedAt": 1786460230840
 }
