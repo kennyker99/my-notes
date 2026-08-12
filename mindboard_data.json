@@ -373,7 +373,7 @@
           "w": 168.22889606737994,
           "h": 117.26812713980488,
           "color": "#fff6b3",
-          "z": 369,
+          "z": 373,
           "text": "<h2 style=\"text-align: left;\">经济结构</h2><h2 style=\"text-align: left;\"><ul><li><span style=\"font-size: 13.5px; font-weight: normal;\">Eg. 澳大利亚</span></li></ul></h2>",
           "comments": [],
           "locked": false
@@ -633,7 +633,7 @@
       "vx": -37.018116734421255,
       "vy": 473.0938894583203,
       "vzoom": 0.8124830858917513,
-      "maxZ": 372,
+      "maxZ": 373,
       "updatedAt": 1785853422858
     }
   },
@@ -641,5 +641,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1786535960749
+  "syncedAt": 1786536031583
 }
