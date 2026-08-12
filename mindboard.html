@@ -301,6 +301,25 @@
   }
   .comment-new button:hover{filter:brightness(1.08);}
 
+  /* ---------- 表情反应 (Reactions) ---------- */
+  .reaction-picker-pop{
+    position:absolute;top:24px;right:6px;z-index:60;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
+    padding:8px;width:190px;box-shadow:0 4px 16px rgba(0,0,0,.4);
+    display:grid;grid-template-columns:repeat(5,1fr);gap:2px;
+  }
+  .reaction-picker-item{
+    font-size:19px;text-align:center;padding:5px 0;border-radius:6px;cursor:pointer;line-height:1;
+  }
+  .reaction-picker-item:hover{background:var(--bg3);}
+  .reaction-badges{
+    position:absolute;left:6px;bottom:6px;z-index:4;display:flex;flex-wrap:wrap;gap:3px;max-width:calc(100% - 12px);
+  }
+  .reaction-badge{
+    display:flex;align-items:center;gap:3px;background:var(--bg2);border:1px solid var(--border2);border-radius:10px;
+    padding:1px 6px;font-size:11px;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.25);cursor:pointer;
+  }
+  .reaction-badge:hover{border-color:var(--orange);}
+
   .resize-handle{
     position:absolute;width:15px;height:15px;z-index:5;opacity:0;transition:opacity .12s;
   }
@@ -2156,7 +2175,7 @@ function updateConnectorRailButtons(){
   dashedBtn.classList.toggle('active', !!conn.dashed);
 }
 function closeFloatingPops(){
-  document.querySelectorAll('.palette-pop,.label-picker-pop,.comment-picker-pop,#connWeightPop').forEach(function(p){ p.remove(); });
+  document.querySelectorAll('.palette-pop,.label-picker-pop,.comment-picker-pop,.reaction-picker-pop,#connWeightPop').forEach(function(p){ p.remove(); });
 }
 function openConnColorPicker(anchorBtn){
   var conn = currentSelectedConnector();
@@ -2257,11 +2276,13 @@ function buildCardEl(card){
     (card.type==='header' ? '<span class="card-bar-icon">'+CARD_ICONS[card.type]+'</span>' : '<span class="card-color-dot" style="background:'+(card.color||'#fff')+'"></span>') +
     (card.locked ? '<span class="card-bar-icon" title="已锁定位置">🔒</span>' : '') +
     '<span class="card-bar-spacer"></span>'+
+    '<button class="card-btn reaction-btn" title="表情反应">😊</button>'+
     '<button class="card-btn comment-btn" title="评论">💬'+(cardComments(card).length>0 ? '<span class="comment-badge">'+(cardComments(card).length>99?'99+':cardComments(card).length)+'</span>' : '')+'</button>'+
     '<button class="card-btn dup-btn" title="复制">⧉</button>'+
     '<button class="card-btn del-btn" title="删除">🗑</button>';
   el.appendChild(bar);
   renderCardLabels(card, el);
+  renderReactionBadges(card, el);
 
   var body = document.createElement('div');
   body.className = 'card-body';
@@ -2302,6 +2323,7 @@ function buildCardEl(card){
     });
   }
 
+  bar.querySelector('.reaction-btn').addEventListener('click', function(e){ e.stopPropagation(); toggleReactionPicker(el, card); });
   bar.querySelector('.comment-btn').addEventListener('click', function(e){ e.stopPropagation(); toggleCommentPicker(el, card); });
   bar.querySelector('.dup-btn').addEventListener('click', function(e){ e.stopPropagation(); duplicateSelectionOrCard(card.id); });
   bar.querySelector('.del-btn').addEventListener('click', function(e){ e.stopPropagation(); deleteSelectionOrCard(card.id); });
@@ -2390,6 +2412,24 @@ function updateComment(card, commentId, text){
   if(!c) return;
   pushHistory();
   c.text = text; c.editedTs = Date.now();
+  scheduleSave();
+}
+
+/* ---------- 表情反应 (Reactions) ---------- */
+var REACTION_EMOJI_SET = ['👍','👎','😀','😍','😂','😢','🎉','🔥','💯','❤️'];
+function cardReactions(card){ if(!card.reactions) card.reactions={}; return card.reactions; }
+function addReaction(card, emoji){
+  pushHistory();
+  var r = cardReactions(card);
+  r[emoji] = (r[emoji]||0) + 1;
+  scheduleSave();
+}
+function removeReactionOne(card, emoji){
+  var r = cardReactions(card);
+  if(!r[emoji]) return;
+  pushHistory();
+  r[emoji] -= 1;
+  if(r[emoji]<=0) delete r[emoji];
   scheduleSave();
 }
 function formatCommentTs(ts){
@@ -2498,6 +2538,63 @@ function toggleCommentPicker(cardEl, card){
 
   cardEl.appendChild(pop);
   renderList();
+  setTimeout(function(){
+    document.addEventListener('mousedown', function closer(e){
+      if(!pop.contains(e.target)){ pop.remove(); document.removeEventListener('mousedown',closer); }
+    });
+  },0);
+}
+
+function renderReactionBadges(card, cardEl){
+  var el = cardEl || document.querySelector('.card[data-id="'+card.id+'"]');
+  if(!el) return;
+  var wrap = el.querySelector('.reaction-badges');
+  var r = cardReactions(card);
+  var entries = Object.keys(r).filter(function(e){ return r[e]>0; });
+  if(!entries.length){
+    if(wrap) wrap.remove();
+    return;
+  }
+  if(!wrap){
+    wrap = document.createElement('div');
+    wrap.className = 'reaction-badges';
+    el.appendChild(wrap);
+  }
+  wrap.innerHTML = '';
+  entries.forEach(function(emoji){
+    var badge = document.createElement('span');
+    badge.className = 'reaction-badge';
+    badge.title = '点击减去一个';
+    badge.innerHTML = '<span>'+emoji+'</span><span>'+r[emoji]+'</span>';
+    badge.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+    badge.addEventListener('click', function(e){
+      e.stopPropagation();
+      removeReactionOne(card, emoji);
+      renderReactionBadges(card, el);
+    });
+    wrap.appendChild(badge);
+  });
+}
+function toggleReactionPicker(cardEl, card){
+  var existing = cardEl.querySelector('.reaction-picker-pop');
+  if(existing){ existing.remove(); return; }
+  document.querySelectorAll('.reaction-picker-pop,.comment-picker-pop,.label-picker-pop,.palette-pop').forEach(function(p){p.remove();});
+  var pop = document.createElement('div');
+  pop.className = 'reaction-picker-pop';
+  pop.addEventListener('mousedown', function(e){ e.stopPropagation(); });
+  REACTION_EMOJI_SET.forEach(function(emoji){
+    var item = document.createElement('div');
+    item.className = 'reaction-picker-item';
+    item.textContent = emoji;
+    item.addEventListener('click', function(e){
+      e.stopPropagation();
+      addReaction(card, emoji);
+      renderReactionBadges(card, cardEl);
+      pop.remove();
+    });
+    pop.appendChild(item);
+  });
+  cardEl.appendChild(pop);
   setTimeout(function(){
     document.addEventListener('mousedown', function closer(e){
       if(!pop.contains(e.target)){ pop.remove(); document.removeEventListener('mousedown',closer); }
@@ -3847,6 +3944,10 @@ function openCardContextMenu(card, x, y){
     }},
     {label: anyLocked ? '解锁位置' : '锁定位置', action:function(){ toggleLockCards(ids); }},
     {separator:true},
+    {label:'表情反应', action:function(){
+      var el = document.querySelector('.card[data-id="'+card.id+'"]');
+      if(el) toggleReactionPicker(el, card);
+    }},
     {label:'评论'+(cardComments(card).length ? ' ('+cardComments(card).length+')' : ''), action:function(){
       var el = document.querySelector('.card[data-id="'+card.id+'"]');
       if(el) toggleCommentPicker(el, card);
@@ -4437,7 +4538,7 @@ function wireGlobalEvents(){
     if(e.touches.length!==1) return;
     // 单指触摸：卡片里真正可编辑/可交互的部分（文字内容、按钮、输入框、缩放和
     // 连线手柄、菜单、工具条、滚动条）不拦截，交给原生触摸事件处理
-    if(e.target.closest('#contextMenu, #richToolbar, #hScroll, #vScroll, .resize-handle, .connect-handle, .card-body, input, textarea, [contenteditable="true"], .palette-pop, .comment-btn, .dup-btn, .del-btn, .card-color-dot')) return;
+    if(e.target.closest('#contextMenu, #richToolbar, #hScroll, #vScroll, .resize-handle, .connect-handle, .card-body, input, textarea, [contenteditable="true"], .palette-pop, .comment-btn, .reaction-btn, .reaction-picker-pop, .reaction-badge, .dup-btn, .del-btn, .card-color-dot')) return;
     touchGesture.startTouch = e.touches[0];
     touchGesture.startTouchX = e.touches[0].clientX;
     touchGesture.startTouchY = e.touches[0].clientY;
