@@ -15,7 +15,8 @@
           "color": "#c9d9ff",
           "z": 128,
           "text": "<h2>财政政策</h2>• 调节税收，津贴 &amp; 开支<br>• 宽松（带动经济有效增长） vs 紧缩（避免贫富差距扩大）",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3u_a",
@@ -27,7 +28,8 @@
           "color": "#c9d9ff",
           "z": 133,
           "text": "<h2>货币政策</h2>• 调节汇率，利率 &amp; 流动性<br>• 宽松（刺激经济增长） vs 紧缩（预防经济过热）",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3u_d",
@@ -39,7 +41,8 @@
           "color": "#f2f2f2",
           "z": 343,
           "text": "<h1>2. 外在因素</h1><b>• 国债/信用</b><br><b>• 贸易/联盟</b><br><b>• 国际货币流</b>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3u_e",
@@ -51,7 +54,8 @@
           "color": "#ffc9d6",
           "z": 160,
           "text": "<h1>3. 突发性因素</h1><b>• 天灾<br>• 战争/恐怖主义<br>• 疫情</b>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3u_j",
@@ -63,7 +67,8 @@
           "color": "#ffc9d6",
           "z": 260,
           "text": "<h2>国内生产总值 GDP</h2><b>= 消费 Consumer + 投资 Investment + 政府支出 Government Spending + 净出口 Export (X-M</b>)",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3v_m",
@@ -75,7 +80,8 @@
           "color": "#fff6b3",
           "z": 196,
           "text": "<h3><b>国际贸易 International Trade</b></h3>• 产品，服务，资源 &amp; 技术<br>• \"齿轮的输入端\" (the gear's input end)",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3v_n",
@@ -87,7 +93,8 @@
           "color": "#ffd9b3",
           "z": 336,
           "text": "<h3>劳动力与消费力 Labor &amp; Consumption Power</h3>• 就业机会多、发展项目多。内需引擎 (many jobs and projects; the engine of domestic demand)",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3v_o",
@@ -99,7 +106,8 @@
           "color": "#ffc9d6",
           "z": 209,
           "text": "<h3>资产货币化 Asset Monetization</h3>• 资产 → 可流通的钱。整台机器的放大器 (assets become liquid money; the amplifier of the whole machine)",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3v_p",
@@ -111,7 +119,8 @@
           "color": "#e3c9ff",
           "z": 208,
           "text": "<h3>固定资产投资 Investment in Fixed Assets</h3>• 稳定、低收益，慢齿轮 (stable, low yield, the slow gear)",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3v_q",
@@ -123,7 +132,8 @@
           "color": "#c9d9ff",
           "z": 212,
           "text": "<h3>金融资产投资 Financial Asset Investment</h3>• 高收益，快齿轮 (high yield, the fast gear)<br>• \"快齿轮先转、慢齿轮后转\" (the fast gear turns first, the slow gear follows)",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3v_r",
@@ -135,7 +145,8 @@
           "color": "#c6f0d4",
           "z": 214,
           "text": "<h3>国际货币流 International Currency Flow</h3>• 追求安全、高收益率 (pursuing safety and high yield)<br>• \"齿轮的输出/输入闸门\" (the gear's output/input gate)",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3v_t",
@@ -147,7 +158,8 @@
           "color": "#ffd9d9",
           "z": 269,
           "text": "<h1 style=\"text-align: center;\">Central Bank</h1>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3v_u",
@@ -159,7 +171,8 @@
           "color": "#ffd9d9",
           "z": 271,
           "text": "<h2 style=\"text-align: center;\">Financial Institution</h2>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3v_v",
@@ -171,7 +184,8 @@
           "color": "#fff6b3",
           "z": 309,
           "text": "<h2 style=\"text-align: center;\">Government</h2>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3v_w",
@@ -183,7 +197,8 @@
           "color": "#d6ecff",
           "z": 305,
           "text": "<h2 style=\"text-align: center;\">Business / Firm (1)</h2>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3v_x",
@@ -195,7 +210,8 @@
           "color": "#d6ecff",
           "z": 316,
           "text": "<h2 style=\"text-align: center;\">Business / Firm (2)</h2>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3v_y",
@@ -207,7 +223,8 @@
           "color": "#f0f0f0",
           "z": 298,
           "text": "<h2 style=\"text-align: center;\">Households</h2>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3v_z",
@@ -219,7 +236,8 @@
           "color": "#c6f0d4",
           "z": 338,
           "text": "<h2 style=\"text-align: center;\">Rest of World / Environment</h2>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3v_12",
@@ -231,7 +249,8 @@
           "color": "#fff6b3",
           "z": 238,
           "text": "<h3>• GDP GROWTH<br>• INFLATION RATE<br>• UNEMPLOYMENT RATE<br>• WAGE GROWTH<br>• CONSUMER CONFIDENCE<br>• PURCHASING MANAGER INDEX<br>• RETAIL SALES<br>• BUSINESS CONFIDENCE<br>• POPULATION</h3>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_mser0o3v_13",
@@ -243,7 +262,8 @@
           "color": "#ffc9d6",
           "z": 236,
           "text": "<b>• 10YR BOND YIELD%<br>• DEBT TO GDP<br>• CURRENT ACCOUNT<br>• BALANCE OF TRADE<br>• EXPORT (PARTNERS &amp; PRODUCTS)<br>• IMPORT (PARTNERS &amp; PRODUCTS)<br>• TAX RATE<br>• INTEREST RATE<br>• CENTRAL BANK BALANCE SHEET</b>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_msg4sgyj_1",
@@ -255,7 +275,8 @@
           "color": "#fff6b3",
           "z": 109,
           "text": "<p style=\"text-align: left;\"></p><h1>1. 内在因素</h1><b>• 政策<br>• 经济结构<br>• 人口结构</b><p></p>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_msg6t3z1_4",
@@ -267,7 +288,8 @@
           "color": "#fff6b3",
           "z": 344,
           "text": "<h2 style=\"text-align: center;\">货币政策 vs 财政政策</h2>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_msg76nwn_8",
@@ -279,7 +301,8 @@
           "color": "#ffffff",
           "z": 159,
           "text": "<span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">经济齿轮转动的关键</span>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_msg77rlw_9",
@@ -291,7 +314,8 @@
           "color": "#ffffff",
           "z": 143,
           "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">基本面框架</span></div>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_msg78dyy_b",
@@ -303,7 +327,8 @@
           "color": "#e6d9ff",
           "z": 259,
           "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">GDP资金循环</span></div>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_msg7bo0c_k",
@@ -315,7 +340,8 @@
           "color": "#ffffff",
           "z": 177,
           "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">全球经济运行模式</span></div>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_msg7c4bg_l",
@@ -327,7 +353,8 @@
           "color": "#fff6b3",
           "z": 195,
           "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700; text-align: start;\">🔁 六大齿轮 (Six Major Gears)</span></div>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_msg7scfa_s",
@@ -339,7 +366,8 @@
           "color": "#e6d9ff",
           "z": 240,
           "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">📋 经济体的体检报告</span></div>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_msg7z9kc_x",
@@ -351,7 +379,8 @@
           "color": "#ffffff",
           "z": 254,
           "text": "<h1 style=\"text-align: center; \"><span style=\"text-align: start;\">资金撤离和流入方向</span></h1>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_msg819g8_z",
@@ -363,7 +392,8 @@
           "color": "#ffffff",
           "z": 267,
           "text": "<div style=\"text-align: center;\"><span style=\"color: rgb(28, 28, 31); font-size: 20px; font-weight: 700;\">💰 GDP 资金循环 - Circular Flow</span></div>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         },
         {
           "id": "c_msos2lwn_4",
@@ -373,10 +403,11 @@
           "w": 168.22889606737994,
           "h": 117.26812713980488,
           "color": "#fff6b3",
-          "z": 373,
+          "z": 377,
           "text": "<h2 style=\"text-align: left;\">经济结构</h2><h2 style=\"text-align: left;\"><ul><li><span style=\"font-size: 13.5px; font-weight: normal;\">Eg. 澳大利亚</span></li></ul></h2>",
           "comments": [],
-          "locked": false
+          "locked": false,
+          "reactions": {}
         },
         {
           "id": "c_msos8vf1_8",
@@ -386,9 +417,10 @@
           "w": 654.4705829938111,
           "h": 109.38376986176834,
           "color": "#ffd9d9",
-          "z": 372,
+          "z": 374,
           "text": "<p></p><p></p><p></p><div><ul><li>出口商品：矿砂/矿渣(29%)、矿物燃料/油(19%)、未分类商品(18%)、珍珠贵金属(6.5%)、肉类(4.3%)</li><li>出口目的地：中国 40%、日本 15%、南韩 6.8%、英国 4.1%、美国 4.0%</li></ul></div><p></p><p></p><p></p>",
-          "comments": []
+          "comments": [],
+          "reactions": {}
         }
       ],
       "connectors": [
@@ -633,7 +665,7 @@
       "vx": -37.018116734421255,
       "vy": 473.0938894583203,
       "vzoom": 0.8124830858917513,
-      "maxZ": 373,
+      "maxZ": 377,
       "updatedAt": 1785853422858
     }
   },
@@ -641,5 +673,5 @@
     "b_mser0o3u_8"
   ],
   "activeId": "b_mser0o3u_8",
-  "syncedAt": 1786536031583
+  "syncedAt": 1786539182283
 }
