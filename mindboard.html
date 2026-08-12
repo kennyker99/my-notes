@@ -701,15 +701,19 @@
   .el-label{font-size:10.5px;letter-spacing:.01em;}
   .el-sep{height:1px;background:var(--border);margin:8px 10px;}
   .el-spacer{flex:1;}
-  .elrail-normal-group, .elrail-multi-group, .elrail-conn-group, .elrail-text-group{display:flex;flex-direction:column;}
-  .elrail-multi-group, .elrail-conn-group, .elrail-text-group{display:none;}
-  .elrail.multi-mode .elrail-normal-group, .elrail.multi-mode .elrail-conn-group, .elrail.multi-mode .elrail-text-group{display:none;}
+  .elrail-normal-group, .elrail-multi-group, .elrail-conn-group, .elrail-text-group, .elrail-single-group{display:flex;flex-direction:column;}
+  .elrail-multi-group, .elrail-conn-group, .elrail-text-group, .elrail-single-group{display:none;}
+  .elrail.multi-mode .elrail-normal-group, .elrail.multi-mode .elrail-conn-group, .elrail.multi-mode .elrail-text-group, .elrail.multi-mode .elrail-single-group{display:none;}
   .elrail.multi-mode .elrail-multi-group{display:flex;}
-  .elrail.conn-mode .elrail-normal-group, .elrail.conn-mode .elrail-multi-group, .elrail.conn-mode .elrail-text-group{display:none;}
+  .elrail.conn-mode .elrail-normal-group, .elrail.conn-mode .elrail-multi-group, .elrail.conn-mode .elrail-text-group, .elrail.conn-mode .elrail-single-group{display:none;}
   .elrail.conn-mode .elrail-conn-group{display:flex;}
+  /* 只选中一张卡片(没有在编辑文字)：左侧栏切换成这张卡片的操作面板——
+     颜色/标签/表情反应/评论，跟 Milanote 选中卡片时左侧栏的效果一致 */
+  .elrail.single-mode .elrail-normal-group, .elrail.single-mode .elrail-multi-group, .elrail.single-mode .elrail-conn-group, .elrail.single-mode .elrail-text-group{display:none;}
+  .elrail.single-mode .elrail-single-group{display:flex;}
   /* 正在编辑文字：整条侧边栏切换成文字格式面板，其它分组全部让路——
      跟 Milanote 点进文字里编辑时左侧面板整个变成格式工具的效果一致 */
-  .elrail.text-mode .elrail-normal-group, .elrail.text-mode .elrail-multi-group, .elrail.text-mode .elrail-conn-group{display:none;}
+  .elrail.text-mode .elrail-normal-group, .elrail.text-mode .elrail-multi-group, .elrail.text-mode .elrail-conn-group, .elrail.text-mode .elrail-single-group{display:none;}
   .elrail.text-mode .elrail-text-group{display:flex;overflow-y:auto;}
   .el-btn.active{background:var(--bg3);color:var(--orange);}
   .more-tool-pop{
@@ -862,6 +866,14 @@
       <button class="el-btn" id="connLabelBtn"><span class="el-icon">🏷</span><span class="el-label">Label</span></button>
       <button class="el-btn" id="connDashedBtn"><span class="el-icon">┄</span><span class="el-label">Dashed</span></button>
       <button class="el-btn" id="connWeightBtn"><span class="el-icon">☰</span><span class="el-label">Weight</span></button>
+    </div>
+    <!-- 只选中一张卡片(还没进入文字编辑)：跟 Milanote 一样，左侧栏切换成
+         这张卡片的操作面板——颜色/标签/表情反应/评论 -->
+    <div class="elrail-single-group" id="elRailSingle">
+      <button class="el-btn" id="scColorBtn"><span class="el-icon">🎨</span><span class="el-label">Color</span></button>
+      <button class="el-btn" id="scLabelsBtn"><span class="el-icon">🏷</span><span class="el-label">Labels</span></button>
+      <button class="el-btn" id="scReactionsBtn"><span class="el-icon">😊</span><span class="el-label">Reactions</span></button>
+      <button class="el-btn" id="scCommentBtn"><span class="el-icon">💬</span><span class="el-label">Comment</span></button>
     </div>
     <!-- 编辑文字时(便签/标题卡片正文获得焦点)，#richToolbar 会被 JS 挪进这里，
          跟 Milanote 一样让左侧工具栏整个切换成文字格式面板；离开编辑状态时
@@ -3376,6 +3388,7 @@ function refreshSelectionClasses(){
   if(rail){
     rail.classList.toggle('multi-mode', state.selectedCards.size>=2);
     rail.classList.toggle('conn-mode', !!state.selectedConnectorId);
+    rail.classList.toggle('single-mode', state.selectedCards.size===1 && !state.selectedConnectorId);
   }
   renderConnectors();
   updateConnectorRailButtons();
@@ -3397,6 +3410,33 @@ function openMultiLabelPicker(){
   var card = b.cards.find(function(c){ return c.id===ids[0]; });
   var cardEl = document.querySelector('.card[data-id="'+ids[0]+'"]');
   if(card && cardEl) toggleLabelPicker(cardEl, card);
+}
+
+/* ---- 单张卡片操作面板 (左侧工具栏在只选中 1 张卡片时切换为这一组，
+   跟 Milanote 选中卡片时左侧栏出现 Color/Labels/Reactions/Comment 一致) ---- */
+function selectedSingleCard(){
+  if(state.selectedCards.size!==1) return null;
+  var id = Array.from(state.selectedCards)[0];
+  var b = activeBoard();
+  var card = b.cards.find(function(c){ return c.id===id; });
+  var cardEl = document.querySelector('.card[data-id="'+id+'"]');
+  return (card && cardEl) ? {card:card, el:cardEl} : null;
+}
+function openSingleColorPicker(){
+  var s = selectedSingleCard();
+  if(s) togglePalette(s.el, s.card);
+}
+function openSingleLabelPicker(){
+  var s = selectedSingleCard();
+  if(s) toggleLabelPicker(s.el, s.card);
+}
+function openSingleReactionPicker(){
+  var s = selectedSingleCard();
+  if(s) toggleReactionPicker(s.el, s.card);
+}
+function openSingleCommentPicker(){
+  var s = selectedSingleCard();
+  if(s) toggleCommentPicker(s.el, s.card);
 }
 function alignSelection(mode){
   var ids = Array.from(state.selectedCards);
@@ -4818,6 +4858,12 @@ function wireGlobalEvents(){
       pop.classList.remove('active');
     }
   });
+
+  // ---- 单张卡片操作面板（左侧工具栏在只选中 1 张卡片时切换出的按钮） ----
+  document.getElementById('scColorBtn').addEventListener('click', function(e){ e.stopPropagation(); openSingleColorPicker(); });
+  document.getElementById('scLabelsBtn').addEventListener('click', function(e){ e.stopPropagation(); openSingleLabelPicker(); });
+  document.getElementById('scReactionsBtn').addEventListener('click', function(e){ e.stopPropagation(); openSingleReactionPicker(); });
+  document.getElementById('scCommentBtn').addEventListener('click', function(e){ e.stopPropagation(); openSingleCommentPicker(); });
 
   // ---- 连线设置（左侧工具栏在选中一条连线时切换出的按钮） ----
   document.getElementById('connColorBtn').addEventListener('click', function(e){ e.stopPropagation(); openConnColorPicker(e.currentTarget); });
