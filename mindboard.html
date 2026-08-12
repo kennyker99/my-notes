@@ -2275,11 +2275,7 @@ function buildCardEl(card){
   bar.innerHTML =
     (card.type==='header' ? '<span class="card-bar-icon">'+CARD_ICONS[card.type]+'</span>' : '<span class="card-color-dot" style="background:'+(card.color||'#fff')+'"></span>') +
     (card.locked ? '<span class="card-bar-icon" title="已锁定位置">🔒</span>' : '') +
-    '<span class="card-bar-spacer"></span>'+
-    '<button class="card-btn reaction-btn" title="表情反应">😊</button>'+
-    '<button class="card-btn comment-btn" title="评论">💬'+(cardComments(card).length>0 ? '<span class="comment-badge">'+(cardComments(card).length>99?'99+':cardComments(card).length)+'</span>' : '')+'</button>'+
-    '<button class="card-btn dup-btn" title="复制">⧉</button>'+
-    '<button class="card-btn del-btn" title="删除">🗑</button>';
+    '<span class="card-bar-spacer"></span>';
   el.appendChild(bar);
   renderCardLabels(card, el);
   renderReactionBadges(card, el);
@@ -2322,11 +2318,6 @@ function buildCardEl(card){
       togglePalette(el, card);
     });
   }
-
-  bar.querySelector('.reaction-btn').addEventListener('click', function(e){ e.stopPropagation(); toggleReactionPicker(el, card); });
-  bar.querySelector('.comment-btn').addEventListener('click', function(e){ e.stopPropagation(); toggleCommentPicker(el, card); });
-  bar.querySelector('.dup-btn').addEventListener('click', function(e){ e.stopPropagation(); duplicateSelectionOrCard(card.id); });
-  bar.querySelector('.del-btn').addEventListener('click', function(e){ e.stopPropagation(); deleteSelectionOrCard(card.id); });
 
   bar.addEventListener('mousedown', function(e){
     if(e.button!==0) return;
@@ -4538,7 +4529,7 @@ function wireGlobalEvents(){
     if(e.touches.length!==1) return;
     // 单指触摸：卡片里真正可编辑/可交互的部分（文字内容、按钮、输入框、缩放和
     // 连线手柄、菜单、工具条、滚动条）不拦截，交给原生触摸事件处理
-    if(e.target.closest('#contextMenu, #richToolbar, #hScroll, #vScroll, .resize-handle, .connect-handle, .card-body, input, textarea, [contenteditable="true"], .palette-pop, .comment-btn, .reaction-btn, .reaction-picker-pop, .reaction-badge, .dup-btn, .del-btn, .card-color-dot')) return;
+    if(e.target.closest('#contextMenu, #richToolbar, #hScroll, #vScroll, .resize-handle, .connect-handle, .card-body, input, textarea, [contenteditable="true"], .palette-pop, .reaction-picker-pop, .reaction-badge, .card-color-dot')) return;
     touchGesture.startTouch = e.touches[0];
     touchGesture.startTouchX = e.touches[0].clientX;
     touchGesture.startTouchY = e.touches[0].clientY;
